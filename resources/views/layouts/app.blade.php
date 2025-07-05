@@ -16,6 +16,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <!-- Styles -->
         @livewireStyles
     </head>
