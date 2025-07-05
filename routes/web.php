@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request; // ✅ this one
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\FeedbackController;
 
 
 Route::get('/', function () {
@@ -74,3 +75,12 @@ Route::get('/getRoles', [UserManagementController::class, 'getRoles'])->name('ge
 Route::delete('/deleteUser/{id}', [UserManagementController::class, 'deleteUser'])->name('deleteUser');
 Route::post('/restoreUser/{id}', [UserManagementController::class, 'restoreUser'])->name('restoreUser');
 Route::get('/activity-logs', [UserManagementController::class, 'activityLogs'])->name('activity-logs');
+
+
+// FeedBack
+Route::get('/getFeedback', [FeedbackController::class, 'getFeedback'])->name('getFeedback');
+Route::get('/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks');
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
+Route::post('/feedback/bulk-delete', [FeedbackController::class, 'bulkDelete']);
+

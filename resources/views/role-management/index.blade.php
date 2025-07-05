@@ -4,7 +4,7 @@
 
 <script>
     // Modal Functions
-    window.openModal = function (id) {
+    window.openModal = function(id) {
         const modal = document.getElementById(id);
         if (modal) modal.classList.remove('hidden');
     };
@@ -61,11 +61,11 @@
         }, 2000);
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         let userIdToDelete = null; // Delete Users but its soft delete
 
         // Dynamic role
-        window.loadRoles = async function () {
+        window.loadRoles = async function() {
             try {
                 const response = await axios.get('/getRoles');
                 const roles = response.data;
@@ -78,16 +78,16 @@
 
                 roleSelect.innerHTML = '<option value="">-- Select Role --</option>';
                 roles.forEach(role => {
-                    roleSelect.innerHTML += `<option value="${role.name}">${role.name}</option>`;
+                    roleSelect.innerHTML +=
+                    `<option value="${role.name}">${role.name}</option>`;
                 });
             } catch (error) {
                 console.error('Failed to load roles:', error);
             }
         };
 
-
         // Add user && Edit Users
-        window.submitAddUser = async function () {
+        window.submitAddUser = async function() {
             const userId = document.getElementById('addUserModal').dataset.userid;
             const name = document.querySelector('#name').value.trim();
             const email = document.querySelector('#email').value.trim();
@@ -95,7 +95,11 @@
             const password = document.querySelector('#password').value;
             const password_confirmation = document.querySelector('#password_confirmation').value;
 
-            const payload = { name, email, role };
+            const payload = {
+                name,
+                email,
+                role
+            };
             if (password || password_confirmation) {
                 payload.password = password;
                 payload.password_confirmation = password_confirmation;
@@ -150,7 +154,7 @@
         }
 
         // Get Users
-        window.loadUsers = async function () {
+        window.loadUsers = async function() {
             try {
                 const response = await axios.get('/userDetails');
                 const users = response.data.users;
@@ -173,7 +177,8 @@
 
                     row.classList.add('whitespace-nowrap', 'border-b');
                     if (isDeleted) {
-                        row.classList.add('bg-red-100', 'text-red-700'); // Highlight deleted user
+                        row.classList.add('bg-red-100',
+                        'text-red-700'); // Highlight deleted user
                     }
 
                     row.innerHTML = `
@@ -229,7 +234,7 @@
         window.addEventListener('DOMContentLoaded', window.loadUsers);
 
         // Edit Functiuon
-        window.editUser = async function (user) {
+        window.editUser = async function(user) {
             // Load roles into the dropdown first
             await window.loadRoles();
 
@@ -255,7 +260,7 @@
         };
 
         // Add Functiuon
-        window.openAddUser = function () {
+        window.openAddUser = function() {
             document.getElementById('modalTitle').textContent = 'Add New User';
             document.getElementById('modalActionBtn').textContent = 'Add User';
 
@@ -272,13 +277,13 @@
         };
 
         // Open the modal and store the user ID
-        window.deleteUser = function (id) {
+        window.deleteUser = function(id) {
             userIdToDelete = id;
             openModal('deleteUserModal');
         };
 
         // Confirm button click handler
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
             if (!userIdToDelete) return;
 
             try {
@@ -300,7 +305,7 @@
         });
 
         // Restore the data
-        window.restoreUser = async function (id) {
+        window.restoreUser = async function(id) {
             try {
                 const response = await axios.post(`/restoreUser/${id}`);
                 if (response.data.status) {
@@ -317,10 +322,11 @@
         };
 
         // Search Input
-        document.getElementById('searchInput').addEventListener('input', function () {
+        document.getElementById('searchInput').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
             const rows = document.querySelectorAll('#tableBody tr');
-            const noDataMessage = document.getElementById('noDataMessage'); // element for "No data found"
+            const noDataMessage = document.getElementById(
+            'noDataMessage'); // element for "No data found"
             let visibleCount = 0;
 
             rows.forEach(row => {
@@ -328,7 +334,8 @@
                 const email = row.children[2]?.textContent.toLowerCase();
                 const role = row.children[3]?.textContent.toLowerCase();
 
-                const matches = name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm);
+                const matches = name.includes(searchTerm) || email.includes(searchTerm) || role
+                    .includes(searchTerm);
                 row.style.display = matches ? '' : 'none';
                 if (matches) visibleCount++;
             });
