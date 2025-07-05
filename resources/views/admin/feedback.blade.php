@@ -73,6 +73,38 @@
         }, 10);
     };
 
+    window.showConfirmModal = function(id) {
+        deleteId = id;
+        const modal = document.getElementById('confirmModal');
+        const content = document.getElementById('confirmModalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    // Close modal
+    window.closeConfirmModal = function() {
+        const modal = document.getElementById('confirmModal');
+        const modalContent = document.getElementById('confirmModalContent');
+
+        modalContent.classList.add('scale-95', 'opacity-0');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        setTimeout(() => modal.classList.add('hidden'), 200);
+        deleteId = null;
+    };
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (!deleteId) return;
+        axios.delete(`/feedback/${deleteId}`)
+            .then(() => {
+                showToast("Feedback deleted");
+                fetchFeedbacks();
+            })
+            .finally(() => closeConfirmModal());
+    });
+
     window.closeBulkConfirmModal = function() {
         const modal = document.getElementById('bulkConfirmModal');
         const modalContent = document.getElementById('bulkConfirmModalContent');
