@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -35,9 +38,27 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
-        RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+        // ✅ Prevent login if status == 0
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = \App\Models\User::where('email', $request->email)->first();
 
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                return null; // standard failed login
+            }
+
+            if ($user->status == 0) {
+                // ❌ Block user with status 0 and show a clear error
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('Your account has been deactivated.'),
+                ]);
+            }
+
+            return $user;
+        });
+
+        // Existing rate limiting
+        RateLimiter::for('login', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
             return Limit::perMinute(5)->by($throttleKey);
         });
 

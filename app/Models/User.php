@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'status',
         'password',
     ];
 
@@ -65,5 +66,10 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canLogin(): bool
+    {
+        return $this->status == 1;
     }
 }

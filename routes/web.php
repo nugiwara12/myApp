@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request; // ✅ this one
+use App\Http\Controllers\UserManagementController;
 
 
 Route::get('/', function () {
@@ -62,3 +63,14 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+// User Management
+Route::get('/role-management', [UserManagementController::class, 'index'])->name('role-management.index');
+Route::post('/addUser', [UserManagementController::class, 'addUser'])->name('addUser');
+Route::put('/updateUser/{id}', [UserManagementController::class, 'UpdateUser'])->name('UpdateUser');
+Route::get('/userDetails', [UserManagementController::class, 'userDetails'])->name('userDetails');
+Route::get('/getRoles', [UserManagementController::class, 'getRoles'])->name('getRoles');
+Route::delete('/deleteUser/{id}', [UserManagementController::class, 'deleteUser'])->name('deleteUser');
+Route::post('/restoreUser/{id}', [UserManagementController::class, 'restoreUser'])->name('restoreUser');
+Route::get('/activity-logs', [UserManagementController::class, 'activityLogs'])->name('activity-logs');
