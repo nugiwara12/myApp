@@ -30,6 +30,11 @@
                     <x-nav-link :href="route('role-management.index')" :active="request()->routeIs('role-management.index')">
                         {{ __('User Management') }}
                     </x-nav-link>
+
+                    {{-- Activity Logs --}}
+                    <x-nav-link :href="route('activity-logs')" :active="request()->routeIs('activity-logs')">
+                        {{ __('Activity Logs') }}
+                    </x-nav-link>
                 </div>
             </div>
 
