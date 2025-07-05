@@ -430,7 +430,8 @@
                 feedbackList.innerHTML = '';
 
                 if (response.data.length === 0) {
-                    feedbackList.innerHTML = '<p class="text-gray-500">No feedback yet.</p>';
+                    feedbackList.innerHTML =
+                        '<p class="text-gray-500 text-center items-center">No feedback yet.</p>';
                     return;
                 }
 
