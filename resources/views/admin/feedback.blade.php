@@ -13,6 +13,7 @@
             });
     };
 
+    // Render Table
     function renderFeedbacks(data) {
         const tbody = document.getElementById("feedbackTableBody");
         tbody.innerHTML = "";
@@ -25,18 +26,35 @@
 
         data.forEach(item => {
             const tr = document.createElement("tr");
+            tr.classList.add("cursor-pointer", "hover:bg-gray-100");
+
             tr.innerHTML = `
-                <td class="px-4 py-2"><input type="checkbox" class="rowCheckbox" value="${item.id}" onchange="toggleCheckbox()"></td>
-                <td class="px-4 py-2 whitespace-nowrap">${item.name}</td>
-                <td class="px-4 py-2 text-gray-600">${item.message}</td>
-                <td class="px-4 py-2 text-gray-500">${new Date(item.created_at).toLocaleString()}</td>
-                <td class="px-4 py-2">
-                    <button onclick="showConfirmModal(${item.id})"
-                        class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded">
-                        Delete
-                    </button>
-                </td>
-            `;
+            <td class="px-4 py-2">
+                <input type="checkbox" class="rowCheckbox" value="${item.id}" onchange="toggleCheckbox()" />
+            </td>
+            <td class="px-4 py-2 whitespace-nowrap">${item.name}</td>
+            <td class="px-4 py-2 text-gray-600">${item.message}</td>
+            <td class="px-4 py-2 text-gray-500">${new Date(item.created_at).toLocaleString()}</td>
+            <td class="px-4 py-2">
+                <button onclick="event.stopPropagation(); showConfirmModal(${item.id})"
+                    class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded">
+                    Delete
+                </button>
+            </td>
+        `;
+
+            // Add click event to row to toggle the checkbox
+            tr.addEventListener("click", (e) => {
+                const checkbox = tr.querySelector(".rowCheckbox");
+                checkbox.checked = !checkbox.checked;
+                toggleCheckbox(); // Call the update handler
+            });
+
+            // Prevent checkbox click from triggering the row click again
+            tr.querySelector(".rowCheckbox").addEventListener("click", (e) => {
+                e.stopPropagation();
+            });
+
             tbody.appendChild(tr);
         });
 
