@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Indigency;
+use Barryvdh\DomPDF\Facade\Pdf; // Add this at the top if not already
+
+class IndigencyController extends Controller
+{
+    public function index() {
+        return view('indigency.index');
+    }
+
+    public function addIndigency(Request $request) {
+        $validated = $request->validate([
+            'parent_name'   => 'required|string|max:255',
+            'address'       => 'required|string|max:255',
+            'purpose'       => 'required|string|max:255',
+            'childs_name'   => 'required|string|max:255',
+            'age'           => 'required|integer|min:0|max:150',
+            'date'          => 'required|date',
+        ]);
+
+        // Leave as-is: don't append "APPROVAL ACCEPT"
+        $validated['status'] = 1;
+
+        $indigency = Indigency::create($validated);
+
+        return response()->json([
+            'message' => 'Indigency record added successfully.',
+            'data' => $indigency
+        ], 201);
+    }
+
+    public function updateIndigency(Request $request, $id)
+    {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            return response()->json(['message' => 'Not found.'], 404);
+        }
+
+        // ✅ Manual approval request
+        if ($request->has('approve') && $indigency->age >= 1 && $indigency->age <= 20) {
+            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
+                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
+                $indigency->save();
+            }
+
+            return response()->json([
+                'message' => 'Approved successfully.',
+                'data' => $indigency
+            ]);
+        }
+
+        // ✅ Normal update
+        $validated = $request->validate([
+            'parent_name' => 'nullable|string|max:255',
+            'address'     => 'nullable|string|max:255',
+            'purpose'     => 'nullable|string|max:255',
+            'childs_name' => 'nullable|string|max:255',
+            'age'         => 'nullable|integer|min:1|max:150',
+            'date'        => 'nullable|date',
+        ]);
+
+        // ✅ Auto-approval if updated age falls between 1-20
+        if (isset($validated['age']) && $validated['age'] >= 1 && $validated['age'] <= 20) {
+            if (!empty($validated['purpose']) && !str_contains($validated['purpose'], 'APPROVAL ACCEPT')) {
+                $validated['purpose'] = rtrim($validated['purpose']) . ' - APPROVAL ACCEPT';
+            }
+        }
+
+        $indigency->update($validated);
+
+        return response()->json([
+            'message' => 'Indigency record updated successfully.',
+            'data' => $indigency,
+        ]);
+    }
+
+    public function getIndigencies(Request $request)
+    {
+        $status = $request->input('status');
+        $perPage = $request->input('per_page', 10); // Default to 10 entries per page
+
+        $query = Indigency::query()->orderByDesc('created_at');
+
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        $paginated = $query->paginate($perPage);
+
+        return response()->json($paginated); // returns: data, current_page, last_page, etc.
+    }
+
+    public function showIndigencyPdf($id)
+    {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            abort(404, 'Indigency record not found.');
+        }
+
+        $pdf = Pdf::loadView('indigency.indigencyPdf', compact('indigency'));
+
+        // Show in browser (not download)
+        return $pdf->stream("indigency_certificate_{$id}.pdf");
+    }
+
+    public function delete($id)
+    {
+        Indigency::where('id', $id)->update(['status' => 0]);
+        return response()->json(['message' => 'Record soft deleted.']);
+    }
+
+    public function deleteSelected(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        Indigency::whereIn('id', $ids)->update(['status' => 0]);
+        return response()->json(['message' => 'Selected records marked as deleted.']);
+    }
+
+    public function restore(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        Indigency::whereIn('id', $ids)->update(['status' => 1]);
+
+        return response()->json(['message' => 'Records restored.']);
+    }
+}

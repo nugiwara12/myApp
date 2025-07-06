@@ -5,13 +5,13 @@
                 <i class="bi bi-people text-[#1B76B5] text-xl"></i>
             </div>
             <div>
-                <h1 class="text-lg font-semibold">User Managementr</h1>
+                <h1 class="text-lg font-semibold">User Management</h1>
                 <p class="text-sm text-gray-500">Manage Your Employees</p>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- Card -->
@@ -37,7 +37,7 @@
                                 <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
                                     <tr class="whitespace-nowrap">
                                         <th class="px-4 py-2">User ID</th>
-                                        <th class="px-4 py-2">Usernme</th>
+                                        <th class="px-4 py-2">Username</th>
                                         <th class="px-4 py-2">Email Address</th>
                                         <th class="px-4 py-2">Role</th>
                                         <th class="px-4 py-2">Status</th>

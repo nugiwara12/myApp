@@ -132,9 +132,10 @@ class UserManagementController extends Controller
                 ->select(
                     'activity_logs.id',
                     'activity_logs.user_id',
-                    'users.name',
+                    'activity_logs.name',
+                    'activity_logs.email',
+                    'activity_logs.role',
                     'activity_logs.description',
-                    'users.role',
                     'users.email_verified_at',
                     'activity_logs.created_at',
                     'activity_logs.updated_at'
@@ -142,12 +143,14 @@ class UserManagementController extends Controller
                 ->orderByDesc('activity_logs.id')
                 ->get();
 
+            // ✅ You must return a JSON response here!
             return response()->json([
                 'success' => true,
                 'data' => $logs
             ]);
         }
 
+        // Normal page load (non-AJAX)
         return view('activityLogs.activity_log');
     }
 

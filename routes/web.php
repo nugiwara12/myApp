@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request; // ✅ this one
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\IndigencyController;
 
 
 Route::get('/', function () {
@@ -74,3 +76,23 @@ Route::get('/getRoles', [UserManagementController::class, 'getRoles'])->name('ge
 Route::delete('/deleteUser/{id}', [UserManagementController::class, 'deleteUser'])->name('deleteUser');
 Route::post('/restoreUser/{id}', [UserManagementController::class, 'restoreUser'])->name('restoreUser');
 Route::get('/activity-logs', [UserManagementController::class, 'activityLogs'])->name('activity-logs');
+
+
+// FeedBack
+Route::get('/getFeedback', [FeedbackController::class, 'getFeedback'])->name('getFeedback');
+Route::get('/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks');
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
+Route::post('/feedback/bulk-delete', [FeedbackController::class, 'bulkDelete']);
+
+// Indigency
+Route::get('/indigency', [IndigencyController::class, 'index'])->name('indigency.index');
+Route::post('/addIndigency', [IndigencyController::class, 'addIndigency'])->name('addIndigency');
+Route::get('/getIndigencies', [IndigencyController::class, 'getIndigencies'])->name('getIndigencies');
+Route::post('/indigency/{id}/delete', [IndigencyController::class, 'delete']);
+Route::post('/deleteSelectedIndigencies', [IndigencyController::class, 'deleteSelected'])->name('deleteSelectedIndigencies');
+Route::post('/restoreIndigencies', [IndigencyController::class, 'restore'])->name('restoreIndigencies');
+Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigency'])->name('updateIndigency');
+Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
+Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
+
