@@ -431,7 +431,7 @@
 
                 if (response.data.length === 0) {
                     feedbackList.innerHTML =
-                        '<p class="text-gray-500 text-center items-center">No feedback yet.</p>';
+                        '<div class="w-full flex justify-center items-center text-gray-500 min-h-[100px]">No feedback yet.</div>';
                     return;
                 }
 
