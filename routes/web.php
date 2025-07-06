@@ -96,3 +96,4 @@ Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigenc
 Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
 Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
 
+

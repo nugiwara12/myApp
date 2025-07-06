@@ -80,6 +80,29 @@ class IndigencyController extends Controller
         ]);
     }
 
+    public function approveIndigency($id)
+    {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            return response()->json(['message' => 'Not found.'], 404);
+        }
+
+        if ($indigency->age >= 1 && $indigency->age <= 20) {
+            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
+                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
+                $indigency->save();
+            }
+
+            return response()->json([
+                'message' => 'Approved successfully.',
+                'data' => $indigency
+            ]);
+        }
+
+        return response()->json(['message' => 'Age not within approval range.'], 400);
+    }
+
     public function getIndigencies(Request $request)
     {
         $status = $request->input('status');
