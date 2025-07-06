@@ -94,5 +94,5 @@ Route::post('/deleteSelectedIndigencies', [IndigencyController::class, 'deleteSe
 Route::post('/restoreIndigencies', [IndigencyController::class, 'restore'])->name('restoreIndigencies');
 Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigency'])->name('updateIndigency');
 Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
-Route::put('/indigency/{id}', [IndigencyController::class, 'updateIndigency']);
+Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
 

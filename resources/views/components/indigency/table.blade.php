@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="bg-white rounded-lg shadow-sm p-6">
@@ -53,12 +53,12 @@
                             </thead>
                             <tbody id="indigencyTableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
+                        <div id="paginationControls" class="mt-4"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 </x-app-layout>

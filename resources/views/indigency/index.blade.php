@@ -1,6 +1,7 @@
 <!-- Your Blade Components -->
 <x-indigency.table />
 <x-form-modal />
+<x-pagination-function />
 
 <!-- Script Section -->
 <script>
@@ -87,6 +88,8 @@
         modalId: 'certificationModal',
         fieldIds: ['parent_name', 'address', 'purpose', 'childs_name', 'age', 'date'],
         editId: null,
+        currentPage: 1,
+        perPage: 10,
 
         submit(event) {
             event.preventDefault();
@@ -118,54 +121,44 @@
                 });
         },
 
-        fetchList() {
-            axios.get(`{{ route('getIndigencies') }}`)
+        fetchList(page = 1) {
+            this.currentPage = page;
+            axios.get(`{{ route('getIndigencies') }}?per_page=${this.perPage}&page=${this.currentPage}`)
                 .then(response => {
-                    const data = response.data.data;
+                    const { data, total, current_page, last_page } = response.data;
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
                             <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
+
                     data.forEach(item => {
                         const row = this.createTableRow(item);
                         tbody.appendChild(row);
+                    });
+
+                    document.getElementById('paginationControls').innerHTML = Pagination({
+                        currentPage: current_page,
+                        totalPages: last_page,
+                        totalData: total
                     });
                 })
                 .catch(() => showToast('Failed to fetch records.', 'error'));
         },
 
         createTableRow(item) {
+            // Your existing row generation logic here
             const row = document.createElement('tr');
             const statusText = item.status === 1 ? 'Active' : 'Deleted';
 
-            // Determine if item is pending approval (age 1-20 and not yet approved)
-            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes(
-                'APPROVAL ACCEPT');
+            row.setAttribute('data-search', `${item.parent_name} ${item.address} ${item.purpose} ${item.childs_name} ${item.age} ${statusText} ${item.date}`.toLowerCase());
+            row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
 
-            // Add searchable data
-            row.setAttribute('data-search', `
-                ${item.parent_name} ${item.address} ${item.purpose}
-                ${item.childs_name} ${item.age} ${statusText} ${item.date}
-            `.toLowerCase());
+            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes('APPROVAL ACCEPT');
 
-            // Apply row styling based on status
-            if (item.status === 0) {
-                row.classList.add('bg-red-100');
-            } else if (isForApproval) {
-                row.classList.add('bg-yellow-100'); // For approval
-            } else {
-                row.classList.add('hover:bg-gray-50');
-            }
-
-            row.classList.add('cursor-pointer');
-
-            // Build the row content
             row.innerHTML = `
-                <td class="px-4 py-2">
-                    ${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ``}
-                </td>
+                <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
                 <td class="px-4 py-2">${item.parent_name}</td>
                 <td class="px-4 py-2">${item.address}</td>
                 <td class="px-4 py-2">${item.purpose}</td>
@@ -181,41 +174,10 @@
                     }
                 </td>
                 <td class="px-4 py-2 d-flex gap-2" id="actions-${item.id}">
-                    ${isForApproval
-                        ? `
-                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
-                            class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center"
-                            title="Approve">
-                            <i class="bi bi-check-circle text-white text-md"></i>
-                        </button>`
-                        : item.status === 1
-                        ? `
-                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
-                            title="Edit">
-                            <i class="bi bi-pencil-square text-black"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
-                            title="Delete">
-                            <i class="bi bi-trash-fill text-red-500"></i>
-                        </button>
-                        <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
-                            title="View PDF">
-                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
-                        </button>`
-                        : `
-                        <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
-                            class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center"
-                            title="Restore">
-                            <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
-                        </button>`
-                    }
+                    ${this.getActionButtons(item, isForApproval)}
                 </td>
             `;
 
-            // Enable row click to toggle checkbox
             if (item.status === 1) {
                 row.addEventListener('click', (e) => {
                     if (e.target.closest('button')) return;
@@ -234,9 +196,32 @@
             }
 
             return row;
+        },
+
+        getActionButtons(item, isForApproval) {
+            if (isForApproval) {
+                return `
+                    <button onclick="event.stopPropagation(); approveIndigency(${item.id})" class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center" title="Approve">
+                        <i class="bi bi-check-circle text-white text-md"></i>
+                    </button>`;
+            } else if (item.status === 1) {
+                return `
+                    <button onclick="event.stopPropagation(); editIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                        <i class="bi bi-pencil-square text-black"></i>
+                    </button>
+                    <button onclick="event.stopPropagation(); deleteIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                        <i class="bi bi-trash-fill text-red-500"></i>
+                    </button>
+                    <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                        <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                    </button>`;
+            } else {
+                return `
+                    <button onclick="event.stopPropagation(); restoreIndigency(${item.id})" class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                        <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
+                    </button>`;
+            }
         }
-
-
     };
 
     // Approved the legal Age
@@ -420,6 +405,19 @@
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('input', filterTableRows);
+        }
+    });
+
+    // {agination}
+    document.addEventListener('DOMContentLoaded', () => {
+        window.indigencyModal.fetchList();
+
+        const perPageSelect = document.getElementById('per_page');
+        if (perPageSelect) {
+            perPageSelect.addEventListener('change', function () {
+                window.indigencyModal.perPage = parseInt(this.value);
+                window.indigencyModal.fetchList(1);
+            });
         }
     });
 </script>

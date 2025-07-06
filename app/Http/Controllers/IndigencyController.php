@@ -83,18 +83,17 @@ class IndigencyController extends Controller
     public function getIndigencies(Request $request)
     {
         $status = $request->input('status');
+        $perPage = $request->input('per_page', 10); // Default to 10 entries per page
 
-        $query = Indigency::query();
+        $query = Indigency::query()->orderByDesc('created_at');
 
         if ($status !== null) {
-            $query->where('status', $status); // filter by status
+            $query->where('status', $status);
         }
 
-        $indigencies = $query->orderByDesc('created_at')->get();
+        $paginated = $query->paginate($perPage);
 
-        return response()->json([
-            'data' => $indigencies
-        ]);
+        return response()->json($paginated); // returns: data, current_page, last_page, etc.
     }
 
     public function showIndigencyPdf($id)
