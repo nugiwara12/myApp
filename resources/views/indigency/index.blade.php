@@ -226,14 +226,15 @@
 
     // Approved the legal Age
     function approveIndigency(id) {
-        axios.put(`/indigency/${id}`, {
-                approve: true
+        axios.post(`/indigency/${id}/approve`, { approve: true })
+            .then(response => {
+                showToast(response.data.message, 'success');
+                window.indigencyModal.fetchList(); // Refresh list
             })
-            .then(res => {
-                showToast('Approved successfully.', 'success');
-                window.indigencyModal.fetchList();
-            })
-            .catch(() => showToast('Failed to approve.', 'error'));
+            .catch(error => {
+                const message = error.response?.data?.message || 'Approval failed.';
+                showToast(message, 'error');
+            });
     }
 
     // Function to fetch a single record and open modal
