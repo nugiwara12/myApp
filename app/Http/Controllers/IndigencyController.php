@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Indigency;
+use Barryvdh\DomPDF\Facade\Pdf; // Add this at the top if not already
 
 class IndigencyController extends Controller
 {
@@ -13,7 +14,6 @@ class IndigencyController extends Controller
     }
 
     public function addIndigency(Request $request) {
-        // Validate request
         $validated = $request->validate([
             'parent_name'   => 'required|string|max:255',
             'address'       => 'required|string|max:255',
@@ -23,21 +23,39 @@ class IndigencyController extends Controller
             'date'          => 'required|date',
         ]);
 
-        // Explicitly set status to 1 (active)
+        // Leave as-is: don't append "APPROVAL ACCEPT"
         $validated['status'] = 1;
 
-        // Create record
         $indigency = Indigency::create($validated);
 
-        // Return JSON response
         return response()->json([
             'message' => 'Indigency record added successfully.',
             'data' => $indigency
-        ], 201); // 201 Created
+        ], 201);
     }
 
     public function updateIndigency(Request $request, $id)
     {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            return response()->json(['message' => 'Not found.'], 404);
+        }
+
+        // ✅ Manual approval request
+        if ($request->has('approve') && $indigency->age >= 1 && $indigency->age <= 20) {
+            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
+                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
+                $indigency->save();
+            }
+
+            return response()->json([
+                'message' => 'Approved successfully.',
+                'data' => $indigency
+            ]);
+        }
+
+        // ✅ Normal update
         $validated = $request->validate([
             'parent_name' => 'nullable|string|max:255',
             'address'     => 'nullable|string|max:255',
@@ -47,9 +65,11 @@ class IndigencyController extends Controller
             'date'        => 'nullable|date',
         ]);
 
-        $indigency = Indigency::find($id);
-        if (!$indigency) {
-            return response()->json(['message' => 'Not found.'], 404);
+        // ✅ Auto-approval if updated age falls between 1-20
+        if (isset($validated['age']) && $validated['age'] >= 1 && $validated['age'] <= 20) {
+            if (!empty($validated['purpose']) && !str_contains($validated['purpose'], 'APPROVAL ACCEPT')) {
+                $validated['purpose'] = rtrim($validated['purpose']) . ' - APPROVAL ACCEPT';
+            }
         }
 
         $indigency->update($validated);
@@ -75,6 +95,20 @@ class IndigencyController extends Controller
         return response()->json([
             'data' => $indigencies
         ]);
+    }
+
+    public function showIndigencyPdf($id)
+    {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            abort(404, 'Indigency record not found.');
+        }
+
+        $pdf = Pdf::loadView('indigency.indigencyPdf', compact('indigency'));
+
+        // Show in browser (not download)
+        return $pdf->stream("indigency_certificate_{$id}.pdf");
     }
 
     public function delete($id)

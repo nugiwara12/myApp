@@ -46,8 +46,8 @@
                                     <th class="px-4 py-2">Purpose</th>
                                     <th class="px-4 py-2">Childs Name</th>
                                     <th class="px-4 py-2">Age</th>
-                                    <th class="px-4 py-2">Status</th>
                                     <th class="px-4 py-2">Date</th>
+                                    <th class="px-4 py-2">Status</th>
                                     <th class="px-4 py-2">Action</th>
                                 </tr>
                             </thead>

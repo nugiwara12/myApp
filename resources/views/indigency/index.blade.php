@@ -140,13 +140,28 @@
             const row = document.createElement('tr');
             const statusText = item.status === 1 ? 'Active' : 'Deleted';
 
+            // Determine if item is pending approval (age 1-20 and not yet approved)
+            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes(
+                'APPROVAL ACCEPT');
+
+            // Add searchable data
             row.setAttribute('data-search', `
                 ${item.parent_name} ${item.address} ${item.purpose}
                 ${item.childs_name} ${item.age} ${statusText} ${item.date}
             `.toLowerCase());
 
-            row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
+            // Apply row styling based on status
+            if (item.status === 0) {
+                row.classList.add('bg-red-100');
+            } else if (isForApproval) {
+                row.classList.add('bg-yellow-100'); // For approval
+            } else {
+                row.classList.add('hover:bg-gray-50');
+            }
 
+            row.classList.add('cursor-pointer');
+
+            // Build the row content
             row.innerHTML = `
                 <td class="px-4 py-2">
                     ${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ``}
@@ -158,12 +173,22 @@
                 <td class="px-4 py-2">${item.age}</td>
                 <td class="px-4 py-2">${item.date}</td>
                 <td class="px-4 py-2">
-                    ${item.status === 1
+                    ${isForApproval
+                        ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Pending</span>'
+                        : item.status === 1
                         ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded">Active</span>'
-                        : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'}
+                        : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'
+                    }
                 </td>
-                <td class="px-4 py-2 d-flex gap-2">
-                    ${item.status === 1
+                <td class="px-4 py-2 d-flex gap-2" id="actions-${item.id}">
+                    ${isForApproval
+                        ? `
+                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                            class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center"
+                            title="Approve">
+                            <i class="bi bi-check-circle text-white text-md"></i>
+                        </button>`
+                        : item.status === 1
                         ? `
                         <button onclick="event.stopPropagation(); editIndigency(${item.id})"
                             class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
@@ -174,16 +199,23 @@
                             class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
                             title="Delete">
                             <i class="bi bi-trash-fill text-red-500"></i>
+                        </button>
+                        <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center"
+                            title="View PDF">
+                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
                         </button>`
                         : `
                         <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
                             class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center"
                             title="Restore">
                             <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
-                        </button>`}
+                        </button>`
+                    }
                 </td>
             `;
 
+            // Enable row click to toggle checkbox
             if (item.status === 1) {
                 row.addEventListener('click', (e) => {
                     if (e.target.closest('button')) return;
@@ -203,7 +235,21 @@
 
             return row;
         }
+
+
     };
+
+    // Approved the legal Age
+    function approveIndigency(id) {
+        axios.put(`/indigency/${id}`, {
+                approve: true
+            })
+            .then(res => {
+                showToast('Approved successfully.', 'success');
+                window.indigencyModal.fetchList();
+            })
+            .catch(() => showToast('Failed to approve.', 'error'));
+    }
 
     // Function to fetch a single record and open modal
     function editIndigency(id) {
@@ -264,17 +310,6 @@
 
         confirmCallback = onConfirm;
     }
-
-    document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
-        document.getElementById('confirmationModal').classList.add('hidden');
-        confirmCallback = null;
-    });
-
-    document.getElementById('confirmActionBtn').addEventListener('click', () => {
-        if (confirmCallback) confirmCallback();
-        document.getElementById('confirmationModal').classList.add('hidden');
-    });
-
 
     // Select All Toggle
     function toggleSelectAll(source) {
@@ -367,6 +402,16 @@
             }
         });
     }
+
+    document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
+        document.getElementById('confirmationModal').classList.add('hidden');
+        confirmCallback = null;
+    });
+
+    document.getElementById('confirmActionBtn').addEventListener('click', () => {
+        if (confirmCallback) confirmCallback();
+        document.getElementById('confirmationModal').classList.add('hidden');
+    });
 
     // ✅ Unified initial fetch and search binding
     document.addEventListener('DOMContentLoaded', function() {
