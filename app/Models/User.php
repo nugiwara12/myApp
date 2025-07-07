@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     // ✅ This is the method used by Filament to authorize dashboard access
     public function canAccessPanel(Panel $panel): bool
     {
-        // Adjust this logic to match your needs
-        return $this->hasAnyRole(['admin', 'user', 'encoder', 'staff']) && $this->status === 1;
+        // return $this->hasAnyRole(['admin', 'user', 'encoder', 'staff']) && $this->status === 1;
+        return $this->hasRole('admin') && $this->status === 1;
     }
 }
