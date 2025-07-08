@@ -74,6 +74,10 @@
         // Reset edit mode
         window.indigencyModal.editId = null;
 
+        // Set modal title & button
+        document.getElementById('modalTitle').innerText = 'Add Indigency';
+        document.getElementById('btnSubmitIndigency').innerText = 'Submit';
+
         // Clear form fields manually
         window.indigencyModal.fieldIds.forEach(field => {
             const input = document.getElementById(field);
