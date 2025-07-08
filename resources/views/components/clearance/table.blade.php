@@ -5,8 +5,8 @@
                 <i class="bi bi-file-earmark-text text-[#1B76B5] text-xl"></i>
             </div>
             <div>
-                <h1 class="text-lg font-semibold">Indigency Certification</h1>
-                <p class="text-sm text-gray-500">View submitted indigency requests</p>
+                <h1 class="text-lg font-semibold">Barangay Clearance</h1>
+                <p class="text-sm text-gray-500">View submitted Clearance requests</p>
             </div>
         </div>
     </x-slot>
@@ -23,13 +23,13 @@
 
                         <!-- Right: Buttons -->
                         <div class="text-right space-x-2">
-                            <x-danger-button id="deleteSelectedBtn" class="whitespace-nowrap disabled:opacity-50"
-                                onclick="deleteSelectedIndigencies()" disabled>
+                            <x-danger-button id="multiDeleteBtn" class="whitespace-nowrap disabled:opacity-50"
+                                onclick="deleteSelectedInClearance()" disabled>
                                 Multiple Delete
                             </x-danger-button>
 
-                            <x-primary-button onclick="openAddIndigency()">
-                                Add Indigency
+                            <x-primary-button onclick="openAddClearance()">
+                                Add Clearance
                             </x-primary-button>
                         </div>
                     </div>
@@ -39,19 +39,26 @@
                         <table class="w-full text-sm text-left">
                             <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
                                 <tr>
-                                    <th class="px-4 py-2"><input type="checkbox" id="selectAll"
-                                            onchange="toggleSelectAll(this)"></th>
-                                    <th class="px-4 py-2">Parent Name</th>
-                                    <th class="px-4 py-2">Address</th>
-                                    <th class="px-4 py-2">Purpose</th>
-                                    <th class="px-4 py-2">Childs Name</th>
+                                    <th class="px-4 py-2"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
+                                    <th class="px-4 py-2">Full Name</th>
+                                    <th class="px-4 py-2">Birthdate</th>
                                     <th class="px-4 py-2">Age</th>
-                                    <th class="px-4 py-2">Date</th>
+                                    <th class="px-4 py-2">Gender</th>
+                                    <th class="px-4 py-2">Civil Status</th>
+                                    <th class="px-4 py-2">Citizenship</th>
+                                    <th class="px-4 py-2">Occupation</th>
+                                    <th class="px-4 py-2">Contact</th>
+                                    <th class="px-4 py-2">House No.</th>
+                                    <th class="px-4 py-2">Purok</th>
+                                    <th class="px-4 py-2">Barangay</th>
+                                    <th class="px-4 py-2">Municipality</th>
+                                    <th class="px-4 py-2">Province</th>
+                                    <th class="px-4 py-2">Purpose</th>
                                     <th class="px-4 py-2">Status</th>
                                     <th class="px-4 py-2">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="indigencyTableBody" class="divide-y divide-gray-200"></tbody>
+                            <tbody id="clearanceTableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
                         <div id="paginationControls" class="mt-4"></div>
                     </div>

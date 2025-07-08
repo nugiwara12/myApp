@@ -7,6 +7,7 @@ use Illuminate\Http\Request; // ✅ this one
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\IndigencyController;
+use App\Http\Controllers\ClearanceController;
 
 
 Route::get('/', function () {
@@ -95,5 +96,12 @@ Route::post('/restoreIndigencies', [IndigencyController::class, 'restore'])->nam
 Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigency'])->name('updateIndigency');
 Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
 Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
+
+
+// clearance
+Route::get('/clearance', [ClearanceController::class, 'index'])->name('clearance.index');
+Route::post('/addClearance', [ClearanceController::class, 'addClearance'])->name('addClearance');
+Route::get('/getIndClearance', [ClearanceController::class, 'getIndClearance'])->name('getIndClearance');
+Route::put('/updateClearance/{id}', [ClearanceController::class, 'updateClearance'])->name('updateClearance');
 
 

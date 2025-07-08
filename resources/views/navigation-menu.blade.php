@@ -80,8 +80,8 @@
                                 </x-dropdown-link>
 
                                 <!-- Barangay Clearance -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('clearance.index') }}"
+                                    :active="request()->routeIs('clearance.index')">
                                     {{ __('Barangay Clearance') }}
                                 </x-dropdown-link>
 

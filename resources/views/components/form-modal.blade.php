@@ -2,7 +2,6 @@
 <div id="certificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-xl p-6 relative">
         <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Indigency</h2>
-
         <form id="indigencyForm" onsubmit="submitIndigency(event)" class="space-y-4">
             @csrf
 
@@ -84,6 +83,134 @@
             </button>
             <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
                 Confirm
+            </button>
+        </div>
+    </div>
+</div>
+
+{{-- Barangay Clearance --}}
+<div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
+        <!-- Header -->
+        <div class="px-6 pt-6">
+            <h2 id="modalTitle" class="text-start text-xl font-bold text-gray-800">
+                Barangay Clearance Application Form
+            </h2>
+        </div>
+
+        <!-- Scrollable Body -->
+        <div class="overflow-y-auto px-6 py-4 space-y-6 flex-1">
+            <form id="clearanceForm" class="space-y-6">
+                @csrf
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Personal Information</h3>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <!-- Inputs -->
+                        <div>
+                            <label for="full_name" class="block font-medium">Full Name</label>
+                            <input type="text" id="full_name" name="full_name"
+                                class="mt-1 w-full rounded border px-3 py-2" required />
+                        </div>
+                        <div>
+                            <label for="birthdate" class="block font-medium">Date of Birth</label>
+                            <input type="date" id="birthdate" name="birthdate"
+                                class="mt-1 w-full rounded border px-3 py-2" required />
+                        </div>
+                        <div>
+                            <label for="age" class="block font-medium">Age</label>
+                            <input type="number" id="age" name="age"
+                                class="mt-1 w-full rounded border px-3 py-2" required />
+                        </div>
+                        <div>
+                            <label for="gender" class="block font-medium">Sex / Gender</label>
+                            <select id="gender" name="gender"
+                                class="mt-1 w-full rounded border px-3 py-2" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="civil_status" class="block font-medium">Civil Status</label>
+                            <select id="civil_status" name="civil_status"
+                                class="mt-1 w-full rounded border px-3 py-2">
+                                <option value="">Select Status</option>
+                                <option value="Single">Single</option>
+                                <option value="Married">Married</option>
+                                <option value="Widowed">Widowed</option>
+                                <option value="Separated">Separated</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="citizenship" class="block font-medium">Citizenship</label>
+                            <input type="text" id="citizenship" name="citizenship"
+                                class="mt-1 w-full rounded border px-3 py-2" />
+                        </div>
+                        <div>
+                            <label for="occupation" class="block font-medium">Occupation</label>
+                            <input type="text" id="occupation" name="occupation"
+                                class="mt-1 w-full rounded border px-3 py-2" />
+                        </div>
+                        <div>
+                            <label for="contact" class="block font-medium">Contact Number</label>
+                            <input type="text" id="contact" name="contact"
+                                class="mt-1 w-full rounded border px-3 py-2" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Address</h3>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="house_no" class="block font-medium">House No. / Street</label>
+                            <input type="text" id="house_no" name="house_no"
+                                class="mt-1 w-full rounded border px-3 py-2" />
+                        </div>
+                        <div>
+                            <label for="purok" class="block font-medium">Purok / Zone</label>
+                            <input type="text" id="purok" name="purok"
+                                class="mt-1 w-full rounded border px-3 py-2" />
+                        </div>
+                        <div>
+                            <label for="barangay" class="block font-medium">Barangay</label>
+                            <input type="text" id="barangay" name="barangay"
+                                class="mt-1 w-full rounded border px-3 py-2" value="Panipuan" />
+                        </div>
+                        <div>
+                            <label for="municipality" class="block font-medium">City / Municipality</label>
+                            <input type="text" id="municipality" name="municipality"
+                                class="mt-1 w-full rounded border px-3 py-2" value="San Fernando" />
+                        </div>
+                        <div>
+                            <label for="province" class="block font-medium">Province</label>
+                            <input type="text" id="province" name="province"
+                                class="mt-1 w-full rounded border px-3 py-2" value="Pampanga" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purpose -->
+                <div>
+                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Purpose</h3>
+                    <textarea id="purpose" name="purpose" rows="4"
+                        class="w-full rounded border px-3 py-2 resize-none"
+                        placeholder="State the reason for requesting the Barangay Clearance..." required></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="border-t px-6 py-4 flex justify-end gap-2">
+            <button type="button" id="btnCancelClearance" onclick="closeModal('clearancenModal')"
+                class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
+                Cancel
+            </button>
+            <button type="button" id="btnSubmitClearance" onclick="window.clearanceModal.submit(event)"
+                class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]">
+                Submit Application
             </button>
         </div>
     </div>
