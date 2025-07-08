@@ -118,9 +118,13 @@
                                 class="mt-1 w-full rounded border px-3 py-2" required />
                         </div>
                         <div>
-                            <label for="age" class="block font-medium">Age</label>
-                            <input type="number" id="age" name="age"
-                                class="mt-1 w-full rounded border px-3 py-2" required />
+                            <label for="age" class="block font-medium">Age:
+                                <span class="italic text-gray-500 text-xs">(150 maximum age range)</span>
+                            </label>
+                            <input type="number" id="clearance_age" name="clearance_age" min="1" max="150"
+                                oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';"
+                                class="mt-1 w-full rounded border px-3 py-2"
+                                required />
                         </div>
                         <div>
                             <label for="gender" class="block font-medium">Sex / Gender</label>
@@ -194,8 +198,8 @@
 
                 <!-- Purpose -->
                 <div>
-                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Purpose</h3>
-                    <textarea id="purpose" name="purpose" rows="4"
+                    <h3 class="text-lg font-semibold text-gray-700">Purpose</h3>
+                    <textarea id="clearance_purpose" name="clearance_purpose" rows="4"
                         class="w-full rounded border px-3 py-2 resize-none"
                         placeholder="State the reason for requesting the Barangay Clearance..." required></textarea>
                 </div>

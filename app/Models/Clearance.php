@@ -14,7 +14,7 @@ class Clearance extends Model
     protected $fillable = [
         'full_name',
         'birthdate',
-        'age',
+        'clearance_age',
         'gender',
         'civil_status',
         'citizenship',
@@ -25,6 +25,7 @@ class Clearance extends Model
         'barangay',
         'municipality',
         'province',
-        'purpose',
+        'approved',
+        'clearance_purpose',
     ];
 }

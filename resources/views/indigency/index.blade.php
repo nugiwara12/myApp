@@ -18,7 +18,6 @@
         const modal = document.getElementById(id);
         if (!modal) return;
         modal.classList.add('hidden');
-        modal.removeAttribute('data-userid');
         const form = modal.querySelector('form');
         if (form) form.reset();
     };
@@ -92,7 +91,7 @@
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
-                            <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+                            <td colspan="8" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
 
@@ -274,7 +273,7 @@
         const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 
         // Enable only if more than 1 item is selected
-        deleteSelectedBtn.disabled = selectedCount < 2;
+        deleteSelectedBtn.disabled = selectedCount < 1;
     }
 
     // Delete single

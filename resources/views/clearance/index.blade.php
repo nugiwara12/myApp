@@ -42,8 +42,8 @@
     window.clearanceModal = {
         modalId: 'clearancenModal',
         fieldIds: [
-            'full_name', 'birthdate', 'age', 'gender', 'civil_status', 'citizenship', 'occupation',
-            'contact', 'house_no', 'purok', 'barangay', 'municipality', 'province', 'purpose'
+            'full_name', 'birthdate', 'clearance_age', 'gender', 'civil_status', 'citizenship', 'occupation',
+            'contact', 'house_no', 'purok', 'barangay', 'municipality', 'province', 'clearance_purpose', 'approved'
         ],
         editId: null,
         currentPage: 1,
@@ -55,56 +55,55 @@
             const form = document.getElementById('clearanceForm');
             const formData = new FormData(form);
 
-            const data = {};
-            this.fieldIds.forEach(field => {
-                data[field] = formData.get(field) || '';
-            });
+            // Append _method if editing
+            if (this.editId) {
+                formData.append('_method', 'PUT');
+            }
 
-            const method = this.editId ? 'put' : 'post';
             const url = this.editId
                 ? `/updateClearance/${this.editId}`
                 : `{!! route('addClearance') !!}`;
 
-            axios({
-                method: method,
-                url: url,
-                data: data
+            axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
-                .then(() => {
-                    showToast(this.editId ? 'Updated successfully.' : 'Submitted successfully.', 'success');
-                    closeModal(this.modalId);
-                    this.editId = null;
-                    this.fetchList();
-                })
-                .catch(error => {
-                    if (error.response?.status === 422) {
-                        const errors = error.response.data.errors;
-                        for (const field in errors) {
-                            const errorEl = document.getElementById(`error-${field}`);
-                            if (errorEl) {
-                                errorEl.textContent = errors[field][0];
-                            }
+            .then(() => {
+                showToast(this.editId ? 'Updated successfully.' : 'Submitted successfully.', 'success');
+                closeModal(this.modalId);
+                this.editId = null;
+                this.fetchList();
+            })
+            .catch(error => {
+                if (error.response?.status === 422) {
+                    const errors = error.response.data.errors;
+                    for (const field in errors) {
+                        const errorEl = document.getElementById(`error-${field}`);
+                        if (errorEl) {
+                            errorEl.textContent = errors[field][0];
                         }
-                        const firstError = Object.values(errors)[0][0];
-                        showToast(firstError, 'error');
-                    } else {
-                        showToast('Submission failed.', 'error');
-                        console.error(error);
                     }
-                });
+                    const firstError = Object.values(errors)[0][0];
+                    showToast(firstError, 'error');
+                } else {
+                    showToast('Submission failed.', 'error');
+                    console.error(error);
+                }
+            });
         },
 
         fetchList(page = 1) {
             this.currentPage = page;
 
-            axios.get(`{!! route('getIndClearance') !!}?per_page=${this.perPage}&page=${this.currentPage}`)
+            axios.get(`{{ route('getIndClearance') }}?per_page=${this.perPage}&page=${this.currentPage}`)
                 .then(response => {
                     const { data, total, current_page, last_page } = response.data;
                     const tbody = document.getElementById('clearanceTableBody');
 
                     tbody.innerHTML = data.length
                         ? ''
-                        : `<tr><td colspan="8" class="text-center text-gray-500 py-4">No records found.</td></tr>`;
+                        : `<tr><td colspan="17" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td></tr>`;
 
                     data.forEach(item => {
                         const row = this.createTableRow(item);
@@ -128,10 +127,20 @@
             const row = document.createElement('tr');
             const statusText = item.status === 1 ? 'Active' : 'Deleted';
 
+            // ✅ INSERT HERE
+            if (item.status === 0) {
+                row.classList.add('bg-red-100');
+            } else if (item.clearance_age >= 1 && item.clearance_age <= 17) {
+                row.classList.add('bg-yellow-100', 'cursor-pointer');
+            } else {
+                row.classList.add('hover:bg-gray-50', 'cursor-pointer');
+            }
+
+
             row.setAttribute('data-search', `
                 ${item.full_name}
                 ${item.birthdate}
-                ${item.age}
+                ${item.clearance_age}
                 ${item.gender}
                 ${item.civil_status}
                 ${item.citizenship}
@@ -142,18 +151,19 @@
                 ${item.barangay}
                 ${item.municipality}
                 ${item.province}
-                ${item.purpose}
+                ${item.clearance_purpose}
+                ${item.approved}
                 ${statusText}
             `.toLowerCase());
             row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
 
-            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes('APPROVAL ACCEPT');
+            const isForApproval = item.status === 1 && item.clearance_age >= 1 && item.clearance_age <= 17 && item.approved != 1;
 
             row.innerHTML = `
                 <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
                 <td class="px-4 py-2">${item.full_name}</td>
                 <td class="px-4 py-2">${item.birthdate}</td>
-                <td class="px-4 py-2">${item.age}</td>
+                <td class="px-4 py-2">${item.clearance_age}</td>
                 <td class="px-4 py-2">${item.gender}</td>
                 <td class="px-4 py-2">${item.civil_status}</td>
                 <td class="px-4 py-2">${item.citizenship}</td>
@@ -164,13 +174,22 @@
                 <td class="px-4 py-2">${item.barangay}</td>
                 <td class="px-4 py-2">${item.municipality}</td>
                 <td class="px-4 py-2">${item.province}</td>
-                <td class="px-4 py-2">${item.purpose}</td>
+                <td class="px-4 py-2">${item.clearance_purpose}</td>
                 <td class="px-4 py-2">
                     ${isForApproval
                         ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Pending</span>'
                         : item.status === 1
                         ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded">Active</span>'
                         : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'
+                    }
+                </td>
+               <td class="px-4 py-2">
+                    ${
+                        item.status === 0
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">Deleted</span>'
+                            : item.approved === 1
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">Approved</span>'
+                            : '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Not Approved</span>'
                     }
                 </td>
                 <td class="px-4 py-2 d-flex gap-2 whitespace-nowrap" id="actions-${item.id}">
@@ -230,14 +249,14 @@
         document.getElementById('btnSubmitClearance').innerText = 'Update';
         openModal(window.clearanceModal.modalId);
 
-        // Clear form fields
+        // Clear form fields first
         window.clearanceModal.fieldIds.forEach(field => {
             const input = document.getElementById(field);
             if (input) input.value = '';
         });
 
-        // ✅ Use GET to fetch the data
-        axios.put(`/updateClearance/${id}`)
+        // Correct: Use GET to fetch record by ID
+        axios.get(`/getClearanceById/${id}`)
             .then(response => {
                 const data = response.data.data;
                 window.clearanceModal.editId = data.id;
@@ -247,7 +266,11 @@
                     if (!input) return;
 
                     if (field === 'birthdate' && data.birthdate) {
-                        input.value = data.birthdate.split('T')[0]; // format as YYYY-MM-DD
+                        input.value = data.birthdate.split('T')[0]; // Ensure proper format for input type="date"
+                    } else if (field === 'clearance_age') {
+                        input.value = data.clearance_age ?? '';
+                    } else if (field === 'clearance_purpose') {
+                        input.value = data.clearance_purpose ?? '';
                     } else {
                         input.value = data[field] ?? '';
                     }
@@ -255,6 +278,19 @@
             })
             .catch(() => {
                 showToast('Failed to load record.', 'error');
+        });
+    }
+
+    // Approved the legal Age
+    function approveClearance(id) {
+        axios.post(`/clearance/${id}/approve`, { approve: true })
+            .then(response => {
+                showToast(response.data.message, 'success');
+                window.clearanceModal.fetchList(); // Refresh list
+            })
+            .catch(error => {
+                const message = error.response?.data?.message || 'Approval failed.';
+                showToast(message, 'error');
             });
     }
 
@@ -268,6 +304,123 @@
             row.style.display = searchableText.includes(query) ? '' : 'none';
         });
     }
+
+    // Select All Toggle
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('.selectCheckbox');
+        checkboxes.forEach(cb => cb.checked = source.checked);
+        updateDeleteButtonState();
+    }
+
+    // Update "Select All" checkbox
+    function updateSelectAllCheckbox() {
+        const checkboxes = document.querySelectorAll('.selectCheckbox');
+        const selectAll = document.getElementById('selectAll');
+        if (!selectAll) return;
+
+        const allChecked = [...checkboxes].length > 0 && [...checkboxes].every(cb => cb.checked);
+        selectAll.checked = allChecked;
+    }
+
+    // Remove dissabled of the multi button
+    function updateDeleteButtonState() {
+        const selected = document.querySelectorAll('.selectCheckbox:checked');
+        const deleteBtn = document.getElementById('multiDeleteBtn');
+
+        if (deleteBtn) {
+            deleteBtn.disabled = selected.length === 1;
+        }
+    }
+
+    // Delete single
+    function deleteClearance(id) {
+        showConfirmation({
+            title: 'Delete Record',
+            message: 'Are you sure you want to delete this record?',
+            confirmText: 'Delete',
+            onConfirm: () => {
+                axios.post(`/clearance/${id}/delete`)
+                    .then(() => {
+                        showToast('Record deleted.', 'success');
+                        window.clearanceModal.fetchList();
+                    })
+                    .catch(() => {
+                        showToast('Failed to delete record.', 'error');
+                    });
+            }
+        });
+    }
+
+    // Delete multiple
+    function deleteSelectedClearance() {
+        const selected = [...document.querySelectorAll('.selectCheckbox:checked')];
+        const ids = selected.map(cb => cb.dataset.id);
+
+        if (ids.length === 0) return;
+
+        showConfirmation({
+            title: 'Multiple Delete Records',
+            message: `Are you sure you want to delete ${ids.length} selected record(s)?`,
+            confirmText: 'Delete All',
+            onConfirm: () => {
+                axios.post(`{{ route('deleteSelectedClearance') }}`, {
+                        ids
+                    })
+                    .then(() => {
+                        showToast('Selected records deleted.', 'success');
+                        window.clearanceModal.fetchList();
+                    })
+                    .catch(() => {
+                        showToast('Failed to delete selected records.', 'error');
+                    });
+            }
+        });
+    }
+
+    // Restore single
+    function restoreClearance(id) {
+        showConfirmation({
+            title: 'Restore Record',
+            message: 'Do you want to restore this record?',
+            confirmText: 'Restore',
+            onConfirm: () => {
+                axios.post("{{ route('restoreClearance') }}", {
+                        ids: [id]
+                    })
+                    .then(() => {
+                        showToast('Record restored.', 'success');
+                        window.clearanceModal.fetchList();
+                    })
+                    .catch(() => {
+                        showToast('Failed to restore record.', 'error');
+                    });
+            }
+        });
+    }
+
+    function showConfirmation({
+        title,
+        message,
+        confirmText = 'Confirm',
+        onConfirm
+    }) {
+        document.getElementById('confirmationTitle').textContent = title;
+        document.getElementById('confirmationMessage').textContent = message;
+        document.getElementById('confirmActionBtn').textContent = confirmText;
+        document.getElementById('confirmationModal').classList.remove('hidden');
+
+        confirmCallback = onConfirm;
+    }
+
+    document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
+        document.getElementById('confirmationModal').classList.add('hidden');
+        confirmCallback = null;
+    });
+
+    document.getElementById('confirmActionBtn').addEventListener('click', () => {
+        if (confirmCallback) confirmCallback();
+        document.getElementById('confirmationModal').classList.add('hidden');
+    });
 
     // Fetch list on page load
     document.addEventListener('DOMContentLoaded', function() {

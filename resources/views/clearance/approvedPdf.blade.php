@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Certificate of Indigency</title>
+    <title>Certificate of clearance</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -70,7 +70,7 @@
             border-bottom: 2px solid #000;
         }
 
-        .indigency {
+        .clearance {
             font-weight: bold;
             font-size: 20px;
             margin-top: 1rem;
@@ -158,7 +158,7 @@
                     <span class="baranagay-tabun">Barangay Panipuan</span>
                 </p>
                 <div class="certificate-title-wrapper">
-                    <h1 class="certificate-title">CERTIFICATE OF INDIGENCY</h1>
+                    <h1 class="certificate-title">Barangay Clearance</h1>
                 </div>
             </div>
         </div>
@@ -171,19 +171,19 @@
         <!-- Content -->
         <div class="content">
             <p class="indent-8">
-                This is to certify that <span class="bold">{{ strtoupper($indigency->parent_name) }}</span>, of legal age, Filipino, and a resident of <span class="bold">{{ strtoupper($indigency->address) }}</span>, is one of the <span class="italic">indigents</span> in our barangay.
-            </p>
-
-            <p>
-                This certification is being issued upon the request of the above-named person for <span class="bold" id="purposeText">{{ strtoupper($indigency->purpose) }}</span>.
+                This is to certify that Mr/Mrs./Ms. <span class="bold">{{ strtoupper($clearance->full_name) }}</span>, of legal age, male/female, single/married/widow/widower, filipino citizen, with residence of <span class="bold">{{ strtoupper($clearance->purok) }}</span> Barangay Panipuan, Sanfernado City Pampanga, whose specimen signature appears below, neither pending case nor derogatory record on the file of this office. I further certify that Mr./Mrs./Ms.<span class="bold">{{ strtoupper($clearance->full_name) }}</span> of this barangay.
             </p>
 
             <p class="indent-8">
-                Issued this <strong>{{ \Carbon\Carbon::parse($indigency->date)->format('jS') }}</strong> day of <strong>{{ \Carbon\Carbon::parse($indigency->date)->format('F Y') }}</strong>, at the Office of the Sangguniang Barangay, Barangay Panipuan, San Fernando City, Pampanga.
+                This certification is hereby issued upon the request of the aforementioned individual for the purpose of <span class="bold" id="purposeText">{{ strtoupper($clearance->clearance_purpose) }}</span>, age of <strong>{{$clearance->clearance_age}}</strong> years old is know to be a person of good moral character and reputation.
+            </p>
+
+            <p class="indent-8"> This certification was issued upon of request of the above-named for the puspose of <strong>{{$clearance->clearance_purpose }}</strong> day of <strong>{{ \Carbon\Carbon::parse($clearance->date)->format('F Y') }}</strong>, at the Office of the Sangguniang Barangay, Barangay Panipuan, City of San Fernando, Pampanga.
             </p>
 
             <p>__________________ <br><span class="mark-sign">Signature</span></p>
         </div>
+
 
         <!-- Verification -->
         <p class="verify-text-sec">Checked and Verified by:</p>

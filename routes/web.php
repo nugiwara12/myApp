@@ -103,5 +103,11 @@ Route::get('/clearance', [ClearanceController::class, 'index'])->name('clearance
 Route::post('/addClearance', [ClearanceController::class, 'addClearance'])->name('addClearance');
 Route::get('/getIndClearance', [ClearanceController::class, 'getIndClearance'])->name('getIndClearance');
 Route::put('/updateClearance/{id}', [ClearanceController::class, 'updateClearance'])->name('updateClearance');
+Route::get('/getClearanceById/{id}', [ClearanceController::class, 'getClearanceById'])->name('getClearanceById');
+Route::post('/clearance/{id}/approve', [ClearanceController::class, 'approveClearance']);
 
+Route::post('/clearance/{id}/delete', [ClearanceController::class, 'delete']);
+Route::post('/deleteSelectedClearance', [ClearanceController::class, 'deleteSelected'])->name('deleteSelectedClearance');
+Route::post('/restoreClearance', [ClearanceController::class, 'restore'])->name('restoreClearance');
+Route::get('/clearance/pdf/{id}', [ClearanceController::class, 'showClearancePdf'])->name('clearance.pdf');
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('full_name');
             $table->date('birthdate');
-            $table->integer('age');
+            $table->integer('clearance_age');
             $table->enum('gender', ['Male', 'Female']);
             $table->enum('civil_status', ['Single', 'Married', 'Widowed', 'Separated'])->nullable();
             $table->string('citizenship')->nullable();
@@ -26,8 +26,9 @@ return new class extends Migration
             $table->string('barangay')->default('Panipuan');
             $table->string('municipality')->default('San Fernando');
             $table->string('province')->default('Pampanga');
-            $table->text('purpose');
+            $table->text('clearance_purpose');
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('approved')->default(0); // 0 = Not approved, 1 = Approved
             $table->timestamps();
         });
     }

@@ -30,13 +30,24 @@ class ClearanceController extends Controller
         return response()->json($paginated); // returns: data, current_page, last_page, etc.
     }
 
+    public function getClearanceById($id)
+    {
+        $clearance = Clearance::find($id);
+
+        if (!$clearance) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+
+        return response()->json(['data' => $clearance]);
+    }
+
     public function addClearance(Request $request)
     {
         try {
             $validated = $request->validate([
                 'full_name'     => 'required|string|max:255',
                 'birthdate'     => 'required|date',
-                'age'           => 'required|numeric|max:150',
+                'clearance_age'           => 'required|numeric|max:150',
                 'gender'        => 'required|in:Male,Female',
                 'civil_status'  => 'nullable|string|max:50',
                 'citizenship'   => 'nullable|string|max:100',
@@ -47,7 +58,7 @@ class ClearanceController extends Controller
                 'barangay'      => 'required|string|max:100',
                 'municipality'  => 'required|string|max:100',
                 'province'      => 'required|string|max:100',
-                'purpose'       => 'required|string|max:500',
+                'clearance_purpose'       => 'required|string|max:500',
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -76,7 +87,7 @@ class ClearanceController extends Controller
             $validated = $request->validate([
                 'full_name'     => 'nullable|string|max:255',
                 'birthdate'     => 'nullable|date',
-                'age'           => 'nullable|numeric|max:150',
+                'clearance_age'           => 'nullable|numeric|max:150',
                 'gender'        => 'nullable|in:Male,Female',
                 'civil_status'  => 'nullable|string|max:50',
                 'citizenship'   => 'nullable|string|max:100',
@@ -87,7 +98,7 @@ class ClearanceController extends Controller
                 'barangay'      => 'nullable|string|max:100',
                 'municipality'  => 'nullable|string|max:100',
                 'province'      => 'nullable|string|max:100',
-                'purpose'       => 'nullable|string|max:500',
+                'clearance_purpose'       => 'nullable|string|max:500',
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -96,12 +107,6 @@ class ClearanceController extends Controller
             ], 422);
         }
 
-        // Auto-approval if age is between 1 and 20
-        if (isset($validated['age']) && $validated['age'] >= 1 && $validated['age'] <= 20) {
-            if (!empty($validated['purpose']) && !str_contains($validated['purpose'], 'APPROVAL ACCEPT')) {
-                $validated['purpose'] = rtrim($validated['purpose']) . ' - APPROVAL ACCEPT';
-            }
-        }
 
         $clearance->update($validated);
 
@@ -111,64 +116,62 @@ class ClearanceController extends Controller
         ]);
     }
 
-    public function showIndigencyPdf($id)
+    public function approveClearance($id)
     {
-        $indigency = Indigency::find($id);
+        $clearance = Clearance::find($id);
 
-        if (!$indigency) {
-            abort(404, 'Indigency record not found.');
-        }
-
-        // Check age to determine which PDF layout to use
-        $view = ($indigency->age >= 1 && $indigency->age <= 17)
-            ? 'indigency.indigencyPdf'
-            : 'indigency.legalPdf';
-
-        $pdf = Pdf::loadView($view, compact('indigency'));
-
-        return $pdf->stream("indigency_certificate_{$id}.pdf");
-    }
-
-    public function approveIndigency($id)
-    {
-        $indigency = Indigency::find($id);
-
-        if (!$indigency) {
+        if (!$clearance) {
             return response()->json(['message' => 'Not found.'], 404);
         }
 
-        if ($indigency->age >= 1 && $indigency->age <= 20) {
-            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
-                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
-                $indigency->save();
-            }
+        if ($clearance->clearance_age >= 1 && $clearance->clearance_age <= 17) {
+            $clearance->approved = 1;
+            $clearance->save();
 
             return response()->json([
                 'message' => 'Approved successfully.',
-                'data' => $indigency
+                'data' => $clearance
             ]);
         }
 
         return response()->json(['message' => 'Age not within approval range.'], 400);
     }
 
+    public function showClearancePdf($id)
+    {
+        $clearance = Clearance::find($id);
+
+        if (!$clearance) {
+            abort(404, 'clearance record not found.');
+        }
+
+        // Check age to determine which PDF layout to use
+        $view = ($clearance->age >= 1 && $clearance->age <= 17)
+            ? 'clearance.clearancePdf'
+            : 'clearance.approvedPdf';
+
+        $pdf = Pdf::loadView($view, compact('clearance'));
+
+        return $pdf->stream("clearance_certificate_{$id}.pdf");
+    }
+
     public function delete($id)
     {
-        Indigency::where('id', $id)->update(['status' => 0]);
+        Clearance::where('id', $id)->update(['status' => 0]);
         return response()->json(['message' => 'Record soft deleted.']);
     }
 
     public function deleteSelected(Request $request)
     {
         $ids = $request->input('ids', []);
-        Indigency::whereIn('id', $ids)->update(['status' => 0]);
+        Clearance::whereIn('id', $ids)->update(['status' => 0]);
         return response()->json(['message' => 'Selected records marked as deleted.']);
     }
 
     public function restore(Request $request)
     {
         $ids = $request->input('ids', []);
-        Indigency::whereIn('id', $ids)->update(['status' => 1]);
+        Clearance::whereIn('id', $ids)->update(['status' => 1]);
 
         return response()->json(['message' => 'Records restored.']);
     }

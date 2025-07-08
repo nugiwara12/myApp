@@ -24,7 +24,7 @@
                         <!-- Right: Buttons -->
                         <div class="text-right space-x-2">
                             <x-danger-button id="multiDeleteBtn" class="whitespace-nowrap disabled:opacity-50"
-                                onclick="deleteSelectedInClearance()" disabled>
+                                onclick="deleteSelectedClearance()" disabled>
                                 Multiple Delete
                             </x-danger-button>
 
@@ -37,7 +37,7 @@
                     <!-- Table -->
                     <div class="h-full overflow-y-auto rounded">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
+                            <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10 whitespace-nowrap">
                                 <tr>
                                     <th class="px-4 py-2"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
                                     <th class="px-4 py-2">Full Name</th>
@@ -55,10 +55,11 @@
                                     <th class="px-4 py-2">Province</th>
                                     <th class="px-4 py-2">Purpose</th>
                                     <th class="px-4 py-2">Status</th>
+                                    <th class="px-4 py-2">Approval</th>
                                     <th class="px-4 py-2">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="clearanceTableBody" class="divide-y divide-gray-200"></tbody>
+                            <tbody id="clearanceTableBody" class="divide-y divide-gray-200 whitespace-nowrap"></tbody>
                         </table>
                         <div id="paginationControls" class="mt-4"></div>
                     </div>
