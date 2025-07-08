@@ -27,6 +27,7 @@
                     </x-nav-link>
 
                     {{-- User management --}}
+                    @hasrole('admin')
                     <x-nav-link :href="route('role-management.index')" :active="request()->routeIs('role-management.index')">
                         {{ __('User Management') }}
                     </x-nav-link>
@@ -99,6 +100,7 @@
 
                         </x-dropdown>
                     </div>
+                    @endhasrole
 
                 </div>
 
