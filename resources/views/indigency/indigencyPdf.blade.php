@@ -121,7 +121,7 @@
 <body>
     <div class="certification">
         <img class="left-logo" src="{{ public_path('admin_assets/images/logo-left.png') }}" alt="Left Logo">
-        <img class="profile-picture" src="{{ public_path('admin_assets/images/logo-left.png') }}" alt="Right Logo">
+        <img class="profile-picture" src="{{ public_path('admin_assets/images/sanfernando.png') }}" alt="Right Logo">
 
         <div class="barangay">
             <p class="header-title1">
@@ -129,7 +129,7 @@
                 Province of Pampanga<br>
                 Sanfernando City<br>
                 OFFICE OF THE SANGGUNIANG BARANGAY<br>
-                <span class="baranagay-tabun">Barangay Ivan</span>
+                <span class="baranagay-tabun">Barangay Panipuan</span>
             </p>
             <hr>
             <div class="indigency">CERTIFICATE OF INDIGENCY</div>

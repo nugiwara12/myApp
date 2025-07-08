@@ -80,6 +80,24 @@ class IndigencyController extends Controller
         ]);
     }
 
+    public function showIndigencyPdf($id)
+    {
+        $indigency = Indigency::find($id);
+
+        if (!$indigency) {
+            abort(404, 'Indigency record not found.');
+        }
+
+        // Check age to determine which PDF layout to use
+        $view = ($indigency->age >= 1 && $indigency->age <= 17)
+            ? 'indigency.indigencyPdf'
+            : 'indigency.legalPdf';
+
+        $pdf = Pdf::loadView($view, compact('indigency'));
+
+        return $pdf->stream("indigency_certificate_{$id}.pdf");
+    }
+
     public function approveIndigency($id)
     {
         $indigency = Indigency::find($id);
@@ -117,20 +135,6 @@ class IndigencyController extends Controller
         $paginated = $query->paginate($perPage);
 
         return response()->json($paginated); // returns: data, current_page, last_page, etc.
-    }
-
-    public function showIndigencyPdf($id)
-    {
-        $indigency = Indigency::find($id);
-
-        if (!$indigency) {
-            abort(404, 'Indigency record not found.');
-        }
-
-        $pdf = Pdf::loadView('indigency.indigencyPdf', compact('indigency'));
-
-        // Show in browser (not download)
-        return $pdf->stream("indigency_certificate_{$id}.pdf");
     }
 
     public function delete($id)
