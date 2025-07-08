@@ -66,7 +66,7 @@
     <!-- Indigency Modal -->
     <div id="certificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-xl p-6 relative">
-            <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Indigency</h2>
+            <h2 id="modalTitle" class="text-xl font-bold mb-4 text-black">Add Indigency</h2>
 
             <form id="indigencyForm" onsubmit="submitIndigency(event)" class="space-y-4">
                 @csrf
@@ -75,7 +75,7 @@
                 <div>
                     <label for="parent_name" class="block text-sm font-medium text-gray-700">Parent Name:</label>
                     <input type="text" id="parent_name" name="parent_name"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -83,7 +83,7 @@
                 <div>
                     <label for="address" class="block text-sm font-medium text-gray-700">Address:</label>
                     <input type="text" id="address" name="address"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -91,7 +91,7 @@
                 <div>
                     <label for="purpose" class="block text-sm font-medium text-gray-700">Purpose:</label>
                     <input type="text" id="purpose" name="purpose"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -99,7 +99,7 @@
                 <div>
                     <label for="childs_name" class="block text-sm font-medium text-gray-700">Child Name:</label>
                     <input type="text" id="childs_name" name="childs_name"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -110,7 +110,7 @@
                     </label>
                     <input type="number" id="age" name="age" min="1" max="150"
                         oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -118,7 +118,7 @@
                 <div>
                     <label for="date" class="block text-sm font-medium text-gray-700">Date:</label>
                     <input type="date" id="date" name="date"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required />
                 </div>
 
@@ -229,6 +229,10 @@
             // Reset edit mode
             window.indigencyModal.editId = null;
 
+            // Set modal title & button
+            document.getElementById('modalTitle').innerText = 'Add Indigency';
+            document.getElementById('btnSubmitIndigency').innerText = 'Submit';
+
             // Clear form fields manually
             window.indigencyModal.fieldIds.forEach(field => {
                 const input = document.getElementById(field);
@@ -236,6 +240,40 @@
             });
 
             openModal(window.indigencyModal.modalId);
+        }
+
+                // Function to fetch a single record and open modal
+        function editIndigency(id) {
+            document.getElementById('modalTitle').innerText = 'Edit Indigency';
+            document.getElementById('btnSubmitIndigency').innerText = 'Update';
+            openModal(window.indigencyModal.modalId);
+
+            // Clear form
+            window.indigencyModal.fieldIds.forEach(field => {
+                const input = document.getElementById(field);
+                if (input) input.value = '';
+            });
+
+            axios.put(`/updateIndigency/${id}`) // use GET, not PUT, to fetch
+                .then(response => {
+                    const data = response.data.data;
+                    window.indigencyModal.editId = data.id;
+
+                    window.indigencyModal.fieldIds.forEach(field => {
+                        const input = document.getElementById(field);
+                        if (!input) return;
+
+                        // Format the date field properly
+                        if (field === 'date' && data.date) {
+                            input.value = data.date.split('T')[0]; // Only 'YYYY-MM-DD'
+                        } else {
+                            input.value = data[field] ?? '';
+                        }
+                    });
+                })
+                .catch(() => {
+                    showToast('Failed to load record.', 'error');
+                });
         }
 
         // Indigency Modal Handler
@@ -389,40 +427,6 @@
                 .catch(error => {
                     const message = error.response?.data?.message || 'Approval failed.';
                     showToast(message, 'error');
-                });
-        }
-
-        // Function to fetch a single record and open modal
-        function editIndigency(id) {
-            document.getElementById('modalTitle').innerText = 'Edit Indigency';
-            document.getElementById('btnSubmitIndigency').innerText = 'Update';
-            openModal(window.indigencyModal.modalId);
-
-            // Clear form
-            window.indigencyModal.fieldIds.forEach(field => {
-                const input = document.getElementById(field);
-                if (input) input.value = '';
-            });
-
-            axios.put(`/updateIndigency/${id}`) // use GET, not PUT, to fetch
-                .then(response => {
-                    const data = response.data.data;
-                    window.indigencyModal.editId = data.id;
-
-                    window.indigencyModal.fieldIds.forEach(field => {
-                        const input = document.getElementById(field);
-                        if (!input) return;
-
-                        // Format the date field properly
-                        if (field === 'date' && data.date) {
-                            input.value = data.date.split('T')[0]; // Only 'YYYY-MM-DD'
-                        } else {
-                            input.value = data[field] ?? '';
-                        }
-                    });
-                })
-                .catch(() => {
-                    showToast('Failed to load record.', 'error');
                 });
         }
 
