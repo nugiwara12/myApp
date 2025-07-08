@@ -62,7 +62,7 @@
                             <tbody id="clearanceTableBody" class="divide-y divide-gray-200 whitespace-nowrap"></tbody>
                         </table>
                     </div>
-                    <div id="paginationControls" class="mt-4"></div>
+                    <div id="paginationControls" class="mt-4 border-t"></div>
                 </div>
             </div>
         </div>

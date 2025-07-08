@@ -54,7 +54,7 @@
                             </thead>
                             <tbody id="indigencyTableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
-                        <div id="paginationControls" class="mt-4"></div>
+                        <div id="paginationControls" class="mt-4 border-t"></div>
                     </div>
                 </div>
             </div>
