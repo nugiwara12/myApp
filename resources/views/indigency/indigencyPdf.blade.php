@@ -151,7 +151,7 @@
             </p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                This certificate is issued upon request for her <strong>son</strong>,
+                This certificate is issued upon request for her <strong>child</strong>,
                 <span class="purpose">{{ strtoupper($indigency->childs_name) }}</span>, age
                 <span class="age">{{ strtoupper($indigency->age) }}</span>, born on
                 <span class="date_of_birth">March 25, 2014</span>,
