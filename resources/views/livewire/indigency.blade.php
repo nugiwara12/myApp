@@ -11,8 +11,8 @@
         </div>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
+    <div class="">
+        <div class="max-w-full mx-auto">
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="rounded-lg shadow-sm p-6">
                     <div class="flex justify-between mb-4 flex-wrap gap-2">
@@ -53,8 +53,8 @@
                             </thead>
                             <tbody id="indigencyTableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
-                        <div id="paginationControls" class="mt-4"></div>
                     </div>
+                    <div id="paginationControls" class="mt-4"></div>
                 </div>
             </div>
         </div>
