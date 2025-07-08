@@ -48,6 +48,7 @@
                                     <th class="px-4 py-2">Age</th>
                                     <th class="px-4 py-2">Date</th>
                                     <th class="px-4 py-2">Status</th>
+                                    <th class="px-4 py-2">Approved</th>
                                     <th class="px-4 py-2">Action</th>
                                 </tr>
                             </thead>
@@ -322,7 +323,7 @@
                         const tbody = document.getElementById('indigencyTableBody');
                         tbody.innerHTML = data.length ? '' : `
                             <tr>
-                                <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+                                <td colspan="10" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                             </tr>
                         `;
 
@@ -334,21 +335,33 @@
                         document.getElementById('paginationControls').innerHTML = Pagination({
                             currentPage: current_page,
                             totalPages: last_page,
-                            totalData: total
+                            totalData: total,
+                            perPage: this.perPage,
+                            namespace: 'indigency'
                         });
                     })
                     .catch(() => showToast('Failed to fetch records.', 'error'));
             },
 
             createTableRow(item) {
-                // Your existing row generation logic here
                 const row = document.createElement('tr');
                 const statusText = item.status === 1 ? 'Active' : 'Deleted';
+                const approved = Number(item.approved);
+                const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && approved !== 1;
+
+                // 🔁 Clean classList
+                row.className = 'cursor-pointer';
+
+                // ✅ Apply background + text color conditionally
+                if (item.status === 0) {
+                    row.classList.add('bg-red-100', 'text-red-900', 'hover:bg-red-200');
+                } else if (item.age >= 1 && item.age <= 17) {
+                    row.classList.add('bg-yellow-100', 'text-yellow-900', 'hover:bg-yellow-200');
+                } else {
+                    row.classList.add('hover:bg-gray-100', 'text-gray-900', 'dark:hover:bg-gray-700', 'dark:text-gray-100');
+                }
 
                 row.setAttribute('data-search', `${item.parent_name} ${item.address} ${item.purpose} ${item.childs_name} ${item.age} ${statusText} ${item.date}`.toLowerCase());
-                row.classList.add(item.status === 0 ? 'bg-red-500' : 'hover:bg-gray-500', 'cursor-pointer');
-
-                const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes('APPROVAL ACCEPT');
 
                 row.innerHTML = `
                     <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
@@ -366,7 +379,15 @@
                             : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'
                         }
                     </td>
-                    <td class="px-4 py-2 d-flex gap-2" id="actions-${item.id}">
+                    <td class="px-4 py-2">
+                        ${item.status === 0
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">Deleted</span>'
+                            : approved === 1
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">Approved</span>'
+                            : '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Not Approved</span>'
+                        }
+                    </td>
+                    <td class="px-4 py-2 d-flex gap-2 whitespace-nowrap" id="actions-${item.id}">
                         ${this.getActionButtons(item, isForApproval)}
                     </td>
                 `;
@@ -392,25 +413,35 @@
             },
 
             getActionButtons(item, isForApproval) {
+                const isMinor = item.age >= 1 && item.age <= 17;
+                const iconTextColor = isMinor
+                    ? 'text-gray-800' // Good contrast on yellow
+                    : 'text-black dark:text-white';
+
                 if (isForApproval) {
                     return `
-                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})" class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center" title="Approve">
+                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                            class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center" title="Approve">
                             <i class="bi bi-check-circle text-white text-md"></i>
                         </button>`;
                 } else if (item.status === 1) {
                     return `
-                        <button onclick="event.stopPropagation(); editIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
-                            <i class="bi bi-pencil-square text-white"></i>
+                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                            <i class="bi bi-pencil-square ${iconTextColor}"></i>
                         </button>
-                        <button onclick="event.stopPropagation(); deleteIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
-                            <i class="bi bi-trash-fill text-red-500"></i>
+                        <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                            <i class="bi bi-trash-fill ${isMinor ? 'text-gray-800' : 'text-red-600 dark:text-red-400'}"></i>
                         </button>
-                        <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
-                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                        <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                            <i class="bi bi-file-earmark-pdf ${isMinor ? 'text-gray-800' : 'text-red-600 dark:text-red-400'}"></i>
                         </button>`;
                 } else {
                     return `
-                        <button onclick="event.stopPropagation(); restoreIndigency(${item.id})" class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                        <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
+                            class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
                             <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
                         </button>`;
                 }

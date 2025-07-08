@@ -91,7 +91,7 @@
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
-                            <td colspan="8" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
+                            <td colspan="10" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
 
@@ -116,10 +116,19 @@
             const row = document.createElement('tr');
             const statusText = item.status === 1 ? 'Active' : 'Deleted';
 
+            // ✅ INSERT HERE
+            if (item.status === 0) {
+                row.classList.add('bg-red-100');
+            } else if (item.age >= 1 && item.age <= 17) {
+                row.classList.add('bg-yellow-100', 'cursor-pointer');
+            } else {
+                row.classList.add('hover:bg-gray-50', 'cursor-pointer');
+            }
+
             row.setAttribute('data-search', `${item.parent_name} ${item.address} ${item.purpose} ${item.childs_name} ${item.age} ${statusText} ${item.date}`.toLowerCase());
             row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
 
-            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes('APPROVAL ACCEPT');
+            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && item.approved != 1;
 
             row.innerHTML = `
                 <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
@@ -135,6 +144,15 @@
                         : item.status === 1
                         ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded">Active</span>'
                         : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'
+                    }
+                </td>
+                <td class="px-4 py-2">
+                    ${
+                        item.status === 0
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">Deleted</span>'
+                            : item.approved === 1
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">Approved</span>'
+                            : '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Not Approved</span>'
                     }
                 </td>
                 <td class="px-4 py-2 d-flex gap-2 whitespace-nowrap" id="actions-${item.id}">
@@ -273,7 +291,7 @@
         const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 
         // Enable only if more than 1 item is selected
-        deleteSelectedBtn.disabled = selectedCount < 1;
+        deleteSelectedBtn.disabled = selectedCount < 2;
     }
 
     // Delete single

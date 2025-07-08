@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('childs_name');
             $table->unsignedTinyInteger('age');
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('approved')->default(0); // 0 = Not approved, 1 = Approved
             $table->date('date');
             $table->timestamps();
         });

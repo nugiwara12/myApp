@@ -103,7 +103,7 @@
 
                     tbody.innerHTML = data.length
                         ? ''
-                        : `<tr><td colspan="17" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td></tr>`;
+                        : `<tr><td colspan="18" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td></tr>`;
 
                     data.forEach(item => {
                         const row = this.createTableRow(item);
@@ -135,7 +135,6 @@
             } else {
                 row.classList.add('hover:bg-gray-50', 'cursor-pointer');
             }
-
 
             row.setAttribute('data-search', `
                 ${item.full_name}

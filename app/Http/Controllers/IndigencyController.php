@@ -43,11 +43,7 @@ class IndigencyController extends Controller
         }
 
         // ✅ Manual approval request
-        if ($request->has('approve') && $indigency->age >= 1 && $indigency->age <= 20) {
-            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
-                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
-                $indigency->save();
-            }
+        if ($request->has('approve') && $indigency->age >= 1 && $indigency->age <= 17) {
 
             return response()->json([
                 'message' => 'Approved successfully.',
@@ -65,12 +61,6 @@ class IndigencyController extends Controller
             'date'        => 'nullable|date',
         ]);
 
-        // ✅ Auto-approval if updated age falls between 1-20
-        if (isset($validated['age']) && $validated['age'] >= 1 && $validated['age'] <= 20) {
-            if (!empty($validated['purpose']) && !str_contains($validated['purpose'], 'APPROVAL ACCEPT')) {
-                $validated['purpose'] = rtrim($validated['purpose']) . ' - APPROVAL ACCEPT';
-            }
-        }
 
         $indigency->update($validated);
 
@@ -106,11 +96,9 @@ class IndigencyController extends Controller
             return response()->json(['message' => 'Not found.'], 404);
         }
 
-        if ($indigency->age >= 1 && $indigency->age <= 20) {
-            if (!str_contains($indigency->purpose, 'APPROVAL ACCEPT')) {
-                $indigency->purpose = rtrim($indigency->purpose) . ' - APPROVAL ACCEPT';
-                $indigency->save();
-            }
+        if ($indigency->age >= 1 && $indigency->age <= 17) {
+            $indigency->approved = 1;
+            $indigency->save();
 
             return response()->json([
                 'message' => 'Approved successfully.',
