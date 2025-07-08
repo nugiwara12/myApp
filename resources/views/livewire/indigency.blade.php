@@ -370,7 +370,7 @@
                     <td class="px-4 py-2">${item.purpose}</td>
                     <td class="px-4 py-2">${item.childs_name}</td>
                     <td class="px-4 py-2">${item.age}</td>
-                    <td class="px-4 py-2">${item.date}</td>
+                    <td class="px-4 py-2">${new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                     <td class="px-4 py-2">
                         ${isForApproval
                             ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Pending</span>'
