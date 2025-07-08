@@ -10,7 +10,7 @@ class BarangayCertificates extends Page
 
     protected static string $view = 'filament.admin.pages.barangay-certificates';
 
-    protected static ?string $title = 'Barangay Certificates'; // This will show in sidebar
+    protected static ?string $title = 'Barangay Residence'; // This will show in sidebar
 
     protected static ?string $navigationGroup = 'Forms'; // Same group as BarangayForms
 }
