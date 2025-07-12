@@ -74,8 +74,8 @@
                                 <div class="border-t border-gray-200"></div>
 
                                 <!-- Residency Certificate -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('residence.index') }}"
+                                    :active="request()->routeIs('residence.index')">
                                     {{ __('Residency Certificate') }}
                                 </x-dropdown-link>
 

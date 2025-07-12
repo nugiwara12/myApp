@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Barangay Tabun - Certificate of Indigency</title>
+    <title>Barangay Panipuan - Certificate of Indigency</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -161,7 +161,7 @@
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 Issued this <span
                     class="date">{{ \Carbon\Carbon::parse($indigency->date)->format('jS \\of F Y') }}</span> at
-                Barangay Tabun, Mabalacat City, Pampanga.
+                Barangay Panipuan, Mabalacat City, Pampanga.
             </p>
 
             <p>__________________ <br><span class="mark-sign">Signature</span></p>

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\IndigencyController;
 use App\Http\Controllers\ClearanceController;
+use App\Http\Controllers\ResidencyController;
 
 
 Route::get('/', function () {
@@ -110,4 +111,18 @@ Route::post('/clearance/{id}/delete', [ClearanceController::class, 'delete']);
 Route::post('/deleteSelectedClearance', [ClearanceController::class, 'deleteSelected'])->name('deleteSelectedClearance');
 Route::post('/restoreClearance', [ClearanceController::class, 'restore'])->name('restoreClearance');
 Route::get('/clearance/pdf/{id}', [ClearanceController::class, 'showClearancePdf'])->name('clearance.pdf');
+
+
+// Residence
+Route::get('/residence', [ResidencyController::class, 'index'])->name('residence.index');
+Route::post('/addResidence', [ResidencyController::class, 'addResidence'])->name('addResidence');
+Route::put('/updateResidence/{id}', [ResidencyController::class, 'updateResidence'])->name('updateResidence');
+Route::delete('/residence/{id}', [ResidencyController::class, 'destroy'])->name('residence.destroy');
+Route::get('/getResidenceInformation/{id?}', [ResidencyController::class, 'getResidenceInformation'])->name('getResidenceInformation');
+Route::post('/residency/{id}/approve', [ResidencyController::class, 'approveResidence']);
+Route::post('/residency/{id}/delete', [ResidencyController::class, 'delete']);
+Route::post('/residency/delete-selected', [ResidencyController::class, 'deleteSelected'])->name('deleteSelectedResidencies');
+Route::post('/residency/restore', [ResidencyController::class, 'restore'])->name('restoreResidencies');
+Route::get('/residencePdf/{id}', [ResidencyController::class, 'residencePdf'])->name('residencePdf');
+Route::post('/approvedFIle/{id}', [ResidencyController::class, 'approvedFIle'])->name('approvedFIle');
 

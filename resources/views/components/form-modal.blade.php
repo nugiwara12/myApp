@@ -219,3 +219,197 @@
         </div>
     </div>
 </div>
+
+<!-- Residency Certificate Modal -->
+<div id="residencyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[90vh] flex flex-col relative">
+
+        <!-- Modal Header -->
+        <div class="p-6 border-b flex-shrink-0">
+            <h2 id="modalTitle" class="text-xl font-bold">Certificate of Residency</h2>
+        </div>
+
+        <!-- Scrollable Form Body -->
+        <form id="residencyForm" onsubmit="submitResidency(event)" class="overflow-y-auto px-6 py-4 space-y-4 flex-1">
+            @csrf
+
+            <!-- Resident Name -->
+            <div>
+                <label for="resident_name" class="block text-sm font-medium text-gray-700">Resident Name:</label>
+                <input type="text" id="resident_name" name="resident_name"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Email Address -->
+            <div>
+                <label for="resident_email_address" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                <input type="email" id="resident_email_address" name="resident_email_address"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Voters Number -->
+            <div>
+                <label for="voters_id_pre_number" class="block text-sm font-medium text-gray-700">
+                    Voter's ID / Present Number:
+                </label>
+                <input type="text" id="voters_id_pre_number" name="voters_id_pre_number"
+                    pattern="[A-Za-z0-9]+" title="Letters and numbers only"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Zip Code -->
+            <div>
+                <label for="zip_code" class="block text-sm font-medium text-gray-700">
+                    Zip Code
+                </label>
+               <input type="text" name="zip_code" id="zip_code" value="2000"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed bg-gray-100"
+                    required readonly />
+            </div>
+
+            <!-- Resident Age -->
+            <div>
+                <label for="resident_age" class="block text-sm font-medium text-gray-700">Age:
+                    <span class="italic text-gray-500 text-xs">(150 maximum age range)</span>
+                </label>
+                <input type="number" id="resident_age" name="resident_age" min="1" max="150"
+                    oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Civil Status -->
+            <div>
+                <label for="civil_status" class="block text-sm font-medium text-gray-700">Civil Status:</label>
+                <select id="civil_status" name="civil_status"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required>
+                    <option value="" disabled selected>Select Civil Status</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="widowed">Widowed</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="separated">Separated</option>
+                    <option value="annulled">Annulled</option>
+                </select>
+            </div>
+
+            <!-- Nationality -->
+            <div>
+                <label for="nationality" class="block text-sm font-medium text-gray-700">Nationality:</label>
+                <select id="nationality" name="nationality"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required>
+                    <option value="" selected>Select Nationality</option>
+                    <option value="Filipino">Filipino</option>
+                    <option value="American">American</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Korean">Korean</option>
+                    <option value="Indian">Indian</option>
+                    <option value="British">British</option>
+                    <option value="German">German</option>
+                    <option value="Australian">Australian</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Address -->
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Address:</label>
+                <input type="text" id="address" name="address"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Criminal Record -->
+            <div class="flex items-center">
+                <input type="checkbox" id="has_criminal_record" name="has_criminal_record"
+                    class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                <label for="has_criminal_record" class="ml-2 block text-sm text-gray-700">
+                    Check if resident has criminal record
+                </label>
+            </div>
+
+            <!-- Purpose -->
+            <div>
+                <label for="resident_purpose" class="block text-sm font-medium text-gray-700">Purpose:</label>
+                <textarea id="resident_purpose" name="resident_purpose" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required></textarea>
+            </div>
+
+            <!-- Certificate Number -->
+            <div>
+                <label for="certificate_number" class="block text-sm font-medium text-gray-700">Certificate Number:</label>
+                <input type="text" id="certificate_number" name="certificate_number" readonly
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed"
+                    required />
+            </div>
+
+            <!-- Issue Date -->
+            <div>
+                <label for="issue_date" class="block text-sm font-medium text-gray-700">Issue Date:</label>
+                <input type="date" id="issue_date" name="issue_date"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Barangay Name -->
+            <div>
+                <label for="barangay_name" class="block text-sm font-medium text-gray-700">Barangay Name:</label>
+                <input type="text" id="barangay_name" name="barangay_name" value="Panipuan"
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed"
+                    required />
+            </div>
+
+            <!-- Municipality -->
+            <div>
+                <label for="municipality" class="block text-sm font-medium text-gray-700">Municipality:</label>
+                <input type="text" id="municipality" name="municipality" value="Sanfernando" readonly
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed"
+                    required />
+            </div>
+
+            <!-- Province -->
+            <div>
+                <label for="province" class="block text-sm font-medium text-gray-700">Province:</label>
+                <input type="text" id="province" name="province" value="Pampanga" readonly
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-alloweds"
+                    required />
+            </div>
+        </form>
+
+        <!-- Modal Footer -->
+        <div class="border-t px-6 py-4 flex justify-end space-x-2 flex-shrink-0">
+            <button type="button" onclick="closeModal('residencyModal')"
+                class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
+                Cancel
+            </button>
+            <button type="submit" form="residencyForm"
+                class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#225981]"
+                id="btnSubmitResidency">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal -->
+<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>
+
+
