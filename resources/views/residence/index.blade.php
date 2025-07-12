@@ -207,13 +207,15 @@
                     </span>
                 </td>
                 <td class="px-4 py-4">
-                    ${item.approved_by
-                        ? `<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-md text-sm font-medium">
-                                ${item.approved_by}
-                        </span>`
-                        : `<span class="bg-gray-200 text-gray-600 border border-gray-300 px-3 py-1 rounded-md text-sm font-medium">
-                                Waiting for Approval
-                        </span>`}
+                    ${
+                        item.approved_by && item.approved_by !== '0' && item.approved_by !== 0
+                            ? `<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-md text-sm font-medium">
+                                    ${item.approved_by}
+                            </span>`
+                            : `<span class="bg-gray-200 text-gray-600 border border-gray-300 px-3 py-1 rounded-md text-sm font-medium">
+                                    Waiting for Approval
+                            </span>`
+                    }
                 </td>
                 <td class="px-4 py-2">${item.resident_purpose}</td>
                 <td class="px-4 py-2">${item.certificate_number}</td>
