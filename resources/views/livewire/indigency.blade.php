@@ -23,14 +23,24 @@
 
                         <!-- Right: Buttons -->
                         <div class="text-right space-x-2">
-                            <x-danger-button id="deleteSelectedBtn" class="whitespace-nowrap disabled:opacity-50"
-                                onclick="deleteSelectedIndigencies()" disabled>
+                           <!-- Multiple Delete Button (styled like Filament's danger button) -->
+                            <button
+                                id="deleteSelectedBtn"
+                                onclick="deleteSelectedIndigencies()"
+                                disabled
+                                class="custom-danger-button"
+                            >
                                 Multiple Delete
-                            </x-danger-button>
+                            </button>
 
-                            <x-primary-button onclick="openAddIndigency()">
+                            <!-- Add Indigency Button (styled like Filament's primary button) -->
+                            <button
+                                onclick="openAddIndigency()"
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            >
                                 Add Indigency
-                            </x-primary-button>
+                            </button>
+
                         </div>
                     </div>
 
@@ -125,12 +135,12 @@
 
                 <!-- Buttons -->
                 <div class="pt-4 flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('certificationModal')"
+                    <button type="button" onclick="closeModal('certificationModal')" style="margin-right: 3px;"
                         class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
                         Cancel
                     </button>
                     <button type="submit"
-                        class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]"
+                        class="rounded-md bg-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-primary-500"
                         id="btnSubmitIndigency">
                         Submit
                     </button>
@@ -148,7 +158,7 @@
                 <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
                     Cancel
                 </button>
-                <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
+                <button id="confirmActionBtn" class="custom-danger-button">
                     Confirm
                 </button>
             </div>
@@ -649,7 +659,7 @@
                             return `
                                 <button onclick="changePage(${pageNum})"
                                     class="px-3 py-2 text-sm rounded-md border shadow-sm transition-all duration-200 ${
-                                        currentPage === pageNum ? 'bg-[#1B76B5] text-white' : 'text-gray-700 bg-white hover:bg-gray-100'
+                                        currentPage === pageNum ? 'bg-primary-500 text-white' : 'text-gray-700 bg-white hover:bg-gray-100'
                                     }">
                                     ${pageNum}
                                 </button>

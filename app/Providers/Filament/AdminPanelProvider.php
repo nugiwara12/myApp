@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             // ✅ Include your Vite-compiled CSS and JS assets
-            ->viteTheme('resources/css/app.css')
+            // ->viteTheme('resources/css/app.css')
             // ->viteTheme('resources/js/app.js')
 
             ->discoverResources(
