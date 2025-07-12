@@ -58,7 +58,7 @@
             font-size: 18px;
         }
 
-        .baranagay-tabun {
+        .barangay-tabun {
             font-size: 25px;
             font-weight: bold;
         }
@@ -129,7 +129,7 @@
                 Province of Pampanga<br>
                 Sanfernando City<br>
                 OFFICE OF THE SANGGUNIANG BARANGAY<br>
-                <span class="baranagay-tabun">Barangay Panipuan</span>
+                <span class="barangay-tabun">Barangay Panipuan</span>
             </p>
             <hr>
             <div class="indigency">CERTIFICATE OF INDIGENCY</div>

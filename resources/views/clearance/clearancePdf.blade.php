@@ -49,7 +49,7 @@
             font-size: 18px;
         }
 
-        .baranagay-tabun {
+        .barangay-tabun {
             font-size: 25px;
             font-weight: bold;
         }
@@ -131,7 +131,7 @@
                     Province of Pampanga<br>
                     City of San Fernando<br>
                     OFFICE OF THE SANGGUNIANG BARANGAY<br>
-                    <span class="baranagay-tabun">Barangay Panipuan</span>
+                    <span class="barangay-tabun">Barangay Panipuan</span>
                 </p>
                 <div class="certificate-title-wrapper">
                     <h1 class="certificate-title">Barangay Clearance</h1>
