@@ -412,4 +412,119 @@
     </div>
 </div>
 
+<!-- Barangay ID Form Modal -->
+<div id="barangayIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white border border-gray-300 rounded-lg shadow-lg w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden">
 
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold uppercase">Barangay ID Form</h2>
+        </div>
+
+        <!-- Form Body -->
+        <form id="barangayIdForm" onsubmit="submitBarangayIdForm(event)" class="overflow-y-auto px-6 py-4 flex-1 white">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Full Name</label>
+                    <input type="text" name="barangayId_full_name" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label for="barangayId_email" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                    <input type="email" id="barangayId_email" name="barangayId_email"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        required />
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Address</label>
+                    <input type="text" name="barangayId_address" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Birthdate</label>
+                    <input type="date" id="barangayId_birthdate" name="barangayId_birthdate" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Place of Birth</label>
+                    <input type="text" name="barangayId_place_of_birth" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Age
+                        <span class="italic text-gray-500 text-xs">(150 maximum age range)</span>
+                    </label>
+                    <input type="number" id="barangayId_age" name="barangayId_age" min="1" max="150"
+                    oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';" name="barangayId_age" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Citizenship</label>
+                    <input type="text" name="barangayId_citizenship" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Gender</label>
+                    <select name="barangayId_gender" class="w-full border border-gray-300 rounded p-2" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Civil Status</label>
+                    <input type="text" name="barangayId_civil_status" class="w-full border border-gray-300 rounded p-2" required>
+                </div>
+
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Contact No.</label>
+                    <input
+                        type="tel"
+                        name="barangayId_contact_no"
+                        id="barangayId_contact_no"
+                        class="w-full border border-gray-300 rounded p-2"
+                        required
+                        maxlength="11"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        placeholder="Enter numbers only"
+                    >
+                </div>
+
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Guardian
+                        <span class="italic text-gray-500 text-xs">(If age > 17, make the field editable.)</span>
+                    </label>
+                    <input type="text" id="barangayId_guardian" name="barangayId_guardian" class="w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed" readonly required>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Referal Number</label>
+                    <input type="text" id="barangayId_generated_number" name="barangayId_generated_number" class="w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label class="block mb-1 font-medium text-sm text-gray-700">Image</label>
+                    <input type="file" name="barangayId_image" accept="image/*" class="w-full border border-gray-300 rounded p-2" required>
+
+                    <!-- Preview for existing image -->
+                    <div id="imagePreviewContainer" class="mt-2">
+                        <img id="imagePreview" src="" alt="Current Image" class="w-24 h-24 object-cover rounded hidden">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-2">
+            <button type="button" onclick="closeModal('barangayIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button type="submit" form="barangayIdForm" id="btnSubmitBarangayId" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal for approved ID -->
+<div id="approvedIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Barangay ID</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this Barangay ID?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approvedIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApproveBarangayId()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>

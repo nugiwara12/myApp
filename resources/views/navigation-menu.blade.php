@@ -86,8 +86,8 @@
                                 </x-dropdown-link> --}}
 
                                 <!-- Barangay ID -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('barangayId.index') }}"
+                                    :active="request()->routeIs('barangayId.index')">
                                     {{ __('Barangay ID') }}
                                 </x-dropdown-link>
                             </x-slot>

@@ -9,6 +9,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\IndigencyController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\ResidencyController;
+use App\Http\Controllers\BarangayIdController;
 
 
 Route::get('/', function () {
@@ -126,3 +127,16 @@ Route::post('/residency/restore', [ResidencyController::class, 'restore'])->name
 Route::get('/residencePdf/{id}', [ResidencyController::class, 'residencePdf'])->name('residencePdf');
 Route::post('/approvedFIle/{id}', [ResidencyController::class, 'approvedFIle'])->name('approvedFIle');
 
+
+// Barangay ID
+Route::get('/barangayId/main', [BarangayIdController::class, 'main'])->name('barangayId.index');
+Route::post('/addBarangayId', [BarangayIdController::class, 'addBarangayId'])->name('addBarangayId');
+Route::get('/getBarangayIdList', [BarangayIdController::class, 'getBarangayIdList']);
+Route::post('/barangay-id/{id}/approve', [BarangayIdController::class, 'approvedBarangayId'])->name('barangay-id.approve');
+Route::post('/barangay-id/update/{id}', [BarangayIdController::class, 'updateBarangayId'])->name('barangay-id.update');
+Route::get('/getBarangayIdInformation/{id}', [BarangayIdController::class, 'getBarangayIdInformation']);
+
+Route::post('/barangay-id/delete/{id}', [BarangayIdController::class, 'delete'])->name('barangay-id.delete');
+Route::post('/barangay-id/delete-selected', [BarangayIdController::class, 'deleteSelected'])->name('barangay-id.deleteSelected');
+Route::post('/barangay-id/restore', [BarangayIdController::class, 'restore'])->name('barangay-id.restore');
+Route::get('/barangayPdf/{id}', [BarangayIdController::class, 'barangayPdf'])->name('barangayPdf');
