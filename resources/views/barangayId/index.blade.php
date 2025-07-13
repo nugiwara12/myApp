@@ -500,7 +500,7 @@
     // Function for the search
     function filterTableRows() {
         const query = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('#indigencyTableBody tr');
+        const rows = document.querySelectorAll('#barangayIdTableBody tr');
 
         rows.forEach(row => {
             const searchableText = row.getAttribute('data-search') || '';
