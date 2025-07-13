@@ -15,8 +15,8 @@
                     $dashboardRoute = match (true) {
                         $user->hasRole('admin') => 'admin.dashboard',
                         $user->hasRole('user') => 'user.dashboard',
-                        $user->hasRole('staff') => 'staff.dashboard',
-                        $user->hasRole('encoder') => 'encoder.dashboard',
+                        // $user->hasRole('staff') => 'staff.dashboard',
+                        // $user->hasRole('encoder') => 'encoder.dashboard',
                         default => 'dashboard',
                     };
                 @endphp
@@ -80,16 +80,10 @@
                                 </x-dropdown-link>
 
                                 <!-- Barangay Clearance -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('clearance.index') }}"
+                                {{-- <x-dropdown-link class="whitespace-nowrap" href="{{ route('clearance.index') }}"
                                     :active="request()->routeIs('clearance.index')">
                                     {{ __('Barangay Clearance') }}
-                                </x-dropdown-link>
-
-                                <!-- Business Clearance -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
-                                    {{ __('Business Clearance') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
 
                                 <!-- Barangay ID -->
                                 <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"

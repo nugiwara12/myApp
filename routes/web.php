@@ -28,8 +28,8 @@ Route::middleware([
         return match (true) {
             $user->hasRole('admin') => redirect()->route('admin.dashboard'),
             $user->hasRole('user') => redirect()->route('user.dashboard'),
-            $user->hasRole('staff') => redirect()->route('staff.dashboard'),
-            $user->hasRole('encoder') => redirect()->route('encoder.dashboard'),
+            // $user->hasRole('staff') => redirect()->route('staff.dashboard'),
+            // $user->hasRole('encoder') => redirect()->route('encoder.dashboard'),
             default => abort(403),
         };
     })->name('dashboard');
@@ -43,13 +43,13 @@ Route::middleware([
         return view('user.dashboard');
     })->name('user.dashboard');
 
-    Route::get('/staff/dashboard', function () {
-        return view('staff.dashboard');
-    })->name('staff.dashboard');
+    // Route::get('/staff/dashboard', function () {
+    //     return view('staff.dashboard');
+    // })->name('staff.dashboard');
 
-    Route::get('/encoder/dashboard', function () {
-        return view('encoder.dashboard');
-    })->name('encoder.dashboard');
+    // Route::get('/encoder/dashboard', function () {
+    //     return view('encoder.dashboard');
+    // })->name('encoder.dashboard');
 });
 
 
@@ -100,17 +100,17 @@ Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndi
 
 
 // clearance
-Route::get('/clearance', [ClearanceController::class, 'index'])->name('clearance.index');
-Route::post('/addClearance', [ClearanceController::class, 'addClearance'])->name('addClearance');
-Route::get('/getIndClearance', [ClearanceController::class, 'getIndClearance'])->name('getIndClearance');
-Route::put('/updateClearance/{id}', [ClearanceController::class, 'updateClearance'])->name('updateClearance');
-Route::get('/getClearanceById/{id}', [ClearanceController::class, 'getClearanceById'])->name('getClearanceById');
-Route::post('/clearance/{id}/approve', [ClearanceController::class, 'approveClearance']);
+// Route::get('/clearance', [ClearanceController::class, 'index'])->name('clearance.index');
+// Route::post('/addClearance', [ClearanceController::class, 'addClearance'])->name('addClearance');
+// Route::get('/getIndClearance', [ClearanceController::class, 'getIndClearance'])->name('getIndClearance');
+// Route::put('/updateClearance/{id}', [ClearanceController::class, 'updateClearance'])->name('updateClearance');
+// Route::get('/getClearanceById/{id}', [ClearanceController::class, 'getClearanceById'])->name('getClearanceById');
+// Route::post('/clearance/{id}/approve', [ClearanceController::class, 'approveClearance']);
 
-Route::post('/clearance/{id}/delete', [ClearanceController::class, 'delete']);
-Route::post('/deleteSelectedClearance', [ClearanceController::class, 'deleteSelected'])->name('deleteSelectedClearance');
-Route::post('/restoreClearance', [ClearanceController::class, 'restore'])->name('restoreClearance');
-Route::get('/clearance/pdf/{id}', [ClearanceController::class, 'showClearancePdf'])->name('clearance.pdf');
+// Route::post('/clearance/{id}/delete', [ClearanceController::class, 'delete']);
+// Route::post('/deleteSelectedClearance', [ClearanceController::class, 'deleteSelected'])->name('deleteSelectedClearance');
+// Route::post('/restoreClearance', [ClearanceController::class, 'restore'])->name('restoreClearance');
+// Route::get('/clearance/pdf/{id}', [ClearanceController::class, 'showClearancePdf'])->name('clearance.pdf');
 
 
 // Residence
