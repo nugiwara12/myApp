@@ -5,12 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Barangay System') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+        <!-- title-logo -->
+        <link rel="shortcut icon" href="{{ URL::to('admin_assets/images/logo-left.png') }}">
+        <link rel="shortcut icon" href="{{ URL::to('admin_assets/images/logo-left.png') }}" type="image/x-icon">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -35,7 +35,7 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="max-h-[730px] overflow-y-auto rounded">
+                    <div class="h-full overflow-y-auto rounded">
                         <table class="w-full text-sm text-left">
                             <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
                                 <tr>
@@ -48,12 +48,13 @@
                                     <th class="px-4 py-2">Age</th>
                                     <th class="px-4 py-2">Date</th>
                                     <th class="px-4 py-2">Status</th>
+                                    <th class="px-4 py-2">Approved</th>
                                     <th class="px-4 py-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="indigencyTableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
-                        <div id="paginationControls" class="mt-4"></div>
+                        <div id="paginationControls" class="mt-4 border-t"></div>
                     </div>
                 </div>
             </div>

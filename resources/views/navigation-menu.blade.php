@@ -15,8 +15,8 @@
                     $dashboardRoute = match (true) {
                         $user->hasRole('admin') => 'admin.dashboard',
                         $user->hasRole('user') => 'user.dashboard',
-                        $user->hasRole('staff') => 'staff.dashboard',
-                        $user->hasRole('encoder') => 'encoder.dashboard',
+                        // $user->hasRole('staff') => 'staff.dashboard',
+                        // $user->hasRole('encoder') => 'encoder.dashboard',
                         default => 'dashboard',
                     };
                 @endphp
@@ -27,6 +27,7 @@
                     </x-nav-link>
 
                     {{-- User management --}}
+                    @hasrole('admin')
                     <x-nav-link :href="route('role-management.index')" :active="request()->routeIs('role-management.index')">
                         {{ __('User Management') }}
                     </x-nav-link>
@@ -48,7 +49,7 @@
                                 <span class="inline-flex items-center">
                                     <button type="button"
                                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150 uppercase">
-                                        Baranagay Forms
+                                        Barangay Forms
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -73,32 +74,27 @@
                                 <div class="border-t border-gray-200"></div>
 
                                 <!-- Residency Certificate -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('residence.index') }}"
+                                    :active="request()->routeIs('residence.index')">
                                     {{ __('Residency Certificate') }}
                                 </x-dropdown-link>
 
                                 <!-- Barangay Clearance -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                {{-- <x-dropdown-link class="whitespace-nowrap" href="{{ route('clearance.index') }}"
+                                    :active="request()->routeIs('clearance.index')">
                                     {{ __('Barangay Clearance') }}
-                                </x-dropdown-link>
-
-                                <!-- Business Clearance -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
-                                    {{ __('Business Clearance') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
 
                                 <!-- Barangay ID -->
-                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('indigency.index') }}"
-                                    :active="request()->routeIs('indigency.index')">
+                                <x-dropdown-link class="whitespace-nowrap" href="{{ route('barangayId.index') }}"
+                                    :active="request()->routeIs('barangayId.index')">
                                     {{ __('Barangay ID') }}
                                 </x-dropdown-link>
                             </x-slot>
 
                         </x-dropdown>
                     </div>
+                    @endhasrole
 
                 </div>
 

@@ -25,21 +25,21 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
-        // Encoder
-        $encoder = User::factory()->create([
-            'name' => 'Test Encoder',
-            'email' => 'encoder@example.com',
-            'password' => bcrypt('Password_121010'),
-        ]);
-        $encoder->assignRole('encoder');
+        // // Encoder
+        // $encoder = User::factory()->create([
+        //     'name' => 'Test Encoder',
+        //     'email' => 'encoder@example.com',
+        //     'password' => bcrypt('Password_121010'),
+        // ]);
+        // $encoder->assignRole('encoder');
 
-        // Staff
-        $staff = User::factory()->create([
-            'name' => 'Test Staff',
-            'email' => 'staff@example.com',
-            'password' => bcrypt('Password_121010'),
-        ]);
-        $staff->assignRole('staff');
+        // // Staff
+        // $staff = User::factory()->create([
+        //     'name' => 'Test Staff',
+        //     'email' => 'staff@example.com',
+        //     'password' => bcrypt('Password_121010'),
+        // ]);
+        // $staff->assignRole('staff');
 
         // Normal User
         $user = User::factory()->create([

@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Barangay Tabun - Certificate of Indigency</title>
+    <title>Barangay Panipuan - Certificate of Indigency</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -58,7 +58,7 @@
             font-size: 18px;
         }
 
-        .baranagay-tabun {
+        .barangay-tabun {
             font-size: 25px;
             font-weight: bold;
         }
@@ -121,7 +121,7 @@
 <body>
     <div class="certification">
         <img class="left-logo" src="{{ public_path('admin_assets/images/logo-left.png') }}" alt="Left Logo">
-        <img class="profile-picture" src="{{ public_path('admin_assets/images/logo-left.png') }}" alt="Right Logo">
+        <img class="profile-picture" src="{{ public_path('admin_assets/images/sanfernando.png') }}" alt="Right Logo">
 
         <div class="barangay">
             <p class="header-title1">
@@ -129,7 +129,7 @@
                 Province of Pampanga<br>
                 Sanfernando City<br>
                 OFFICE OF THE SANGGUNIANG BARANGAY<br>
-                <span class="baranagay-tabun">Barangay Ivan</span>
+                <span class="barangay-tabun">Barangay Panipuan</span>
             </p>
             <hr>
             <div class="indigency">CERTIFICATE OF INDIGENCY</div>
@@ -151,7 +151,7 @@
             </p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                This certificate is issued upon request for her <strong>son</strong>,
+                This certificate is issued upon request for her <strong>child</strong>,
                 <span class="purpose">{{ strtoupper($indigency->childs_name) }}</span>, age
                 <span class="age">{{ strtoupper($indigency->age) }}</span>, born on
                 <span class="date_of_birth">March 25, 2014</span>,
@@ -161,7 +161,7 @@
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 Issued this <span
                     class="date">{{ \Carbon\Carbon::parse($indigency->date)->format('jS \\of F Y') }}</span> at
-                Barangay Tabun, Mabalacat City, Pampanga.
+                Barangay Panipuan, Mabalacat City, Pampanga.
             </p>
 
             <p>__________________ <br><span class="mark-sign">Signature</span></p>

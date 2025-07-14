@@ -2,6 +2,7 @@
 <x-indigency.table />
 <x-form-modal />
 <x-pagination-function />
+<x-toast />
 
 <!-- Script Section -->
 <script>
@@ -17,7 +18,6 @@
         const modal = document.getElementById(id);
         if (!modal) return;
         modal.classList.add('hidden');
-        modal.removeAttribute('data-userid');
         const form = modal.querySelector('form');
         if (form) form.reset();
     };
@@ -27,52 +27,14 @@
         window.indigencyModal.submit(event);
     }
 
-    // Toast Notification
-    function showToast(message, type = 'success') {
-        let toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toast-container';
-            toastContainer.className = 'fixed top-4 right-4 z-50 space-y-2';
-            document.body.appendChild(toastContainer);
-        }
-
-        while (toastContainer.firstChild) {
-            toastContainer.removeChild(toastContainer.firstChild);
-        }
-
-        const toast = document.createElement('div');
-        toast.className = `flex items-center px-4 py-3 rounded-lg shadow-lg max-w-xs transition-opacity duration-300 ${
-            type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`;
-
-        toast.innerHTML = `
-            <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2 ${
-                    type === 'success' ? 'text-green-500' : 'text-red-500'
-                }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${
-                        type === 'success'
-                            ? 'M9 12l2 2l4 -4m7 8a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z'
-                            : 'M12 9v2m0 4h.01m6.938 4h-13.856c-1.344 0-2.402-1.066-2.122-2.387l1.721-9.215A2 2 0 0 1 6.667 4h10.666a2 2 0 0 1 1.957 2.398l-1.721 9.215c-.28 1.321-1.338 2.387-2.682 2.387z'
-                    }" />
-                </svg>
-                <span class="text-black">${message}</span>
-            </div>
-        `;
-
-        toastContainer.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add('opacity-0');
-            toast.addEventListener('transitionend', () => toast.remove());
-        }, 2000);
-    }
-
     // Open Add indigency
     function openAddIndigency() {
         // Reset edit mode
         window.indigencyModal.editId = null;
+
+        // Set modal title & button
+        document.getElementById('modalTitle').innerText = 'Add Indigency';
+        document.getElementById('btnSubmitIndigency').innerText = 'Submit';
 
         // Clear form fields manually
         window.indigencyModal.fieldIds.forEach(field => {
@@ -129,7 +91,7 @@
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
-                            <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+                            <td colspan="10" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
 
@@ -141,7 +103,9 @@
                     document.getElementById('paginationControls').innerHTML = Pagination({
                         currentPage: current_page,
                         totalPages: last_page,
-                        totalData: total
+                        totalData: total,
+                        perPage: this.perPage,
+                        namespace: 'indigency'
                     });
                 })
                 .catch(() => showToast('Failed to fetch records.', 'error'));
@@ -152,10 +116,19 @@
             const row = document.createElement('tr');
             const statusText = item.status === 1 ? 'Active' : 'Deleted';
 
+            // ✅ INSERT HERE
+            if (item.status === 0) {
+                row.classList.add('bg-red-100');
+            } else if (item.age >= 1 && item.age <= 17) {
+                row.classList.add('bg-yellow-100', 'cursor-pointer');
+            } else {
+                row.classList.add('hover:bg-gray-50', 'cursor-pointer');
+            }
+
             row.setAttribute('data-search', `${item.parent_name} ${item.address} ${item.purpose} ${item.childs_name} ${item.age} ${statusText} ${item.date}`.toLowerCase());
             row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
 
-            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && !item.purpose.includes('APPROVAL ACCEPT');
+            const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && item.approved != 1;
 
             row.innerHTML = `
                 <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
@@ -164,7 +137,7 @@
                 <td class="px-4 py-2">${item.purpose}</td>
                 <td class="px-4 py-2">${item.childs_name}</td>
                 <td class="px-4 py-2">${item.age}</td>
-                <td class="px-4 py-2">${item.date}</td>
+                <td class="px-4 py-2">${new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                 <td class="px-4 py-2">
                     ${isForApproval
                         ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Pending</span>'
@@ -173,7 +146,16 @@
                         : '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded">Deleted</span>'
                     }
                 </td>
-                <td class="px-4 py-2 d-flex gap-2" id="actions-${item.id}">
+                <td class="px-4 py-2">
+                    ${
+                        item.status === 0
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">Deleted</span>'
+                            : item.approved === 1
+                            ? '<span class="inline-block px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">Approved</span>'
+                            : '<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded">Not Approved</span>'
+                    }
+                </td>
+                <td class="px-4 py-2 d-flex gap-2 whitespace-nowrap" id="actions-${item.id}">
                     ${this.getActionButtons(item, isForApproval)}
                 </td>
             `;
@@ -217,7 +199,7 @@
                     </button>`;
             } else {
                 return `
-                    <button onclick="event.stopPropagation(); restoreIndigency(${item.id})" class="bg-green-500 border rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                    <button onclick="event.stopPropagation(); restoreIndigency(${item.id})" class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
                         <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
                     </button>`;
             }
@@ -269,17 +251,6 @@
             .catch(() => {
                 showToast('Failed to load record.', 'error');
             });
-    }
-
-    // Function for the search
-    function filterTableRows() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('#indigencyTableBody tr');
-
-        rows.forEach(row => {
-            const searchableText = row.getAttribute('data-search') || '';
-            row.style.display = searchableText.includes(query) ? '' : 'none';
-        });
     }
 
     // Show the modal for different function
@@ -389,6 +360,17 @@
         });
     }
 
+    // Function for the search
+    function filterTableRows() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#indigencyTableBody tr');
+
+        rows.forEach(row => {
+            const searchableText = row.getAttribute('data-search') || '';
+            row.style.display = searchableText.includes(query) ? '' : 'none';
+        });
+    }
+
     document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
         document.getElementById('confirmationModal').classList.add('hidden');
         confirmCallback = null;
@@ -409,16 +391,22 @@
         }
     });
 
-    // {agination}
-    document.addEventListener('DOMContentLoaded', () => {
-        window.indigencyModal.fetchList();
+    function changePage(namespace, page) {
+        const modal = window[`${namespace}Modal`];
+        if (modal) {
+            modal.fetchList(page);
+        }
+    }
 
-        const perPageSelect = document.getElementById('per_page');
-        if (perPageSelect) {
-            perPageSelect.addEventListener('change', function () {
-                window.indigencyModal.perPage = parseInt(this.value);
-                window.indigencyModal.fetchList(1);
-            });
+    // pagination}
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.matches('select[id$="_per_page"]')) {
+            const namespace = e.target.getAttribute('data-namespace');
+            const modal = window[`${namespace}Modal`];
+            if (modal) {
+                modal.perPage = parseInt(e.target.value);
+                modal.fetchList(1);
+            }
         }
     });
 </script>
