@@ -21,14 +21,9 @@ class FilamentServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Gate authorization for Filament access
-        Gate::define('viewFilament', function ($user) {
-            return $user->hasAnyRole(['admin', 'user', 'encoder', 'staff']);
-        });
-
-        // Apply the gate for Filament
-        Filament::serving(function () {
-            Filament::authorizeGate('viewFilament');
-        });
+        Filament::registerRenderHook(
+            'body.end',
+            fn () => view('components.toast')
+        );
     }
 }
