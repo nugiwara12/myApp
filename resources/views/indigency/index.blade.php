@@ -7,6 +7,7 @@
 <!-- Script Section -->
 <script>
     let confirmCallback = null;
+    let selectedResidenceId = null;
 
     // Global Modal Control
     window.openModal = function(id) {
@@ -21,6 +22,14 @@
         const form = modal.querySelector('form');
         if (form) form.reset();
     };
+
+    // Generated the Indigency refereal code
+    function generateIndigencyNumber() {
+        const now = new Date();
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, ''); // e.g., 20250713
+        const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+        return `IND-${datePart}-${randomPart}`;
+    }
 
     // Form submission handler
     function submitIndigency(event) {
@@ -42,13 +51,23 @@
             if (input) input.value = '';
         });
 
+         // ✅ Auto-generate the generated_number
+        const genNumInput = document.querySelector('[name="generated_number"]');
+        if (genNumInput) {
+            genNumInput.value = generateIndigencyNumber();
+        }
+
+        // ✅ Set the value here
+        const generatedNumber = generateIndigencyNumber();
+        document.getElementById('indigency_generated_number').value = generatedNumber;
+
         openModal(window.indigencyModal.modalId);
     }
 
     // Indigency Modal Handler
     window.indigencyModal = {
         modalId: 'certificationModal',
-        fieldIds: ['parent_name', 'address', 'purpose', 'childs_name', 'age', 'date'],
+        fieldIds: ['parent_name', 'indigency_email', 'address', 'purpose', 'childs_name', 'age', 'indigency_generated_number', 'date'],
         editId: null,
         currentPage: 1,
         perPage: 10,
@@ -91,7 +110,7 @@
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
-                            <td colspan="10" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
+                            <td colspan="11" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
 
@@ -137,6 +156,7 @@
                 <td class="px-4 py-2">${item.purpose}</td>
                 <td class="px-4 py-2">${item.childs_name}</td>
                 <td class="px-4 py-2">${item.age}</td>
+                <td class="px-4 py-2">${item.indigency_generated_number}</td>
                 <td class="px-4 py-2">${new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                 <td class="px-4 py-2">
                     ${isForApproval
@@ -180,30 +200,71 @@
             return row;
         },
 
-        getActionButtons(item, isForApproval) {
-            if (isForApproval) {
+        getActionButtons(item) {
+            const isNotApproved = item.approved_by == 0 || item.approved_by === '0' || item.approved_by === null || item.approved_by === undefined || item.approved_by === '' || item.approved_by === 'NULL';
+
+            if (item.status === 1 && isNotApproved) {
                 return `
-                    <button onclick="event.stopPropagation(); approveIndigency(${item.id})" class="btn btn-success border bg-green-500 rounded p-1.5 d-flex align-items-center justify-content-center" title="Approve">
-                        <i class="bi bi-check-circle text-white text-md"></i>
-                    </button>`;
-            } else if (item.status === 1) {
+                    <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                        class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
+                        title="Approve">
+                        <i class="bi bi-check-circle-fill text-white text-md"></i>
+                    </button>
+                `;
+            }
+
+            if (item.status === 1) {
                 return `
-                    <button onclick="event.stopPropagation(); editIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                    <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
                         <i class="bi bi-pencil-square text-black"></i>
                     </button>
-                    <button onclick="event.stopPropagation(); deleteIndigency(${item.id})" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                    <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
+                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
                         <i class="bi bi-trash-fill text-red-500"></i>
                     </button>
-                    <button onclick="window.open('/indigency/pdf/${item.id}', '_blank')" class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                    <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
+                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
                         <i class="bi bi-file-earmark-pdf text-red-600"></i>
-                    </button>`;
-            } else {
-                return `
-                    <button onclick="event.stopPropagation(); restoreIndigency(${item.id})" class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
-                        <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
-                    </button>`;
+                    </button>
+                `;
             }
+
+            // If soft deleted or other cases
+            return `
+                <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
+                    class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                    <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
+                </button>
+            `;
         }
+    };
+
+    // approved modal
+    window.approveIndigency = function(id) {
+        selectedResidenceId = id;
+        openModal('approveIndigencyModal');
+    };
+
+    // approved the data
+    window.confirmApproveIndigency = function () {
+        if (!selectedResidenceId) return;
+
+        axios.post(`/barangay-indigency/${selectedResidenceId}/approve`)
+            .then(response => {
+                showToast('Barangay Indigency approved successfully!', 'success');
+                indigencyModal.fetchList();
+                closeModal('approveIndigencyModal');
+            })
+            .catch(error => {
+                console.error("Approval error:", error);
+                showToast('Failed to approve Barangay Indigency.', 'error');
+                closeModal('approveIndigencyModal');
+            })
+            .finally(() => {
+                closeModal('approveIndigencyModal');
+                selectedResidenceId = null;
+            });
     };
 
     // Approved the legal Age

@@ -39,7 +39,10 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary'   => Color::Amber,
+                'danger'    => Color::Red,
+                'success'   => Color::Emerald,
+                'info'      => Color::Blue,
             ])
             // ✅ Include your Vite-compiled CSS and JS assets
             // ->viteTheme('resources/css/app.css')

@@ -9,18 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BarangayIdApproved extends Mailable
+class IndigencyConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $barangayId;
+    public $indigency;
 
-    public function __construct($barangayId)
+    public function __construct($indigency)
     {
-        $this->barangayId = $barangayId;
+        $this->indigency = $indigency;
     }
 
     /**
@@ -29,7 +29,7 @@ class BarangayIdApproved extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Barangay Id Approved',
+            subject: 'Barangay Indigency Confirmation',
         );
     }
 
@@ -39,9 +39,9 @@ class BarangayIdApproved extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.barangay_id_approved', // ✅ Blade view for approval
+            view: 'emails.barangay_indigency_confirmation', // ✅ Blade view for approval
             with: [
-                'barangayId' => $this->barangayId
+                'indigency' => $this->indigency
             ]
         );
     }

@@ -7,8 +7,16 @@
 
             <!-- Parent Name -->
             <div>
-                <label for="parent_name" class="block text-sm font-medium text-gray-700">Parent Name:</label>
+                <label for="parent_name" class="block text-sm font-medium text-gray-700">Name:</label>
                 <input type="text" id="parent_name" name="parent_name"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Email Address -->
+            <div>
+                <label for="indigency_email" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                <input type="email" id="indigency_email" name="indigency_email"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required />
             </div>
@@ -48,6 +56,12 @@
                     required />
             </div>
 
+            {{-- Indigency Generator --}}
+            <div>
+                <label class="block mb-1 font-medium text-sm text-gray-700">Referal Number</label>
+                <input type="text" id="indigency_generated_number" name="indigency_generated_number" class="w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed" readonly>
+            </div>
+
             <!-- Date -->
             <div>
                 <label for="date" class="block text-sm font-medium text-gray-700">Date:</label>
@@ -72,24 +86,8 @@
     </div>
 </div>
 
-<!-- Confirmation Modal -->
-<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
-        <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
-        <div class="flex justify-end space-x-2">
-            <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
-                Cancel
-            </button>
-            <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
-                Confirm
-            </button>
-        </div>
-    </div>
-</div>
-
 {{-- Barangay Clearance --}}
-<div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+{{-- <div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
         <!-- Header -->
         <div class="px-6 pt-6">
@@ -218,7 +216,7 @@
             </button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <!-- Residency Certificate Modal -->
 <div id="residencyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -380,7 +378,7 @@
             <div>
                 <label for="province" class="block text-sm font-medium text-gray-700">Province:</label>
                 <input type="text" id="province" name="province" value="Pampanga" readonly
-                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-alloweds"
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed"
                     required />
             </div>
         </form>
@@ -396,18 +394,6 @@
                 id="btnSubmitResidency">
                 Submit
             </button>
-        </div>
-    </div>
-</div>
-
-<!-- Approval Confirmation Modal -->
-<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
-        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
         </div>
     </div>
 </div>
@@ -517,6 +503,24 @@
     </div>
 </div>
 
+{{-- Approval Modal --}}
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
+        <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
+        <div class="flex justify-end space-x-2">
+            <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
+                Cancel
+            </button>
+            <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Approval Confirmation Modal for approved ID -->
 <div id="approvedIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
@@ -525,6 +529,30 @@
         <div class="flex justify-end space-x-2">
             <button onclick="closeModal('approvedIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
             <button onclick="confirmApproveBarangayId()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal -->
+<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal -->
+<div id="approveIndigencyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Indigency</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this Indigency?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approveIndigencyModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApproveIndigency()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
         </div>
     </div>
 </div>
