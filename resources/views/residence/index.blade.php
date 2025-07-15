@@ -112,15 +112,18 @@
                 const input = document.getElementById(field);
                 if (!input) return;
 
+                // 🛑 Skip resetting these values so they retain HTML-defined defaults
+                if (['barangay_name', 'municipality', 'province'].includes(field)) {
+                    return;
+                }
+
                 if (field === 'certificate_number') {
                     const now = new Date();
                     const yyyymmdd = now.toISOString().split('T')[0].replace(/-/g, '');
                     const random = Math.floor(1000 + Math.random() * 9000);
                     input.value = `RES-${yyyymmdd}-${random}`;
-                } else if (field === 'barangay_name') {
-                    return; // keep current value if set elsewhere
                 } else if (field === 'zip_code') {
-                    input.value = '2000'; // default zip code
+                    input.value = '2000'; // Default ZIP
                 } else if (input.type === 'checkbox') {
                     input.checked = false;
                 } else if (input.type === 'date') {
@@ -385,10 +388,17 @@
         confirmCallback = onConfirm;
     }
 
+    // Select All Toggle
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('.selectCheckbox');
+        checkboxes.forEach(cb => cb.checked = source.checked);
+        updateDeleteButtonState();
+    }
+
     // Function for the search
     function filterTableRows() {
         const query = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('#indigencyTableBody tr');
+        const rows = document.querySelectorAll('#residenceTableBody tr');
 
         rows.forEach(row => {
             const searchableText = row.getAttribute('data-search') || '';

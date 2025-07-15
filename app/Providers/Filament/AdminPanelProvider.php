@@ -29,7 +29,10 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary'   => Color::Amber,
+                'danger'    => Color::Red,
+                'success'   => Color::Emerald,
+                'info'      => Color::Blue,
             ])
             // ✅ Include your Vite-compiled CSS and JS assets
             // ->viteTheme('resources/css/app.css')

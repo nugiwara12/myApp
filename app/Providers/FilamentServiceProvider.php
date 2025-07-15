@@ -21,6 +21,9 @@ class FilamentServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // You can remove this entire method or keep Filament::serving() if you need it for other purposes.
+        Filament::registerRenderHook(
+            'body.end',
+            fn () => view('components.toast')
+        );
     }
 }

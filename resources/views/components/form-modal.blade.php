@@ -86,22 +86,6 @@
     </div>
 </div>
 
-<!-- Confirmation Modal -->
-<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
-        <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
-        <div class="flex justify-end space-x-2">
-            <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
-                Cancel
-            </button>
-            <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
-                Confirm
-            </button>
-        </div>
-    </div>
-</div>
-
 {{-- Barangay Clearance --}}
 {{-- <div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
@@ -394,7 +378,7 @@
             <div>
                 <label for="province" class="block text-sm font-medium text-gray-700">Province:</label>
                 <input type="text" id="province" name="province" value="Pampanga" readonly
-                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-alloweds"
+                    class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 cursor-not-allowed"
                     required />
             </div>
         </form>
@@ -413,7 +397,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Barangay ID Form Modal -->
 <div id="barangayIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
@@ -521,6 +504,22 @@
 </div>
 
 {{-- Approval Modal --}}
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
+        <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
+        <div class="flex justify-end space-x-2">
+            <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
+                Cancel
+            </button>
+            <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
 
 <!-- Approval Confirmation Modal for approved ID -->
 <div id="approvedIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">

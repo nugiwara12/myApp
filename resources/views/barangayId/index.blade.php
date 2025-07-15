@@ -497,6 +497,13 @@
         confirmCallback = onConfirm;
     }
 
+    // Select All Toggle
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('.selectCheckbox');
+        checkboxes.forEach(cb => cb.checked = source.checked);
+        updateDeleteButtonState();
+    }
+
     // Function for the search
     function filterTableRows() {
         const query = document.getElementById('searchInput').value.toLowerCase();
