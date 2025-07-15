@@ -98,6 +98,7 @@ Route::post('/restoreIndigencies', [IndigencyController::class, 'restore'])->nam
 Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigency'])->name('updateIndigency');
 Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
 Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
+Route::post('/barangay-indigency/{id}/approve', [IndigencyController::class, 'approvedIndigency'])->name('barangay-indigency.approve');
 
 
 // clearance

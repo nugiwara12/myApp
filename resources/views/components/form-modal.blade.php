@@ -7,8 +7,16 @@
 
             <!-- Parent Name -->
             <div>
-                <label for="parent_name" class="block text-sm font-medium text-gray-700">Parent Name:</label>
+                <label for="parent_name" class="block text-sm font-medium text-gray-700">Name:</label>
                 <input type="text" id="parent_name" name="parent_name"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required />
+            </div>
+
+            <!-- Email Address -->
+            <div>
+                <label for="indigency_email" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                <input type="email" id="indigency_email" name="indigency_email"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required />
             </div>
@@ -46,6 +54,12 @@
                     oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required />
+            </div>
+
+            {{-- Indigency Generator --}}
+            <div>
+                <label class="block mb-1 font-medium text-sm text-gray-700">Referal Number</label>
+                <input type="text" id="indigency_generated_number" name="indigency_generated_number" class="w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed" readonly>
             </div>
 
             <!-- Date -->
@@ -89,7 +103,7 @@
 </div>
 
 {{-- Barangay Clearance --}}
-<div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+{{-- <div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
         <!-- Header -->
         <div class="px-6 pt-6">
@@ -218,7 +232,7 @@
             </button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <!-- Residency Certificate Modal -->
 <div id="residencyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -400,17 +414,6 @@
     </div>
 </div>
 
-<!-- Approval Confirmation Modal -->
-<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
-        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
-        </div>
-    </div>
-</div>
 
 <!-- Barangay ID Form Modal -->
 <div id="barangayIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
@@ -517,6 +520,8 @@
     </div>
 </div>
 
+{{-- Approval Modal --}}
+
 <!-- Approval Confirmation Modal for approved ID -->
 <div id="approvedIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
@@ -525,6 +530,30 @@
         <div class="flex justify-end space-x-2">
             <button onclick="closeModal('approvedIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
             <button onclick="confirmApproveBarangayId()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal -->
+<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+        </div>
+    </div>
+</div>
+
+<!-- Approval Confirmation Modal -->
+<div id="approveIndigencyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-lg font-semibold mb-4">Approve Indigency</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to approve this Indigency?</p>
+        <div class="flex justify-end space-x-2">
+            <button onclick="closeModal('approveIndigencyModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+            <button onclick="confirmApproveIndigency()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
         </div>
     </div>
 </div>

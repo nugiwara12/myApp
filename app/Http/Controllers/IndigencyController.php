@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Indigency;
+use App\Mail\IndigencyConfirmation;
+use App\Mail\IndigencyApproved;
+use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf; // Add this at the top if not already
 
 class IndigencyController extends Controller
@@ -13,20 +16,52 @@ class IndigencyController extends Controller
         return view('indigency.index');
     }
 
-    public function addIndigency(Request $request) {
+    public function approvedIndigency(Request $request, $id)
+    {
+        $indigency = Indigency::findOrFail($id);
+        $user = auth()->user();
+
+        $role = $user->getRoleNames()->first() ?? 'Admin';
+        $approver = "{$user->name} ({$role})";
+
+        $indigency->approved_by = $approver;
+        $indigency->approved = 1;
+        $indigency->save();
+
+        try {
+            Mail::to($indigency->indigency_email)->send(new IndigencyApproved($indigency->toArray()));
+        } catch (\Exception $e) {
+            \Log::error('Approval email failed: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'message' => 'Barangay Indigency approved successfully.',
+            'indigency' => $indigency
+        ]);
+    }
+
+    public function addIndigency(Request $request)
+    {
         $validated = $request->validate([
             'parent_name'   => 'required|string|max:255',
+            'indigency_email' => 'required|email|unique:indigencies',
             'address'       => 'required|string|max:255',
             'purpose'       => 'required|string|max:255',
             'childs_name'   => 'required|string|max:255',
             'age'           => 'required|integer|min:0|max:150',
+            'indigency_generated_number' => 'required|string|unique:indigencies',
             'date'          => 'required|date',
         ]);
 
-        // Leave as-is: don't append "APPROVAL ACCEPT"
         $validated['status'] = 1;
 
+        // Create record first
         $indigency = Indigency::create($validated);
+
+        // Then send confirmation email
+        Mail::to($indigency->indigency_email)->send(
+            new IndigencyConfirmation($indigency->toArray())
+        );
 
         return response()->json([
             'message' => 'Indigency record added successfully.',
@@ -54,10 +89,12 @@ class IndigencyController extends Controller
         // ✅ Normal update
         $validated = $request->validate([
             'parent_name' => 'nullable|string|max:255',
+            'indigency_email' => 'nullable|email|unique:indigencies,indigency_email,' . $indigency->id,
             'address'     => 'nullable|string|max:255',
             'purpose'     => 'nullable|string|max:255',
             'childs_name' => 'nullable|string|max:255',
             'age'         => 'nullable|integer|min:1|max:150',
+            'indigency_generated_number' => 'nullable|string|unique:indigencies,indigency_generated_number,' . $indigency->id,
             'date'        => 'nullable|date',
         ]);
 

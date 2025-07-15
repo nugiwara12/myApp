@@ -11,11 +11,13 @@ class Indigency extends Model
     // Allow mass assignment on these fields
     protected $fillable = [
         'parent_name',
+        'indigency_email',
         'address',
         'purpose',
         'childs_name',
         'age',
         'status',
+        'indigency_generated_number',
         'date',
     ];
 
