@@ -15,7 +15,7 @@ class BarangayServiceController extends Controller
         $barangayId = BarangayId::where('barangayId_generated_number', $trackingNumber)->first();
         if ($barangayId) {
             return response()->json([
-                'name' => $barangayId->full_name,
+                'name' => $barangayId->barangayId_full_name,
                 'service_type' => 'Barangay ID',
                 'approved_by' => $barangayId->approved_by ?? 'N/A',
                 'created_at' => $barangayId->created_at,
