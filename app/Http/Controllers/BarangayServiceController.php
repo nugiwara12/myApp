@@ -39,7 +39,7 @@ class BarangayServiceController extends Controller
         $indigency = Indigency::where('indigency_generated_number', $trackingNumber)->first();
         if ($indigency) {
             return response()->json([
-                'name' => $indigency->resident_name,
+                'name' => $indigency->parent_name,
                 'service_type' => 'Certificate of Indigency',
                 'approved_by' => $indigency->approved_by ?? 'N/A',
                 'created_at' => $indigency->created_at,
