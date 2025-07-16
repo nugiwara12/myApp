@@ -42,6 +42,7 @@
                                     <th class="px-4 py-2"><input type="checkbox" id="selectAll"
                                             onchange="toggleSelectAll(this)"></th>
                                     <th class="px-4 py-2">Name</th>
+                                    <th class="px-4 py-2">Email Address</th>
                                     <th class="px-4 py-2">Address</th>
                                     <th class="px-4 py-2">Purpose</th>
                                     <th class="px-4 py-2">Childs Name</th>

@@ -58,7 +58,7 @@
 
             {{-- Indigency Generator --}}
             <div>
-                <label class="block mb-1 font-medium text-sm text-gray-700">Referal Number</label>
+                <label class="block mb-1 font-medium text-sm text-gray-700">Referal Number:</label>
                 <input type="text" id="indigency_generated_number" name="indigency_generated_number" class="w-full border border-gray-300 rounded p-2 bg-gray-100 cursor-not-allowed" readonly>
             </div>
 
