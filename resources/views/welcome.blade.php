@@ -20,6 +20,8 @@
     @endif
 </head>
 
+<x-landing-modal.global-modal />
+
 <div class="bg-[#FDFDFC] text-[#1b1b18] min-h-screen flex flex-col">
 
     <!-- Header -->
@@ -45,6 +47,10 @@
                             </a>
                         @endif
                     @endauth
+                    <button onclick="window.openTrackingModal()"
+                        class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] rounded text-[#1b1b18]">
+                        Track My Request
+                    </button>
                 </nav>
             @endif
         </div>
@@ -111,16 +117,16 @@
                 <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">Our Services</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="border rounded-lg p-6 hover:shadow-lg">
-                        <h4 class="text-xl font-semibold mb-2">Barangay Clearance</h4>
-                        <p class="text-gray-600">Easily request and receive your barangay clearance online.</p>
+                        <h4 class="text-xl font-semibold mb-2">Barangay Residence</h4>
+                        <p class="text-gray-600">Request a barangay residence certificate with ease through our digital form.</p>
                     </div>
                     <div class="border rounded-lg p-6 hover:shadow-lg">
-                        <h4 class="text-xl font-semibold mb-2">Resident Registration</h4>
-                        <p class="text-gray-600">New resident? Register quickly with our digital form system.</p>
+                        <h4 class="text-xl font-semibold mb-2">Barangay ID</h4>
+                        <p class="text-gray-600">Apply for an official Barangay ID with photo and QR code for verification.</p>
                     </div>
                     <div class="border rounded-lg p-6 hover:shadow-lg">
-                        <h4 class="text-xl font-semibold mb-2">Permit Applications</h4>
-                        <p class="text-gray-600">Apply for permits and certificates with zero hassle.</p>
+                        <h4 class="text-xl font-semibold mb-2">Barangay Indigency</h4>
+                        <p class="text-gray-600">Get your certificate of indigency for school, work, or medical assistance.</p>
                     </div>
                 </div>
             </div>
@@ -131,26 +137,34 @@
             <div class="max-w-7xl mx-auto px-4">
                 <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">Popular Barangay Requests</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl p-4">
-                        <img src="https://via.placeholder.com/300x180" class="rounded mb-4 w-full" />
-                        <h4 class="text-lg font-semibold mb-2">Indigency Certificate</h4>
+                    <!-- Indigency -->
+                    <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl pt-12 pb-6 px-4 text-center">
+                        <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-100 p-4 rounded-full shadow-md">
+                            <i class="bi bi-person-exclamation text-blue-700 text-3xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 mt-2">Indigency Certificate</h4>
                         <p class="text-gray-600 text-sm">Proof of indigency for scholarship or medical use.</p>
-                        <button class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Request
-                            Now</button>
+                        <button onclick="openIndigencyModal('IndigencyModal')" class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Request Now</button>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl p-4">
-                        <img src="https://via.placeholder.com/300x180" class="rounded mb-4 w-full" />
-                        <h4 class="text-lg font-semibold mb-2">Barangay ID</h4>
+
+                    <!-- Barangay ID -->
+                    <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl pt-12 pb-6 px-4 text-center">
+                        <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-100 p-4 rounded-full shadow-md">
+                            <i class="bi bi-person-badge text-blue-700 text-3xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 mt-2">Barangay ID</h4>
                         <p class="text-gray-600 text-sm">Apply for or renew your official Barangay ID.</p>
-                        <button class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Apply
-                            Now</button>
+                        <button onclick="openBarangayIdModal('barangayIdModal')" class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Apply Now</button>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl p-4">
-                        <img src="https://via.placeholder.com/300x180" class="rounded mb-4 w-full" />
-                        <h4 class="text-lg font-semibold mb-2">Business Clearance</h4>
-                        <p class="text-gray-600 text-sm">Obtain permits to operate your business in the barangay.</p>
-                        <button class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Start
-                            Request</button>
+
+                    <!-- Barangay Residence -->
+                    <div class="relative bg-white rounded-lg shadow-md hover:shadow-xl pt-12 pb-6 px-4 text-center">
+                        <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-100 p-4 rounded-full shadow-md">
+                            <i class="bi bi-house-door text-blue-700 text-3xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 mt-2">Barangay Residence</h4>
+                        <p class="text-gray-600 text-sm">Get your barangay residency certificate quickly and easily.</p>
+                        <button onclick="openResidenceModal('residencyModal')" class="mt-3 w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Get Certificate</button>
                     </div>
                 </div>
             </div>
@@ -259,6 +273,20 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     let isModalVisible = false;
+
+    // Global Modal Control
+    window.openModal = function(id) {
+        document.getElementById(id)?.classList.remove('hidden');
+    };
+
+    // Global Closed Modal Control
+    window.closeModal = function(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.add('hidden');
+        const form = modal.querySelector('form');
+        if (form) form.reset();
+    };
 
     // Toast Notification Function
     function showToast(message, type = 'success') {
@@ -455,4 +483,326 @@
     document.addEventListener("DOMContentLoaded", function() {
         window.fetchFeedback();
     });
+
+    // Generated the barangayId refereal code
+    function generateBarangayIdNumber() {
+        const now = new Date();
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, ''); // e.g., 20250713
+        const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+        return `BRGY-${datePart}-${randomPart}`;
+    }
+
+    // Generate the barangay Indigency
+    function generateIndigencyNumber() {
+        const now = new Date();
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, ''); // e.g., 20250713
+        const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+        return `INDI-${datePart}-${randomPart}`;
+    }
+
+    // Generate the barangay residence
+    function generateResidenceNumber() {
+        const now = new Date();
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, ''); // e.g., 20250713
+        const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+        return `RESID-${datePart}-${randomPart}`;
+    }
+
+    // Modal Function
+    // Open indigency Modal
+    window.openIndigencyModal = function (type) {
+        const modal = document.getElementById('IndigencyModal');
+        modal.classList.remove('hidden');
+
+        // 🟦 Keep referral and date generation intact
+        document.getElementById('indigency_generated_number').value = generateIndigencyNumber();
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+    };
+
+    // Handle form submission indigency with spinner
+    document.getElementById('indigencyForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const submitBtn = document.getElementById('btnSubmitIndigency');
+        const spinner = document.getElementById('submitSpinner');
+        const submitText = document.getElementById('submitText');
+
+        // Show loading
+        spinner.classList.remove('hidden');
+        submitText.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+
+        axios.post('/addIndigency', formData, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(response => {
+            showToast('Form submitted successfully!', 'success');
+            closeModal('IndigencyModal');
+        })
+        .catch(error => {
+            console.error('Submit error:', error);
+            showToast('Submission failed. Please check your input.', 'error');
+        })
+        .finally(() => {
+            // Restore button state
+            spinner.classList.add('hidden');
+            submitText.textContent = 'Submit';
+            submitBtn.disabled = false;
+        });
+    });
+
+    // Open residence Modal and set default values
+    window.openResidenceModal = function (type) {
+        const modal = document.getElementById('residencyModal');
+        modal.classList.remove('hidden');
+
+        // Generate certificate number
+        const certificateInput = document.getElementById('certificate_number');
+        if (certificateInput) {
+            certificateInput.value = generateResidenceNumber();
+        }
+
+        // Set issue date (handle fallback if element doesn't exist)
+        const issueDateInput = document.getElementById('issue_date');
+        if (issueDateInput) {
+            issueDateInput.value = new Date().toISOString().slice(0, 10);
+        }
+    };
+
+    // Handle form submission with spinner
+    function submitResidency(e) {
+        e.preventDefault();
+
+        const form = document.getElementById('residencyForm');
+        const formData = new FormData(form);
+
+        // Manually convert checkbox value to "1" or "0"
+        const checkbox = document.getElementById('has_criminal_record');
+        formData.set('has_criminal_record', checkbox && checkbox.checked ? '1' : '0');
+
+        // Reference elements outside the form
+        const submitBtn = document.getElementById('btnSubmitResidency');
+        const spinner = document.getElementById('submitResidenceSpinner');
+        const submitText = document.getElementById('submitText');
+
+        // Show loading state
+        spinner.classList.remove('hidden');
+        submitText.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+
+        // Send request to backend
+        axios.post('/addResidence', formData, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(response => {
+            showToast('Form submitted successfully!', 'success');
+            closeModal('residencyModal');
+            form.reset(); // optional: reset form after submission
+        })
+        .catch(error => {
+            console.error('Submit error:', error);
+            showToast('Submission failed. Please check your input.', 'error');
+        })
+        .finally(() => {
+            // Restore button state
+            spinner.classList.add('hidden');
+            submitText.textContent = 'Submit';
+            submitBtn.disabled = false;
+        });
+    }
+
+    // Open Barangay ID Modal and set default values
+    window.openBarangayIdModal = function () {
+        const modal = document.getElementById('barangayIdModal');
+        modal.classList.remove('hidden');
+
+        // Generate reference number
+        const certificateInput = document.getElementById('barangayId_generated_number');
+        if (certificateInput) {
+            certificateInput.value = generateBarangayIdNumber();
+        }
+
+        // Set issue date (fallback handled if not present)
+        const issueDateInput = document.getElementById('issue_date');
+        if (issueDateInput) {
+            issueDateInput.value = new Date().toISOString().slice(0, 10);
+        }
+
+        // Setup guardian field behavior
+        window.setupGuardianReadonly();
+    };
+
+    // Enable or disable guardian input based on age
+    window.setupGuardianReadonly = function () {
+        const ageInput = document.getElementById('barangayId_age');
+        const guardianInput = document.getElementById('barangayId_guardian');
+
+        if (!ageInput || !guardianInput) return;
+
+        const handleGuardianField = () => {
+            const age = parseInt(ageInput.value, 10);
+
+            if (!isNaN(age) && age >= 1 && age <= 17) {
+                guardianInput.readOnly = true;
+                guardianInput.required = false;
+                guardianInput.classList.add('bg-gray-100', 'cursor-not-allowed');
+                guardianInput.value = '';
+            } else if (!isNaN(age) && age > 17) {
+                guardianInput.readOnly = false;
+                guardianInput.required = true;
+                guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            } else {
+                guardianInput.readOnly = false;
+                guardianInput.required = false;
+                guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            }
+        };
+
+        ageInput.removeEventListener('input', handleGuardianField);
+        ageInput.addEventListener('input', handleGuardianField);
+
+        // Run once on load
+        handleGuardianField();
+    };
+
+    // Handle form submit with spinner
+    window.submitBarangayIdForm = function (e) {
+        e.preventDefault();
+
+        const form = document.getElementById('barangayIdForm');
+        const formData = new FormData(form);
+
+        const submitBtn = document.getElementById('btnSubmitBarangayId');
+        const spinner = document.getElementById('submitBarangayIdSpinner');
+        const submitText = document.getElementById('submitBarangayIdText');
+
+        // Start loading
+        spinner.classList.remove('hidden');
+        submitText.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+
+        axios.post('/addBarangayId', formData, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(response => {
+            showToast('Form submitted successfully!', 'success');
+            closeModal('barangayIdModal');
+            form.reset();
+
+            // Reset preview
+            const preview = document.getElementById('imagePreview');
+            if (preview) preview.classList.add('hidden');
+        })
+        .catch(error => {
+            console.error('Submit error:', error);
+            showToast('Submission failed. Please check your input.', 'error');
+        })
+        .finally(() => {
+            spinner.classList.add('hidden');
+            submitText.textContent = 'Submit';
+            submitBtn.disabled = false;
+        });
+    };
+
+     // Modal open/close
+    window.openTrackingModal = function () {
+        document.getElementById('trackingModal').classList.remove('hidden');
+    };
+
+    // Closed function of tracking data
+    window.closeTrackingModal = function () {
+        document.getElementById('trackingModal').classList.add('hidden');
+        document.getElementById('tracking_number_input').value = '';
+        document.getElementById('trackingResultContainer').classList.add('hidden');
+        document.getElementById('trackingResultRow').innerHTML = '';
+        document.getElementById('submitTrackingText').textContent = 'Search';
+        document.getElementById('submitTrackingSpinner').classList.add('hidden');
+        document.getElementById('btnSubmitTracking').disabled = false;
+    };
+
+    // Load the data of the tracking
+    window.submitTrackingNumber = function (e) {
+        e.preventDefault();
+
+        const input = document.getElementById('tracking_number_input');
+        const trackingNumber = input.value.trim();
+        const spinner = document.getElementById('submitTrackingSpinner');
+        const submitText = document.getElementById('submitTrackingText');
+        const btn = document.getElementById('btnSubmitTracking');
+        const resultContainer = document.getElementById('trackingResultContainer');
+        const resultRow = document.getElementById('trackingResultRow');
+
+        if (!trackingNumber) {
+            showToast('Please enter a tracking number.', 'error');
+            return;
+        }
+
+        // Start loading
+        spinner.classList.remove('hidden');
+        submitText.textContent = 'Searching...';
+        btn.disabled = true;
+        resultContainer.classList.add('hidden');
+        resultRow.innerHTML = '';
+
+        axios.get(`/track/${trackingNumber}`)
+            .then(response => {
+                const data = response.data;
+
+                resultRow.innerHTML = `
+                    <tr>
+                        <td class="px-4 py-2 border">${data.name || 'N/A'}</td>
+                        <td class="px-4 py-2 border">${data.service_type || 'N/A'}</td>
+                        <td class="px-4 py-2 border">${formatDate(data.created_at)}</td>
+                        <td class="px-4 py-2 border">Ready for pick up!</td>
+                        <td class="px-4 py-2 border font-medium ${getStatusColor(data.status)}">
+                            ${formatStatus(data.status)}
+                        </td>
+                    </tr>
+                `;
+
+                resultContainer.classList.remove('hidden');
+            })
+            .catch(() => {
+                showToast('No result found for that tracking number.', 'error');
+            })
+            .finally(() => {
+                spinner.classList.add('hidden');
+                submitText.textContent = 'Search';
+                btn.disabled = false;
+            });
+    };
+
+    // Status format color
+    function getStatusColor(status) {
+        if (status === 'Pending' || status === 0) return 'text-red-500';
+        if (status === 'Approved' || status === 1) return 'text-green-600';
+        return 'text-gray-500';
+    }
+
+    // Status Function for
+    function formatStatus(status) {
+        if (status === 0 || status === 'Pending') return 'Pending';
+        if (status === 1 || status === 'Approved') return 'Approved';
+        return status;
+    }
+
+    // Format of date
+    function formatDate(isoDate) {
+        if (!isoDate) return 'N/A';
+        const date = new Date(isoDate);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
 </script>
