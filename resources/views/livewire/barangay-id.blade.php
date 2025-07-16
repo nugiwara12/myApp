@@ -294,21 +294,27 @@
             const handleGuardianField = () => {
                 const age = parseInt(ageInput.value, 10);
 
-                if (!isNaN(age) && age <= 17) {
+                if (!isNaN(age) && age >= 1 && age <= 17) {
                     guardianInput.readOnly = true;
+                    guardianInput.required = false; // ✅ Not required if age 1-17
                     guardianInput.classList.add('bg-gray-100', 'cursor-not-allowed');
                     guardianInput.value = ''; // Optional clear
                 } else if (!isNaN(age) && age > 17) {
                     guardianInput.readOnly = false;
+                    guardianInput.required = true; // ✅ Required if age > 17
+                    guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
+                } else {
+                    // Reset default state if age is invalid
+                    guardianInput.readOnly = false;
+                    guardianInput.required = false;
                     guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
                 }
             };
 
-            // Remove old listener before adding new one (if reusing modal)
             ageInput.removeEventListener('input', handleGuardianField);
             ageInput.addEventListener('input', handleGuardianField);
 
-            handleGuardianField(); // run on load
+            handleGuardianField(); // Run on initial load
         };
 
         // Form submission handler
@@ -514,7 +520,7 @@
                     <td class="px-4 py-2">${item.barangayId_civil_status}</td>
                     <td class="px-4 py-2">${item.barangayId_contact_no}</td>
                     <td class="px-4 py-2">${item.barangayId_guardian}</td>
-                    <td class="px-4 py-2">${item.generated_number}</td>
+                    <td class="px-4 py-2">${item.barangayId_generated_number}</td>
                     <td class="px-4 py-2">${item.approved == 1
                         ? '<span class="text-green-600 bg-green-100 px-2 py-1 rounded text-xs font-semibold">Approved</span>'
                         : '<span class="text-yellow-600 bg-yellow-100 px-2 py-1 rounded text-xs font-semibold">Pending</span>'}</td>
