@@ -454,7 +454,7 @@
                 axios.post('/residency/delete-selected', { ids })
                     .then(() => {
                         showToast('Selected records deleted.', 'success');
-                        window.residencyModal.fetchList();
+                        window.barangayIdModal.fetchList();
                     })
                     .catch(() => {
                         showToast('Failed to delete selected records.', 'error');

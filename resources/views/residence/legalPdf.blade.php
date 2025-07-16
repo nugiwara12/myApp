@@ -163,7 +163,7 @@
                     Republic of the Philippines<br>
                     Province of Tarlac<br>
                     Municipality of Moncada<br>
-                    <span class="barangay-poblacion">BARANGAY POBLACION 1</span><br>
+                    <span class="barangay-poblacion">BARANGAY PANIPPUAN</span><br>
                     OFFICE OF THE PUNONG BARANGAY
                 </p>
                 <div class="certificate-title-wrapper">
@@ -212,7 +212,7 @@
             <p class="sec-name underline">MARC DOMINADO JR.</p>
             <p class="brgy-position">Barangay Secretary</p>
 
-            <p class="signature-name underline">HON. ARTEMIO R. BUAN</p>
+            <p class="signature-name underline">JOHN IVAN O, MICLAT</p>
             <p class="brgy-position">Punong Barangay</p>
         </div>
 

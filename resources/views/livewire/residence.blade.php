@@ -49,7 +49,7 @@
                     <!-- Table -->
                     <div class="h-full overflow-y-auto rounded">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 uppercase sticky top-0 z-10 whitespace-nowrap">
+                            <thead class="bg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
                                 <tr>
                                     <th class="px-4 py-2"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
                                     <th class="px-4 py-2">Parent Name</th>
@@ -306,10 +306,10 @@
             justify-content: center;
         ">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-            <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
+            <h2 class="text-lg font-semibold mb-4" style="color: black;">Approve Residence</h2>
             <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
             <div class="flex justify-end space-x-2" style="margin-top: 8px;">
-                <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                <button onclick="closeModal('approveModal')" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">Cancel</button>
                 <button onclick="confirmApprove()" class="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700" style="margin-left: 8px;">Approve</button>
             </div>
         </div>
@@ -329,7 +329,7 @@
             justify-content: center;
         ">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
+            <h2 id="confirmationTitle" class="text-lg font-semibold mb-2" style="color: black;">Confirm Action</h2>
             <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
             <div class="flex justify-end space-x-2">
                 <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">

@@ -210,7 +210,7 @@
             <p class="sec-name underline">MARC DOMINADO JR.</p>
             <p class="brgy-position">Barangay Secretary</p>
 
-            <p class="signature-name underline">HON. ARTEMIO R. BUAN</p>
+            <p class="signature-name underline">JOHN IVAN 0, MICLAT</p>
             <p class="brgy-position">Punong Barangay</p>
         </div>
 

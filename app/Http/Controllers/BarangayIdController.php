@@ -11,6 +11,8 @@ use App\Mail\BarangayIdApproved;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class BarangayIdController extends Controller
 {
