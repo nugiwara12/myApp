@@ -19,8 +19,15 @@ class IndigencyController extends Controller
     public function approvedIndigency(Request $request, $id)
     {
         $indigency = Indigency::findOrFail($id);
-        $user = auth()->user();
 
+        // ✅ Prevent approval if age is outside range
+        if ($indigency->age < 1 || $indigency->age > 17) {
+            return response()->json([
+                'message' => 'Age not within approval range.'
+            ], 422);
+        }
+
+        $user = auth()->user();
         $role = $user->getRoleNames()->first() ?? 'Admin';
         $approver = "{$user->name} ({$role})";
 
