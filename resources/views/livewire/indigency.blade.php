@@ -52,7 +52,7 @@
                     <!-- Table -->
                     <div class="h-full overflow-y-auto rounded">
                         <table class="w-full text-sm text-left">
-                            <thead class="bbg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
+                            <thead class="bg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
                                 <tr>
                                     <th class="px-4 py-2"><input type="checkbox" id="selectAll"
                                             onchange="toggleSelectAll(this)"></th>
@@ -423,7 +423,7 @@
                         <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
                             class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
                             title="Approve">
-                            <i class="bi bi-check-circle-fill text-white text-md"></i>
+                            <i class="bi bi-check-circle-fill dark:text-white text-md"></i>
                         </button>
                     `;
                 }
@@ -449,7 +449,7 @@
                 return `
                     <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
                         class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
-                        <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
+                        <i class="bi bi-arrow-counterclockwise dark:text-white text-md"></i>
                     </button>
                 `;
             }

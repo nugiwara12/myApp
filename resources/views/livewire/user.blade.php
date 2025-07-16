@@ -21,22 +21,27 @@
                     <div class="flex justify-between mb-4">
                         <!-- Left: Title -->
                         <div class="text-left">
-                            <x-search-input id="searchInput" placeholder="Search users" class="w-full sm:w-full text-black" />
+                            <input
+                                id="searchInput"
+                                type="text"
+                                placeholder="Search Indigency"
+                                class="w-full sm:w-60 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            />
                         </div>
 
                         <!-- Right: Button -->
                         <div class="text-right">
-                            <x-primary-button onclick="openAddUser()">
+                            <buttton onclick="openAddUser()" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 cursor-pointer transition">
                                 Add User
-                            </x-primary-button>
+                            </buttton>
                         </div>
                     </div>
 
                     <!-- Scrollable Table -->
-                    <div id="scrollContainer" class="max-h-[730px] overflow-y-auto rounded">
+                    <div id="scrollContainer" class="h-full overflow-y-auto rounded">
                         <div class="min-w-[1024px]">
                             <table id="userTable" class="w-full text-sm text-left">
-                                <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
+                                <thead class="bg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
                                     <tr class="whitespace-nowrap">
                                         <th class="px-4 py-2">User ID</th>
                                         <th class="px-4 py-2">Username</th>
@@ -46,7 +51,7 @@
                                         <th class="px-4 py-2">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tableBody" class="divide-y divide-gray-200">
+                                <tbody id="tableBody" class="divide-y divide-gray-200 dark:divide-gray-700 whitespace-nowrap text-gray-800 dark:text-gray-100">
                                     <!-- Rows inserted via JavaScript -->
                                 </tbody>
                             </table>
@@ -59,13 +64,25 @@
 
     <!-- Add User Modal -->
     <div id="addUserModal"
-        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4">
+        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"
+        style="
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        ">
+
         <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-xl overflow-y-auto max-h-[90vh]">
             <h2 id="modalTitle" class="text-lg font-semibold text-gray-800 text-start mb-2">Add New User</h2>
             <p class="text-sm text-gray-500 text-start mb-6">Fill in the details to create a new user account.</p>
 
             <!-- Form Fields -->
-            <div class="space-y-4">
+            <div class="space-y-4" style="color: black;">
                 <!-- Name -->
                 <div>
                     <x-input-label for="name" :value="__('Name')" />
@@ -114,7 +131,7 @@
                     Cancel
                 </button>
                 <button id="modalActionBtn" onclick="submitAddUser()"
-                    class="bg-[#1B76B5] text-white px-4 py-2 rounded-md text-sm hover:bg-[#166799]">
+                    class="rounded-md bg-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-primary-500">
                     Add User
                 </button>
             </div>
@@ -122,13 +139,27 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div id="deleteUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"
+        style="
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        ">
+
         <div class="bg-white rounded-lg p-6 w-full max-w-md text-center shadow-lg">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h2>
-            <p class="text-gray-600 mb-6">Are you sure you want to delete this user?</p>
-            <div class="flex justify-center gap-4">
-                <button onclick="closeModal('deleteUserModal')" class="px-4 py-2 rounded-md border text-gray-700">Cancel</button>
-                <button id="confirmDeleteBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Delete</button>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4" style="color: black;">Confirm Delete</h2>
+            <p class="text-gray-600 mb-6" style="color: black;">Are you sure you want to delete this user?</p>
+            <div class="flex justify-center gap-2" style="margin-top: 8px;">
+                <button onclick="closeModal('deleteUserModal')" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 text-white bg-primary-600 hover:bg-primary-700 rounded">Delete</button>
             </div>
         </div>
     </div>
@@ -317,29 +348,29 @@
                         }
 
                         row.innerHTML = `
-                            <td class="px-4 py-2 text-white">${user.id}</td>
-                            <td class="px-4 py-2 text-white">${user.name}</td>
-                            <td class="px-4 py-2 text-white">${user.email}</td>
-                            <td class="px-4 py-2 text-white capitalize">${user.roles && user.roles.length > 0 ? user.roles[0].name : 'No role'}</td>
-                            <td class="px-4 py-2 text-white">
+                            <td class="px-4 py-2 dark:text-white">${user.id}</td>
+                            <td class="px-4 py-2 dark:text-white">${user.name}</td>
+                            <td class="px-4 py-2 dark:text-white">${user.email}</td>
+                            <td class="px-4 py-2 dark:text-white capitalize">${user.roles && user.roles.length > 0 ? user.roles[0].name : 'No role'}</td>
+                            <td class="px-4 py-2 dark:text-white">
                                 <span class="${user.status === 1
-                                    ? 'bg-green-400 text-white border border-green-500'
-                                    : 'bg-red-400 text-white border border-gray-400'}
+                                    ? 'bg-primary-500 text-white border border-green-500'
+                                    : 'bg-red-400 dark:text-white border border-gray-400'}
                                     px-3 py-1 rounded-md text-sm font-medium">
                                     ${user.status === 1 ? 'Active' : 'Inactive'}
                                 </span>
                             </td>
-                            <td class="px-4 py-2 text-white">
+                            <td class="px-4 py-2 dark:text-white">
                                 ${isDeleted
                                     ? `<button
                                             onclick="restoreUser(${user.id})"
-                                            class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition duration-200"
+                                            class="bg-green-500 dark:text-white p-2 rounded-lg hover:bg-green-600 transition duration-200"
                                             title="Restore"
                                         >
                                             <i class="bi bi-arrow-clockwise"></i>
                                         </button>`
                                     : `<button
-                                            class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-200"
+                                            class="bg-blue-500 dark:text-white p-2 rounded-lg hover:bg-blue-600 transition duration-200"
                                             title="Edit"
                                             onclick='editUser(${JSON.stringify(user)})'
                                         >
@@ -347,7 +378,7 @@
                                         </button>
                                         <button
                                             onclick="deleteUser(${user.id})"
-                                            class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition duration-200 ml-2"
+                                            class="bg-red-500 dark:text-white p-2 rounded-lg hover:bg-red-600 transition duration-200 ml-2"
                                             title="Delete"
                                         >
                                             <i class="bi bi-trash-fill"></i>
