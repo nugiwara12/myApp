@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('indigency_email')->unique();
             $table->string('address');
             $table->string('purpose');
-            $table->string('childs_name');
+            $table->string('childs_name')->nullable();
             $table->unsignedTinyInteger('age');
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('approved')->default(0); // 0 = Not approved, 1 = Approved
