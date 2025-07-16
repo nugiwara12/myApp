@@ -47,7 +47,7 @@ class IndigencyController extends Controller
             'indigency_email' => 'required|email|unique:indigencies',
             'address'       => 'required|string|max:255',
             'purpose'       => 'required|string|max:255',
-            'childs_name'   => 'required|string|max:255',
+            'childs_name'   => 'nullable|string|max:255',
             'age'           => 'required|integer|min:0|max:150',
             'indigency_generated_number' => 'required|string|unique:indigencies',
             'date'          => 'required|date',
