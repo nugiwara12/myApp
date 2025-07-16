@@ -141,17 +141,18 @@
             } else if (item.age >= 1 && item.age <= 17) {
                 row.classList.add('bg-yellow-100', 'cursor-pointer');
             } else {
-                row.classList.add('hover:bg-gray-50', 'cursor-pointer');
+                row.classList.add('cursor-pointer');
             }
 
             row.setAttribute('data-search', `${item.parent_name} ${item.address} ${item.purpose} ${item.childs_name} ${item.age} ${statusText} ${item.date}`.toLowerCase());
-            row.classList.add(item.status === 0 ? 'bg-red-100' : 'hover:bg-gray-50', 'cursor-pointer');
+            row.classList.add(item.status === 0 ? 'bg-red-100' : 'cursor-pointer');
 
             const isForApproval = item.status === 1 && item.age >= 1 && item.age <= 17 && item.approved != 1;
 
             row.innerHTML = `
                 <td class="px-4 py-2">${item.status === 1 ? `<input type="checkbox" class="selectCheckbox" data-id="${item.id}">` : ''}</td>
                 <td class="px-4 py-2">${item.parent_name}</td>
+                <td class="px-4 py-2">${item.indigency_email}</td>
                 <td class="px-4 py-2">${item.address}</td>
                 <td class="px-4 py-2">${item.purpose}</td>
                 <td class="px-4 py-2">${item.childs_name}</td>
@@ -223,7 +224,7 @@
                         class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
                         <i class="bi bi-trash-fill text-red-500"></i>
                     </button>
-                    <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
+                    <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
                         class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
                         <i class="bi bi-file-earmark-pdf text-red-600"></i>
                     </button>

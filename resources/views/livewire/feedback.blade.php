@@ -19,7 +19,7 @@
                         <!-- Search input with clear button -->
                         <div class="relative w-full sm:w-60">
                             <input id="searchInput" type="text" placeholder="Search feedbacks"
-                                class="border border-gray-300 rounded-md py-2 px-4 pr-10 w-full focus:outline-none focus:ring focus:border-blue-300" />
+                                class="w-96 sm:w-60 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
                             <button id="clearSearchBtn"
                                 class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden">
                                 &times;
@@ -27,16 +27,16 @@
                         </div>
 
                         <button onclick="deleteSelectedFeedbacks()" id="deleteSelectedBtn"
-                            class="ml-4 whitespace-nowrap bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded disabled:opacity-50"
+                            class="px-4 py-2 bg-primary-600 text-white rounded-md disabled:opacity-50 hover:bg-primary-700 transition whitespace-nowrap"
                             disabled>
                             Delete Selected
                         </button>
                     </div>
 
                     <!-- Table -->
-                    <div class="max-h-[730px] overflow-y-auto rounded">
+                    <div class="h-full overflow-y-auto rounded">
                         <table class="w-full text-sm text-left">
-                            <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10">
+                            <thead class="bg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
                                 <tr>
                                     <th class="px-4 py-2"><input type="checkbox" id="selectAll"
                                             onchange="toggleSelectAll(this)"></th>

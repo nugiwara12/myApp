@@ -41,21 +41,27 @@
         const handleGuardianField = () => {
             const age = parseInt(ageInput.value, 10);
 
-            if (!isNaN(age) && age <= 17) {
+            if (!isNaN(age) && age >= 1 && age <= 17) {
                 guardianInput.readOnly = true;
+                guardianInput.required = false; // ✅ Not required if age 1-17
                 guardianInput.classList.add('bg-gray-100', 'cursor-not-allowed');
                 guardianInput.value = ''; // Optional clear
             } else if (!isNaN(age) && age > 17) {
                 guardianInput.readOnly = false;
+                guardianInput.required = true; // ✅ Required if age > 17
+                guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            } else {
+                // Reset default state if age is invalid
+                guardianInput.readOnly = false;
+                guardianInput.required = false;
                 guardianInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
             }
         };
 
-        // Remove old listener before adding new one (if reusing modal)
         ageInput.removeEventListener('input', handleGuardianField);
         ageInput.addEventListener('input', handleGuardianField);
 
-        handleGuardianField(); // run on load
+        handleGuardianField(); // Run on initial load
     };
 
     // Form submission handler
@@ -67,26 +73,47 @@
     function openAddBarangayId() {
         window.barangayIdModal.editId = null;
 
-        document.getElementById('modalTitle').innerText = 'Add Barangay ID';
-        document.getElementById('btnSubmitBarangayId').innerText = 'Submit';
+        const form = document.getElementById('barangayIdForm');
+        if (form) {
+            form.reset(); // Reset all inputs
 
-        window.barangayIdModal.fieldIds.forEach(field => {
-            const input = document.getElementById(field);
-            if (input) input.value = '';
-        });
+            // Clear error borders
+            form.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
 
-        // ✅ Auto-generate the generated_number
-        const genNumInput = document.querySelector('[name="generated_number"]');
-        if (genNumInput) {
-            genNumInput.value = generateBarangayIdNumber();
+            // Clear file input preview
+            const imagePreview = document.getElementById('imagePreview');
+            if (imagePreview) {
+                imagePreview.src = '';
+                imagePreview.classList.add('hidden');
+            }
+
+            // Ensure file input is cleared (for some browsers reset doesn't clear file input)
+            const fileInput = form.querySelector('[name="barangayId_image"]');
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.setAttribute('required', 'required'); // Re-add required for add mode
+            }
         }
 
+        // Set title and button text
+        const title = document.getElementById('modalTitle');
+        if (title) title.innerText = 'Add Barangay ID';
+
+        const submitBtn = document.getElementById('btnSubmitBarangayId');
+        if (submitBtn) submitBtn.innerText = 'Submit';
+
+        // Generate new Barangay ID number
+        const genNumber = generateBarangayIdNumber();
+        const genNumInput = document.querySelector('[name="generated_number"]');
+        if (genNumInput) genNumInput.value = genNumber;
+
+        const finalGenInput = document.getElementById('barangayId_generated_number');
+        if (finalGenInput) finalGenInput.value = genNumber;
+
+        // Setup guardian field logic
         setupGuardianReadonly();
 
-         // ✅ Set the value here
-        const generatedNumber = generateBarangayIdNumber();
-        document.getElementById('barangayId_generated_number').value = generatedNumber;
-
+        // Open the modal
         openModal(window.barangayIdModal.modalId);
     }
 
@@ -240,7 +267,7 @@
                 <td class="px-4 py-2">${item.barangayId_civil_status}</td>
                 <td class="px-4 py-2">${item.barangayId_contact_no}</td>
                 <td class="px-4 py-2">${item.barangayId_guardian}</td>
-                <td class="px-4 py-2">${item.generated_number}</td>
+                <td class="px-4 py-2">${item.barangayId_generated_number}</td>
                 <td class="px-4 py-2">${item.approved == 1
                     ? '<span class="text-green-600 bg-green-100 px-2 py-1 rounded text-xs font-semibold">Approved</span>'
                     : '<span class="text-yellow-600 bg-yellow-100 px-2 py-1 rounded text-xs font-semibold">Pending</span>'}</td>
@@ -454,7 +481,7 @@
                 axios.post('/residency/delete-selected', { ids })
                     .then(() => {
                         showToast('Selected records deleted.', 'success');
-                        window.residencyModal.fetchList();
+                        window.barangayIdModal.fetchList();
                     })
                     .catch(() => {
                         showToast('Failed to delete selected records.', 'error');

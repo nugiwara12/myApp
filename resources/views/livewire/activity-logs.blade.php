@@ -14,9 +14,9 @@
 
     <div class="text-gray-800 px-4 sm:px-6 lg:px-8 py-6">
         <div class="max-w-full mx-auto">
-            <div class="overflow-x-auto shadow-md rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="h-full overflow-y-auto rounded">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-gray-100 dark:bg-gray-800 dark:text-white uppercase sticky top-0 z-10 whitespace-nowrap">
                         <tr class="uppercase whitespace-nowrap text-xs font-medium text-gray-500">
                             <th class="w-[100px] px-6 py-3 text-left">ID</th>
                             <th class="w-[100px] px-6 py-3 text-left">User ID</th>
@@ -28,7 +28,7 @@
                             <th class="w-[100px] px-6 py-3 text-left">Updated At</th>
                         </tr>
                     </thead>
-                    <tbody id="activityTable" class="divide-y divide-gray-200 uppercase whitespace-nowrap">
+                    <tbody id="activityTable" class="divide-y divide-gray-200 dark:divide-gray-700 whitespace-nowrap text-gray-800 dark:text-gray-100">
                         <!-- JS will inject rows -->
                     </tbody>
                 </table>
@@ -62,7 +62,7 @@
                     const statusSpan = `
                         <span class="${
                             isLogin
-                                ? 'bg-green-400 text-white border border-green-500'
+                                ? 'bg-primary-500 text-white border border-green-500'
                                 : isLogout
                                     ? 'bg-red-400 text-white border border-red-500'
                                     : isRegister
@@ -75,33 +75,33 @@
 
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td class="px-6 py-4 text-sm text-white">${log.id}</td>
-                        <td class="px-6 py-4 text-sm text-white">${log.user_id}</td>
-                        <td class="px-6 py-4 text-sm text-white">${log.name}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">${log.id}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">${log.user_id}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">${log.name}</td>
                         <td class="px-6 py-4 text-sm">${statusSpan}</td>
-                        <td class="px-6 py-4 text-sm text-white">${log.role}</td>
-                        <td class="px-6 py-4 text-sm text-white">
+                        <td class="px-6 py-4 text-sm dark:text-white">${log.role}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">
                         ${
                             log.email_verified_at
                                 ? `
                                     <div class="inline-block">
-                                        <span class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-md">
+                                        <span class="inline-block bg-green-500 dark:text-white text-xs font-semibold px-3 py-1 rounded-md">
                                             Verified
                                         </span>
-                                        <div class="text-[11px] text-white mt-1">
+                                        <div class="text-[11px] dark:text-white mt-1">
                                             ${new Date(log.email_verified_at).toLocaleString()}
                                         </div>
                                     </div>
                                 `
                                 : `
-                                    <span class="inline-block bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-md">
+                                    <span class="inline-block bg-red-500 dark:text-white text-xs font-semibold px-3 py-1 rounded-md">
                                         Not Verified
                                     </span>
                                 `
                         }
                         </td>
-                        <td class="px-6 py-4 text-sm text-white">${new Date(log.created_at).toLocaleString()}</td>
-                        <td class="px-6 py-4 text-sm text-white">${new Date(log.updated_at).toLocaleString()}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">${new Date(log.created_at).toLocaleString()}</td>
+                        <td class="px-6 py-4 text-sm dark:text-white">${new Date(log.updated_at).toLocaleString()}</td>
                     `;
 
                     tableBody.appendChild(row);

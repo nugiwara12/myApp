@@ -8,7 +8,7 @@ class BarangayId extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static string $view = 'filament.admin.pages.barangay-forms';
+    protected static string $view = 'filament.admin.pages.barangay-id';
 
     protected static ?string $title = 'Barangay ID';
 
