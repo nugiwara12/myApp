@@ -181,6 +181,29 @@
         </div>
     </div>
 
+    <!-- Approval Confirmation Modal -->
+    <div id="approveIndigencyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+        style="
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        ">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <h2 class="text-lg font-semibold mb-4">Approve Indigency</h2>
+            <p class="mb-6 text-gray-700">Are you sure you want to approve this Indigency?</p>
+            <div class="flex justify-end space-x-2" style="margin-top: 8px;">
+                <button onclick="closeModal('approveIndigencyModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                <button onclick="confirmApproveIndigency()" class="px-4 py-2 text-white bg-primary-600 hover:bg-primary-700 rounded" style="margin-left: 8px;">Approve</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Confirmation Modal -->
     <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
         style="
@@ -294,10 +317,17 @@
                     data[field] = document.getElementById(field)?.value || '';
                 });
 
+                // ✅ Validate age range before submitting
+                const age = parseInt(data.age);
+                if (isNaN(age) || age < 1 || age > 17) {
+                    showToast('Age must be between 1 and 17 for approval.', 'error');
+                    return;
+                }
+
                 const method = this.editId ? 'put' : 'post';
-                const url = this.editId ?
-                    `/updateIndigency/${this.editId}` :
-                    `{{ route('addIndigency') }}`;
+                const url = this.editId
+                    ? `/updateIndigency/${this.editId}`
+                    : `{{ route('addIndigency') }}`;
 
                 axios[method](url, data)
                     .then(() => {
@@ -420,7 +450,7 @@
 
                 if (item.status === 1 && isNotApproved) {
                     return `
-                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                        <button onclick="event.stopPropagation(); openApproveModal(${item.id})"
                             class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
                             title="Approve">
                             <i class="bi bi-check-circle-fill dark:text-white text-md"></i>
@@ -456,29 +486,29 @@
         };
 
         // approved modal
-        window.approveIndigency = function(id) {
-            selectedResidenceId = id;
+        window.openApproveModal = function(id) {
+            window.selectedIndigencyId = id;
             openModal('approveIndigencyModal');
         };
 
         // approved the data
-        window.confirmApproveIndigency = function () {
-            if (!selectedResidenceId) return;
+       window.confirmApproveIndigency = function () {
+            if (!window.selectedIndigencyId) return;
 
-            axios.post(`/barangay-indigency/${selectedResidenceId}/approve`)
+            const id = window.selectedIndigencyId;
+
+            axios.post(`/indigency/${id}/approve`, { approve: true })
                 .then(response => {
                     showToast('Barangay Indigency approved successfully!', 'success');
-                    indigencyModal.fetchList();
-                    closeModal('approveIndigencyModal');
+                    window.indigencyModal.fetchList();
                 })
                 .catch(error => {
                     console.error("Approval error:", error);
-                    showToast('Failed to approve Barangay Indigency.', 'error');
-                    closeModal('approveIndigencyModal');
+                    showToast(error.response?.data?.message || 'Failed to approve Barangay Indigency.', 'error');
                 })
                 .finally(() => {
                     closeModal('approveIndigencyModal');
-                    selectedResidenceId = null;
+                    window.selectedIndigencyId = null;
                 });
         };
 

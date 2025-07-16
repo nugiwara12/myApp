@@ -59,19 +59,29 @@
 
     {{-- MOdal --}}
     <!-- Confirm Delete Modal -->
-    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 hidden z-50">
+    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 hidden z-50"
+        style="
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        ">
         <div id="confirmModalContent"
             class="bg-white p-6 rounded-lg shadow-md w-full max-w-sm transform transition-all scale-95 opacity-0">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-800">Confirm Deletion</h2>
-                <button onclick="closeConfirmModal()" class="text-gray-500 hover:text-gray-700 text-lg">&times;</button>
             </div>
             <p class="text-sm text-gray-600 mb-6">Are you sure you want to delete this feedback?</p>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2" style="margin-top: 8px">
                 <button onclick="closeConfirmModal()"
                     class="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-sm text-gray-700">Cancel</button>
                 <button id="confirmDeleteBtn"
-                    class="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-sm text-white">Delete</button>
+                    class="px-4 py-2 rounded-md bg-primary-600 hover:bg-primary-700 text-sm text-white">Delete</button>
             </div>
         </div>
     </div>
@@ -91,7 +101,7 @@
                 <button onclick="closeBulkConfirmModal()"
                     class="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-sm text-gray-700">Cancel</button>
                 <button id="confirmBulkDeleteBtn"
-                    class="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-sm text-white">Delete</button>
+                    class="px-4 py-2 rounded-md bg-primary-600 hover:bg-primary-700 text-sm dark:text-white">Delete</button>
             </div>
         </div>
     </div>
@@ -135,7 +145,7 @@
                 <td class="px-4 py-2">${new Date(item.created_at).toLocaleString()}</td>
                 <td class="px-4 py-2">
                     <button onclick="event.stopPropagation(); showConfirmModal(${item.id})"
-                        class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded">
+                        class="bg-primary-600 hover:bg-primary-700 text-white text-xs px-3 py-1 rounded">
                         Delete
                     </button>
                 </td>
