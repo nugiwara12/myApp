@@ -110,7 +110,7 @@
                     const tbody = document.getElementById('indigencyTableBody');
                     tbody.innerHTML = data.length ? '' : `
                         <tr>
-                            <td colspan="11" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
+                            <td colspan="12" class="text-center bg-gray-200 text-gray-500 py-4">No records found.</td>
                         </tr>
                     `;
 
