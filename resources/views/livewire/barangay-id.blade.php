@@ -95,7 +95,13 @@
             align-items: center;
             justify-content: center;
         ">
-        <div class="bg-white border border-gray-300 rounded-lg shadow-lg w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden">
+        <div class="bg-white border border-gray-300 rounded-lg shadow-lg w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden"
+            style="overflow: auto;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 0%;
+            height: 90vh;
+            margin-top: 1rem; ">
 
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200">
@@ -568,59 +574,47 @@
                 .then(response => {
                     const data = response.data;
                     const form = document.getElementById('barangayIdForm');
-                    const elements = form.elements;
 
-                    for (let i = 0; i < elements.length; i++) {
-                        const input = elements[i];
-                        const name = input.name;
+                    // Clear any previous error classes
+                    form.querySelectorAll('.border-red-500').forEach(el => {
+                        el.classList.remove('border-red-500');
+                    });
 
-                        if (!name || !data.hasOwnProperty(name)) continue;
+                    // Populate form fields
+                    window.barangayIdModal.fieldIds.forEach(field => {
+                        const input = form.querySelector(`[name="${field}"]`);
+                        if (!input) return;
 
-                        if (input.type === 'checkbox') {
-                            input.checked = !!data[name];
-                        } else if (input.type === 'date') {
-                            input.value = data[name] ? new Date(data[name]).toISOString().split('T')[0] : '';
-                        } else if (input.type === 'file') {
-                            continue; // Don't prefill file input
+                        if (input.type === 'file') {
+                            // Skip file input
+                        } else if (input.type === 'date' && data[field]) {
+                            input.value = new Date(data[field]).toISOString().split('T')[0];
                         } else {
-                            input.value = data[name] ?? '';
+                            input.value = data[field] || '';
                         }
-                    }
+                    });
 
-                    // ✅ Show existing image preview
+                    // Handle image preview
                     const imagePreview = document.getElementById('imagePreview');
-                    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-
-                    if (imagePreview && imagePreviewContainer) {
-                        if (data.barangayId_image) {
-                            imagePreview.src = `/barangayId/${data.barangayId_image}`;
-                            imagePreview.classList.remove('hidden');
-                        } else {
-                            imagePreview.src = '';
-                            imagePreview.classList.add('hidden');
-                        }
+                    if (imagePreview && data.barangayId_image) {
+                        imagePreview.src = `/barangayId/${data.barangayId_image}`;
+                        imagePreview.classList.remove('hidden');
                     }
 
-                    // ✅ Disable required on image input (not required during edit)
+                    // Make image input not required for edits
                     const imageInput = form.querySelector('[name="barangayId_image"]');
                     if (imageInput) {
                         imageInput.removeAttribute('required');
                     }
 
-                    // Set edit ID
-                    barangayIdModal.editId = id;
-
-                    // Update UI
-                    document.getElementById('modalTitle').innerText = 'Edit Barangay ID';
-                    document.getElementById('btnSubmitBarangayId').innerText = 'Update';
-
-                    // ✅ Reapply guardian logic based on age
+                    // Set edit ID and update UI
+                    window.barangayIdModal.editId = id;
+                    document.getElementById('btnSubmitBarangayId').textContent = 'Update';
                     setupGuardianReadonly();
-
-                    // ✅ Open the modal
-                    openModal(barangayIdModal.modalId);
+                    openModal('barangayIdModal');
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error('Error fetching data:', error);
                     showToast('Failed to fetch Barangay ID data.', 'error');
                 });
         }
