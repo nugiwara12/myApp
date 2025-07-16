@@ -21,6 +21,18 @@
                             <x-search-input id="searchInput" placeholder="Search residence" class="w-full sm:w-60" />
                         </div>
 
+                        @php
+                            $user = Auth::user();
+                            $dashboardRoute = match (true) {
+                                $user->hasRole('admin') => 'admin.dashboard',
+                                $user->hasRole('user') => 'user.dashboard',
+                                // $user->hasRole('staff') => 'staff.dashboard',
+                                // $user->hasRole('encoder') => 'encoder.dashboard',
+                                default => 'dashboard',
+                            };
+                        @endphp
+
+                        @hasrole('admin')
                         <!-- Right: Buttons -->
                         <div class="text-right space-x-2">
                             <x-danger-button id="deleteSelectedBtn" class="whitespace-nowrap disabled:opacity-50"
@@ -32,6 +44,7 @@
                                 Add Residence
                             </x-primary-button>
                         </div>
+                        @endhasrole
                     </div>
 
                     <!-- Table -->

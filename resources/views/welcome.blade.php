@@ -271,6 +271,7 @@
 <x-back-to-top />
 <!-- Modal Toggle Script -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
     let isModalVisible = false;
 
@@ -729,61 +730,61 @@
     };
 
     // Load the data of the tracking
-window.submitTrackingNumber = function (e) {
-    e.preventDefault();
+    window.submitTrackingNumber = function (e) {
+        e.preventDefault();
 
-    const input = document.getElementById('tracking_number_input');
-    const trackingNumber = input.value.trim();
-    const spinner = document.getElementById('submitTrackingSpinner');
-    const submitText = document.getElementById('submitTrackingText');
-    const btn = document.getElementById('btnSubmitTracking');
-    const resultContainer = document.getElementById('trackingResultContainer');
-    const resultRow = document.getElementById('trackingResultRow');
+        const input = document.getElementById('tracking_number_input');
+        const trackingNumber = input.value.trim();
+        const spinner = document.getElementById('submitTrackingSpinner');
+        const submitText = document.getElementById('submitTrackingText');
+        const btn = document.getElementById('btnSubmitTracking');
+        const resultContainer = document.getElementById('trackingResultContainer');
+        const resultRow = document.getElementById('trackingResultRow');
 
-    if (!trackingNumber) {
-        showToast('Please enter a tracking number.', 'error');
-        return;
-    }
+        if (!trackingNumber) {
+            showToast('Please enter a tracking number.', 'error');
+            return;
+        }
 
-    // Start loading
-    spinner.classList.remove('hidden');
-    submitText.textContent = 'Searching...';
-    btn.disabled = true;
-    resultContainer.classList.add('hidden');
-    resultRow.innerHTML = '';
+        // Start loading
+        spinner.classList.remove('hidden');
+        submitText.textContent = 'Searching...';
+        btn.disabled = true;
+        resultContainer.classList.add('hidden');
+        resultRow.innerHTML = '';
 
-    axios.get(`/track/${trackingNumber}`)
-        .then(response => {
-            const data = response.data;
+        axios.get(`/track/${trackingNumber}`)
+            .then(response => {
+                const data = response.data;
 
-            // Check if approved_by is "0" (not yet approved)
-            const isApproved = data.approved_by !== "0";
-            const statusText = isApproved ? 'Approved' : 'Pending';
-            const description = isApproved ? 'Ready for pick up!' : 'Waiting for released!';
+                // Check if approved_by is "0" (not yet approved)
+                const isApproved = data.approved_by !== "0";
+                const statusText = isApproved ? 'Approved' : 'Pending';
+                const description = isApproved ? 'Ready for pick up!' : 'Waiting for released!';
 
-            resultRow.innerHTML = `
-                <tr>
-                    <td class="px-4 py-2 border">${data.name || 'N/A'}</td>
-                    <td class="px-4 py-2 border">${data.service_type || 'N/A'}</td>
-                    <td class="px-4 py-2 border">${formatDate(data.created_at)}</td>
-                    <td class="px-4 py-2 border">${description}</td>
-                    <td class="px-4 py-2 border font-medium ${getStatusColor(statusText)}">
-                        ${statusText}
-                    </td>
-                </tr>
-            `;
+                resultRow.innerHTML = `
+                    <tr>
+                        <td class="px-4 py-2 border">${data.name || 'N/A'}</td>
+                        <td class="px-4 py-2 border">${data.service_type || 'N/A'}</td>
+                        <td class="px-4 py-2 border">${formatDate(data.created_at)}</td>
+                        <td class="px-4 py-2 border">${description}</td>
+                        <td class="px-4 py-2 border font-medium ${getStatusColor(statusText)}">
+                            ${statusText}
+                        </td>
+                    </tr>
+                `;
 
-            resultContainer.classList.remove('hidden');
-        })
-        .catch(() => {
-            showToast('No result found for that tracking number.', 'error');
-        })
-        .finally(() => {
-            spinner.classList.add('hidden');
-            submitText.textContent = 'Search';
-            btn.disabled = false;
-        });
-};
+                resultContainer.classList.remove('hidden');
+            })
+            .catch(() => {
+                showToast('No result found for that tracking number.', 'error');
+            })
+            .finally(() => {
+                spinner.classList.add('hidden');
+                submitText.textContent = 'Search';
+                btn.disabled = false;
+            });
+    };
 
     // Color for status
     function getStatusColor(status) {

@@ -202,43 +202,62 @@
         },
 
         getActionButtons(item) {
-            const isNotApproved = item.approved_by == 0 || item.approved_by === '0' || item.approved_by === null || item.approved_by === undefined || item.approved_by === '' || item.approved_by === 'NULL';
+            const isAdmin = window.currentUser?.isAdmin;
+            const isApproved = !(item.approved_by == 0 || item.approved_by === '0' || item.approved_by === null || item.approved_by === undefined || item.approved_by === '' || item.approved_by === 'NULL');
 
-            if (item.status === 1 && isNotApproved) {
-                return `
-                    <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
-                        class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
-                        title="Approve">
-                        <i class="bi bi-check-circle-fill text-white text-md"></i>
-                    </button>
-                `;
+            let buttons = '';
+
+            if (isAdmin) {
+                // ✅ Only show Approve button if NOT approved
+                if (item.status === 1 && !isApproved) {
+                    buttons += `
+                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                            class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
+                            title="Approve">
+                            <i class="bi bi-check-circle-fill text-white text-md"></i>
+                        </button>
+                    `;
+                }
+
+                // ✅ If approved, show Edit, Delete, PDF
+                if (item.status === 1 && isApproved) {
+                    buttons += `
+                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                            <i class="bi bi-pencil-square text-black"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                            <i class="bi bi-trash-fill text-red-500"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                        </button>
+                    `;
+                }
+            } else {
+                // ✅ For regular users: show only if approved
+                if (item.status === 1 && isApproved) {
+                    buttons += `
+                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                            <i class="bi bi-pencil-square text-black"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
+                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                        </button>
+                    `;
+                }
             }
 
-            if (item.status === 1) {
-                return `
-                    <button onclick="event.stopPropagation(); editIndigency(${item.id})"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
-                        <i class="bi bi-pencil-square text-black"></i>
-                    </button>
-                    <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
-                        <i class="bi bi-trash-fill text-red-500"></i>
-                    </button>
-                    <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
-                        <i class="bi bi-file-earmark-pdf text-red-600"></i>
-                    </button>
-                `;
-            }
-
-            // If soft deleted or other cases
-            return `
-                <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
-                    class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
-                    <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
-                </button>
-            `;
+            return buttons;
         }
+    };
+
+    window.currentUser = {
+        isAdmin: @hasrole('admin') true @else false @endhasrole
     };
 
     // approved modal

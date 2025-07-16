@@ -301,43 +301,76 @@
         },
 
         getActionButtons(item) {
-            const isNotApproved = item.approved_by == 0 || item.approved_by === '0' || item.approved_by === null || item.approved_by === undefined || item.approved_by === '' || item.approved_by === 'NULL';
+            const isAdmin = window.currentUser?.isAdmin;
+            const isApproved = !(item.approved_by == 0 || item.approved_by === '0' || item.approved_by === null || item.approved_by === undefined || item.approved_by === '' || item.approved_by === 'NULL');
 
-            if (item.status === 1 && isNotApproved) {
-                return `
-                    <button onclick="event.stopPropagation(); approveBarangayId(${item.id})"
-                        class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
-                        title="Approve">
-                        <i class="bi bi-check-circle-fill text-white text-md"></i>
-                    </button>
-                `;
-            }
+            let buttons = '';
 
             if (item.status === 1) {
-                return `
-                    <button onclick="event.stopPropagation(); editBarangayId(${item.id})"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
-                        <i class="bi bi-pencil-square text-black"></i>
-                    </button>
-                    <button onclick="event.stopPropagation(); deleteBarangayId(${item.id})"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
-                        <i class="bi bi-trash-fill text-red-500"></i>
-                    </button>
-                    <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
-                        class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
-                        <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                if (isAdmin) {
+                    // ✅ If not approved → show Approve button only
+                    if (!isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); approveBarangayId(${item.id})"
+                                class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
+                                title="Approve">
+                                <i class="bi bi-check-circle-fill text-white text-md"></i>
+                            </button>
+                        `;
+                    }
+
+                    // ✅ If approved → show Edit, Delete, PDF
+                    if (isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); editBarangayId(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                                <i class="bi bi-pencil-square text-black"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteBarangayId(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                                <i class="bi bi-trash-fill text-red-500"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                                <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                            </button>
+                        `;
+                    }
+
+                } else {
+                    // ✅ Regular user: show Edit and PDF only if approved
+                    if (isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); editBarangayId(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                                <i class="bi bi-pencil-square text-black"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                                <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                            </button>
+                        `;
+                    }
+                }
+            }
+
+            // ✅ Handle soft-deleted items
+            if (item.status !== 1) {
+                buttons = `
+                    <button onclick="event.stopPropagation(); restoreBarangayId(${item.id})"
+                        class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                        <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
                     </button>
                 `;
             }
 
-            // If soft deleted or other cases
-            return `
-                <button onclick="event.stopPropagation(); restoreBarangayId(${item.id})"
-                    class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
-                    <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
-                </button>
-            `;
+            return buttons;
         }
+    };
+
+    // Admin condition
+    window.currentUser = {
+        isAdmin: @hasrole('admin') true @else false @endhasrole
     };
 
     // Edit for residency
