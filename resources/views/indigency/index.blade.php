@@ -67,7 +67,7 @@
     // Indigency Modal Handler
     window.indigencyModal = {
         modalId: 'certificationModal',
-        fieldIds: ['parent_name', 'indigency_email', 'address', 'purpose', 'childs_name', 'age', 'indigency_generated_number', 'date'],
+        fieldIds: ['parent_name', 'indigency_email', 'address', 'purpose', 'age', 'indigency_generated_number', 'date'],
         editId: null,
         currentPage: 1,
         perPage: 10,
