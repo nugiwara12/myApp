@@ -109,7 +109,7 @@
             </div>
 
             <!-- Form Body -->
-            <form id="barangayIdForm" onsubmit="submitBarangayIdForm(event)" class="overflow-y-auto px-6 py-4 flex-1 white">
+            <form id="barangayIdForm" onsubmit="submitBarangayIdForm(event)" class="overflow-y-auto px-6 py-4 flex-1 white" style="color: black;">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-1 font-medium text-sm text-gray-700">Full Name</label>
@@ -320,28 +320,47 @@
         function openAddBarangayId() {
             window.barangayIdModal.editId = null;
 
+            const form = document.getElementById('barangayIdForm');
+            if (form) {
+                form.reset(); // Reset all inputs
+
+                // Clear error borders
+                form.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+
+                // Clear file input preview
+                const imagePreview = document.getElementById('imagePreview');
+                if (imagePreview) {
+                    imagePreview.src = '';
+                    imagePreview.classList.add('hidden');
+                }
+
+                // Ensure file input is cleared (for some browsers reset doesn't clear file input)
+                const fileInput = form.querySelector('[name="barangayId_image"]');
+                if (fileInput) {
+                    fileInput.value = '';
+                    fileInput.setAttribute('required', 'required'); // Re-add required for add mode
+                }
+            }
+
+            // Set title and button text
             const title = document.getElementById('modalTitle');
             if (title) title.innerText = 'Add Barangay ID';
 
             const submitBtn = document.getElementById('btnSubmitBarangayId');
             if (submitBtn) submitBtn.innerText = 'Submit';
 
-            window.barangayIdModal.fieldIds.forEach(field => {
-                const input = document.getElementById(field);
-                if (input) input.value = '';
-            });
-
+            // Generate new Barangay ID number
+            const genNumber = generateBarangayIdNumber();
             const genNumInput = document.querySelector('[name="generated_number"]');
-            if (genNumInput) {
-                genNumInput.value = generateBarangayIdNumber();
-            }
+            if (genNumInput) genNumInput.value = genNumber;
 
+            const finalGenInput = document.getElementById('barangayId_generated_number');
+            if (finalGenInput) finalGenInput.value = genNumber;
+
+            // Setup guardian field logic
             setupGuardianReadonly();
 
-            const generatedNumber = generateBarangayIdNumber();
-            const finalGenInput = document.getElementById('barangayId_generated_number');
-            if (finalGenInput) finalGenInput.value = generatedNumber;
-
+            // Open the modal
             openModal(window.barangayIdModal.modalId);
         }
 
