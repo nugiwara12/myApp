@@ -438,7 +438,7 @@
                             class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
                             <i class="bi bi-trash-fill text-red-500"></i>
                         </button>
-                        <button onclick="event.stopPropagation(); window.open('/barangayPdf/${item.id}', '_blank')"
+                        <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
                             class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
                             <i class="bi bi-file-earmark-pdf text-red-600"></i>
                         </button>
