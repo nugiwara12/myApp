@@ -67,7 +67,7 @@
     // Indigency Modal Handler
     window.indigencyModal = {
         modalId: 'certificationModal',
-        fieldIds: ['parent_name', 'indigency_email', 'address', 'purpose', 'age', 'indigency_generated_number', 'date'],
+        fieldIds: ['parent_name', 'indigency_email', 'address', 'purpose', 'childs_name', 'age', 'indigency_generated_number', 'date'],
         editId: null,
         currentPage: 1,
         perPage: 10,
@@ -81,9 +81,9 @@
             });
 
             const method = this.editId ? 'put' : 'post';
-            const url = this.editId ?
-                `/updateIndigency/${this.editId}` :
-                `{{ route('addIndigency') }}`;
+            const url = this.editId
+                ? `/updateIndigency/${this.editId}`
+                : `{{ route('addIndigency') }}`;
 
             axios[method](url, data)
                 .then(() => {
@@ -155,7 +155,7 @@
                 <td class="px-4 py-2">${item.indigency_email}</td>
                 <td class="px-4 py-2">${item.address}</td>
                 <td class="px-4 py-2">${item.purpose}</td>
-                <td class="px-4 py-2">${item.childs_name}</td>
+                <td class="px-4 py-2">${item.childs_name || 'N/A'}</td>
                 <td class="px-4 py-2">${item.age}</td>
                 <td class="px-4 py-2">${item.indigency_generated_number}</td>
                 <td class="px-4 py-2">${new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
