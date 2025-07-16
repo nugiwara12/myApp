@@ -40,12 +40,12 @@
                             class="px-5 py-1.5 text-[#1b1b18] border border-transparent hover:border-[#19140035] rounded">
                             Log in
                         </a>
-                        @if (Route::has('register'))
+                        {{-- @if (Route::has('register'))
                             <a href="{{ route('register') }}"
                                 class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] rounded">
                                 Register
                             </a>
-                        @endif
+                        @endif --}}
                     @endauth
                     <button onclick="window.openTrackingModal()"
                         class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] rounded text-[#1b1b18]">
@@ -729,65 +729,70 @@
     };
 
     // Load the data of the tracking
-    window.submitTrackingNumber = function (e) {
-        e.preventDefault();
+window.submitTrackingNumber = function (e) {
+    e.preventDefault();
 
-        const input = document.getElementById('tracking_number_input');
-        const trackingNumber = input.value.trim();
-        const spinner = document.getElementById('submitTrackingSpinner');
-        const submitText = document.getElementById('submitTrackingText');
-        const btn = document.getElementById('btnSubmitTracking');
-        const resultContainer = document.getElementById('trackingResultContainer');
-        const resultRow = document.getElementById('trackingResultRow');
+    const input = document.getElementById('tracking_number_input');
+    const trackingNumber = input.value.trim();
+    const spinner = document.getElementById('submitTrackingSpinner');
+    const submitText = document.getElementById('submitTrackingText');
+    const btn = document.getElementById('btnSubmitTracking');
+    const resultContainer = document.getElementById('trackingResultContainer');
+    const resultRow = document.getElementById('trackingResultRow');
 
-        if (!trackingNumber) {
-            showToast('Please enter a tracking number.', 'error');
-            return;
-        }
+    if (!trackingNumber) {
+        showToast('Please enter a tracking number.', 'error');
+        return;
+    }
 
-        // Start loading
-        spinner.classList.remove('hidden');
-        submitText.textContent = 'Searching...';
-        btn.disabled = true;
-        resultContainer.classList.add('hidden');
-        resultRow.innerHTML = '';
+    // Start loading
+    spinner.classList.remove('hidden');
+    submitText.textContent = 'Searching...';
+    btn.disabled = true;
+    resultContainer.classList.add('hidden');
+    resultRow.innerHTML = '';
 
-        axios.get(`/track/${trackingNumber}`)
-            .then(response => {
-                const data = response.data;
+    axios.get(`/track/${trackingNumber}`)
+        .then(response => {
+            const data = response.data;
 
-                resultRow.innerHTML = `
-                    <tr>
-                        <td class="px-4 py-2 border">${data.name || 'N/A'}</td>
-                        <td class="px-4 py-2 border">${data.service_type || 'N/A'}</td>
-                        <td class="px-4 py-2 border">${formatDate(data.created_at)}</td>
-                        <td class="px-4 py-2 border">Ready for pick up!</td>
-                        <td class="px-4 py-2 border font-medium ${getStatusColor(data.status)}">
-                            ${formatStatus(data.status)}
-                        </td>
-                    </tr>
-                `;
+            // Check if approved_by is "0" (not yet approved)
+            const isApproved = data.approved_by !== "0";
+            const statusText = isApproved ? 'Approved' : 'Pending';
+            const description = isApproved ? 'Ready for pick up!' : 'Waiting for released!';
 
-                resultContainer.classList.remove('hidden');
-            })
-            .catch(() => {
-                showToast('No result found for that tracking number.', 'error');
-            })
-            .finally(() => {
-                spinner.classList.add('hidden');
-                submitText.textContent = 'Search';
-                btn.disabled = false;
-            });
-    };
+            resultRow.innerHTML = `
+                <tr>
+                    <td class="px-4 py-2 border">${data.name || 'N/A'}</td>
+                    <td class="px-4 py-2 border">${data.service_type || 'N/A'}</td>
+                    <td class="px-4 py-2 border">${formatDate(data.created_at)}</td>
+                    <td class="px-4 py-2 border">${description}</td>
+                    <td class="px-4 py-2 border font-medium ${getStatusColor(statusText)}">
+                        ${statusText}
+                    </td>
+                </tr>
+            `;
 
-    // Status format color
+            resultContainer.classList.remove('hidden');
+        })
+        .catch(() => {
+            showToast('No result found for that tracking number.', 'error');
+        })
+        .finally(() => {
+            spinner.classList.add('hidden');
+            submitText.textContent = 'Search';
+            btn.disabled = false;
+        });
+};
+
+    // Color for status
     function getStatusColor(status) {
         if (status === 'Pending' || status === 0) return 'text-red-500';
         if (status === 'Approved' || status === 1) return 'text-green-600';
         return 'text-gray-500';
     }
 
-    // Status Function for
+    // Label for status
     function formatStatus(status) {
         if (status === 0 || status === 'Pending') return 'Pending';
         if (status === 1 || status === 'Approved') return 'Approved';

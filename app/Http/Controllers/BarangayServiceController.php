@@ -17,7 +17,7 @@ class BarangayServiceController extends Controller
             return response()->json([
                 'name' => $barangayId->full_name,
                 'service_type' => 'Barangay ID',
-                'pickup_date' => $barangayId->pickup_date ?? 'N/A',
+                'approved_by' => $barangayId->approved_by ?? 'N/A',
                 'created_at' => $barangayId->created_at,
                 'status' => $barangayId->status,
             ]);
@@ -29,7 +29,7 @@ class BarangayServiceController extends Controller
             return response()->json([
                 'name' => $residency->resident_name,
                 'service_type' => 'Residency Certificate',
-                'pickup_date' => $residency->pickup_date ?? 'N/A',
+                'approved_by' => $residency->approved_by ?? 'N/A',
                 'created_at' => $residency->created_at,
                 'status' => $residency->status,
             ]);
@@ -41,13 +41,13 @@ class BarangayServiceController extends Controller
             return response()->json([
                 'name' => $indigency->resident_name,
                 'service_type' => 'Certificate of Indigency',
-                'pickup_date' => $indigency->pickup_date ?? 'N/A',
+                'approved_by' => $indigency->approved_by ?? 'N/A',
                 'created_at' => $indigency->created_at,
                 'status' => $indigency->status,
             ]);
         }
 
-        // If not found
-        return response()->json(['message' => 'Tracking number not found.'], 404);
+        // No match found
+        return response()->json(['message' => 'No result found.'], 404);
     }
 }
