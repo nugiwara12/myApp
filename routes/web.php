@@ -10,6 +10,7 @@ use App\Http\Controllers\IndigencyController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\ResidencyController;
 use App\Http\Controllers\BarangayIdController;
+use App\Http\Controllers\BarangayServiceController;
 
 
 Route::get('/', function () {
@@ -141,3 +142,7 @@ Route::post('/barangay-id/delete/{id}', [BarangayIdController::class, 'delete'])
 Route::post('/barangay-id/delete-selected', [BarangayIdController::class, 'deleteSelected'])->name('barangay-id.deleteSelected');
 Route::post('/barangay-id/restore', [BarangayIdController::class, 'restore'])->name('barangay-id.restore');
 Route::get('/barangayPdf/{id}', [BarangayIdController::class, 'barangayPdf'])->name('barangayPdf');
+
+
+// Tracking
+Route::get('/track/{trackingNumber}', [BarangayServiceController::class, 'trackRequest']);

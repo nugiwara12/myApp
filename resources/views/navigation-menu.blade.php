@@ -41,6 +41,7 @@
                     <x-nav-link :href="route('feedbacks')" :active="request()->routeIs('feedbacks')">
                         {{ __('Feedback') }}
                     </x-nav-link>
+                    @endhasrole
 
                     {{-- Dropdown after Feedback --}}
                     <div class="flex items-center">
@@ -94,7 +95,6 @@
 
                         </x-dropdown>
                     </div>
-                    @endhasrole
 
                 </div>
 

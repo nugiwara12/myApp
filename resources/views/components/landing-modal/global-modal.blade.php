@@ -1,8 +1,8 @@
-<!-- Indigency Modal -->
-<div id="certificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+{{-- Indigency --}}
+<div id="IndigencyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-xl p-6 relative">
         <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Indigency</h2>
-        <form id="indigencyForm" onsubmit="submitIndigency(event)" class="space-y-4">
+        <form id="indigencyForm" class="space-y-4">
             @csrf
 
             <!-- Parent Name -->
@@ -71,154 +71,26 @@
             </div>
 
             <!-- Buttons -->
-            <div class="pt-4 flex justify-end space-x-2">
-                <button type="button" onclick="closeModal('certificationModal')"
+            <div class="pt-4 flex justify-end space-x-2 whitespace-nowrap">
+                <button type="button" onclick="closeModal('IndigencyModal')"
                     class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
                     Cancel
                 </button>
                 <button type="submit"
-                    class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]"
+                    class="flex items-center gap-2 rounded-md bg-[#1B76B5] whitespace-nowrap px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]"
                     id="btnSubmitIndigency">
-                    Submit
+                    <svg id="submitSpinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                    <span id="submitText">Submit</span>
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-{{-- Barangay Clearance --}}
-{{-- <div id="clearancenModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg flex flex-col max-h-[90vh]">
-        <!-- Header -->
-        <div class="px-6 pt-6">
-            <h2 id="modalTitle" class="text-start text-xl font-bold text-gray-800">
-                Barangay Clearance Application Form
-            </h2>
-        </div>
-
-        <!-- Scrollable Body -->
-        <div class="overflow-y-auto px-6 py-4 space-y-6 flex-1">
-            <form id="clearanceForm" class="space-y-6">
-                @csrf
-                <!-- Personal Information -->
-                <div>
-                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Personal Information</h3>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <!-- Inputs -->
-                        <div>
-                            <label for="full_name" class="block font-medium">Full Name</label>
-                            <input type="text" id="full_name" name="full_name"
-                                class="mt-1 w-full rounded border px-3 py-2" required />
-                        </div>
-                        <div>
-                            <label for="birthdate" class="block font-medium">Date of Birth</label>
-                            <input type="date" id="birthdate" name="birthdate"
-                                class="mt-1 w-full rounded border px-3 py-2" required />
-                        </div>
-                        <div>
-                            <label for="age" class="block font-medium">Age:
-                                <span class="italic text-gray-500 text-xs">(150 maximum age range)</span>
-                            </label>
-                            <input type="number" id="clearance_age" name="clearance_age" min="1" max="150"
-                                oninput="if (this.value > 150) this.value = 150; if (this.value < 1) this.value = '';"
-                                class="mt-1 w-full rounded border px-3 py-2"
-                                required />
-                        </div>
-                        <div>
-                            <label for="gender" class="block font-medium">Sex / Gender</label>
-                            <select id="gender" name="gender"
-                                class="mt-1 w-full rounded border px-3 py-2" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="civil_status" class="block font-medium">Civil Status</label>
-                            <select id="civil_status" name="civil_status"
-                                class="mt-1 w-full rounded border px-3 py-2">
-                                <option value="">Select Status</option>
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
-                                <option value="Widowed">Widowed</option>
-                                <option value="Separated">Separated</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="citizenship" class="block font-medium">Citizenship</label>
-                            <input type="text" id="citizenship" name="citizenship"
-                                class="mt-1 w-full rounded border px-3 py-2" />
-                        </div>
-                        <div>
-                            <label for="occupation" class="block font-medium">Occupation</label>
-                            <input type="text" id="occupation" name="occupation"
-                                class="mt-1 w-full rounded border px-3 py-2" />
-                        </div>
-                        <div>
-                            <label for="contact" class="block font-medium">Contact Number</label>
-                            <input type="text" id="contact" name="contact"
-                                class="mt-1 w-full rounded border px-3 py-2" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Address -->
-                <div>
-                    <h3 class="mb-4 border-b pb-2 text-lg font-semibold text-gray-700">Address</h3>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div>
-                            <label for="house_no" class="block font-medium">House No. / Street</label>
-                            <input type="text" id="house_no" name="house_no"
-                                class="mt-1 w-full rounded border px-3 py-2" />
-                        </div>
-                        <div>
-                            <label for="purok" class="block font-medium">Purok / Zone</label>
-                            <input type="text" id="purok" name="purok"
-                                class="mt-1 w-full rounded border px-3 py-2" />
-                        </div>
-                        <div>
-                            <label for="barangay" class="block font-medium">Barangay</label>
-                            <input type="text" id="barangay" name="barangay"
-                                class="mt-1 w-full rounded border px-3 py-2" value="Panipuan" />
-                        </div>
-                        <div>
-                            <label for="municipality" class="block font-medium">City / Municipality</label>
-                            <input type="text" id="municipality" name="municipality"
-                                class="mt-1 w-full rounded border px-3 py-2" value="San Fernando" />
-                        </div>
-                        <div>
-                            <label for="province" class="block font-medium">Province</label>
-                            <input type="text" id="province" name="province"
-                                class="mt-1 w-full rounded border px-3 py-2" value="Pampanga" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Purpose -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700">Purpose</h3>
-                    <textarea id="clearance_purpose" name="clearance_purpose" rows="4"
-                        class="w-full rounded border px-3 py-2 resize-none"
-                        placeholder="State the reason for requesting the Barangay Clearance..." required></textarea>
-                </div>
-            </form>
-        </div>
-
-        <!-- Footer -->
-        <div class="border-t px-6 py-4 flex justify-end gap-2">
-            <button type="button" id="btnCancelClearance" onclick="closeModal('clearancenModal')"
-                class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100">
-                Cancel
-            </button>
-            <button type="button" id="btnSubmitClearance" onclick="window.clearanceModal.submit(event)"
-                class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]">
-                Submit Application
-            </button>
-        </div>
-    </div>
-</div> --}}
-
-<!-- Residency Certificate Modal -->
+{{-- Residence --}}
 <div id="residencyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[90vh] flex flex-col relative">
 
@@ -392,7 +264,12 @@
             <button type="submit" form="residencyForm"
                 class="rounded-md bg-[#1B76B5] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#225981]"
                 id="btnSubmitResidency">
-                Submit
+                <svg id="submitResidenceSpinner" class="hidden animate-spin h-5 w-5 text-white inline-block mr-2"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                <span id="submitText">Submit</span>
             </button>
         </div>
     </div>
@@ -523,61 +400,78 @@
         <!-- Footer -->
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-2">
             <button type="button" onclick="closeModal('barangayIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button type="submit" form="barangayIdForm" id="btnSubmitBarangayId" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Submit</button>
-        </div>
-    </div>
-</div>
 
-{{-- Approval Modal --}}
+            <button type="submit" form="barangayIdForm"
+                class="flex items-center gap-2 rounded-md bg-[#1B76B5] whitespace-nowrap px-4 py-2 text-sm font-semibold text-white shadow-sm transition duration-150 hover:bg-[#225981]"
+                id="btnSubmitBarangayId">
 
-<!-- Confirmation Modal -->
-<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <h2 id="confirmationTitle" class="text-lg font-semibold mb-2">Confirm Action</h2>
-        <p id="confirmationMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to perform this action?</p>
-        <div class="flex justify-end space-x-2">
-            <button id="cancelConfirmBtn" class="px-4 py-2 text-gray-600 hover:text-black bg-gray-200 rounded">
-                Cancel
-            </button>
-            <button id="confirmActionBtn" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded">
-                Confirm
+                <!-- ✅ Corrected ID -->
+                <svg id="submitBarangayIdSpinner" class="hidden animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+
+                <!-- ✅ Corrected ID -->
+                <span id="submitBarangayIdText">Submit</span>
             </button>
         </div>
     </div>
 </div>
 
-<!-- Approval Confirmation Modal for approved ID -->
-<div id="approvedIdModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 class="text-lg font-semibold mb-4">Approve Barangay ID</h2>
-        <p class="mb-6 text-gray-700">Are you sure you want to approve this Barangay ID?</p>
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('approvedIdModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button onclick="confirmApproveBarangayId()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+
+{{-- Modal for tracking with table --}}
+<div id="trackingModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center px-4">
+    <div class="bg-white w-full max-w-3xl p-6 rounded-xl shadow-xl relative">
+        <!-- Title -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Track Your Request</h2>
+
+        <!-- Input Row -->
+        <div class="flex flex-col md:flex-row items-stretch gap-3">
+            <input type="text" id="tracking_number_input"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="e.g. IND-20250716-1234" />
+
+            <div class="flex gap-2">
+                <button id="btnSubmitTracking" onclick="window.submitTrackingNumber(event)"
+                    class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2 transition">
+                    <span id="submitTrackingText">Search</span>
+                    <svg id="submitTrackingSpinner" class="w-4 h-4 animate-spin hidden"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                            stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                </button>
+
+                <button onclick="window.closeTrackingModal()"
+                    class="bg-gray-200 text-gray-700 px-5 py-2 rounded-md hover:bg-gray-300 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="trackingResultContainer" class="mt-6 hidden">
+            <h3 class="text-lg font-semibold mb-2 text-gray-700">Results</h3>
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="min-w-full text-sm text-gray-700">
+                    <thead class="bg-gray-100 text-left">
+                        <tr>
+                            <th class="px-4 py-3 border-b">Name</th>
+                            <th class="px-4 py-3 border-b">Service Type</th>
+                            <th class="px-4 py-3 border-b">Date Requested</th>
+                            <th class="px-4 py-3 border-b">Description</th>
+                            <th class="px-4 py-3 border-b">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackingResultRow" class="bg-white divide-y divide-gray-100">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Approval Confirmation Modal -->
-<div id="approveModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 class="text-lg font-semibold mb-4">Approve Residence</h2>
-        <p class="mb-6 text-gray-700">Are you sure you want to approve this residence?</p>
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('approveModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button onclick="confirmApprove()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
-        </div>
-    </div>
-</div>
-
-<!-- Approval Confirmation Modal -->
-<div id="approveIndigencyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 class="text-lg font-semibold mb-4">Approve Indigency</h2>
-        <p class="mb-6 text-gray-700">Are you sure you want to approve this Indigency?</p>
-        <div class="flex justify-end space-x-2">
-            <button onclick="closeModal('approveIndigencyModal')" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-            <button onclick="confirmApproveIndigency()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
-        </div>
-    </div>
-</div>

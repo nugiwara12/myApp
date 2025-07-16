@@ -1,60 +1,77 @@
+@php
+    use App\Models\BarangayId;
+    use App\Models\Indigency;
+    use App\Models\Residency;
+
+    // Individual counts (for display in Request Type Cards)
+    $barangayIdCount = BarangayId::count();
+    $indigencyCount = Indigency::count();
+    $residencyCount = Residency::count();
+
+    // Total
+    $totalRequests = $barangayIdCount + $indigencyCount + $residencyCount;
+
+    // Approved
+    $approvedCount = BarangayId::where('approved_by', '!=', '0')->count()
+        + Indigency::where('approved_by', '!=', '0')->count()
+        + Residency::where('approved_by', '!=', '0')->count();
+
+    // Pending
+    $pendingCount = BarangayId::where('approved_by', '0')->count()
+        + Indigency::where('approved_by', '0')->count()
+        + Residency::where('approved_by', '0')->count();
+@endphp
+
+
+
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center space-x-2">
-            <div class="p-3 bg-white rounded-md shadow-md">
-                <i class="bi bi-file-earmark-text text-[#1B76B5] text-xl"></i>
+        <div class="flex items-center gap-3">
+            <div class="p-3 bg-blue-100 rounded-full shadow">
+                <i class="bi bi-speedometer2 text-blue-600 text-xl"></i>
             </div>
             <div>
-                <h1 class="text-lg font-semibold">User Dashboard</h1>
-                <p class="text-sm text-gray-500">View Your Request Service</p>
+                <h1 class="text-xl font-semibold text-gray-800">Welcome back!</h1>
+                <p class="text-sm text-gray-500">Here's an overview of your request activity</p>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex justify-between mb-4 flex-wrap gap-2">
-                        <!-- Left: Search -->
-                        <div class="text-left">
-                            <x-search-input id="searchInput" placeholder="Search request" class="w-full sm:w-60" />
-                        </div>
+    <div class="py-8">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                        <!-- Right: Buttons -->
-                        <div class="text-right space-x-2 hidden">
-                            <x-danger-button id="deleteSelectedBtn" class="whitespace-nowrap disabled:opacity-50"
-                                onclick="deleteSelectedResidencies()" disabled>
-                                Multiple Delete
-                            </x-danger-button>
+            <!-- 🔹 Summary Cards (General) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-blue-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Total Requests</div>
+                    <div class="text-2xl font-bold text-blue-600">{{ $totalRequests }}</div>
+                </div>
+                <div class="bg-green-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Approved</div>
+                    <div class="text-2xl font-bold text-green-600">{{ $approvedCount }}</div>
+                </div>
+                <div class="bg-yellow-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Pending</div>
+                    <div class="text-2xl font-bold text-yellow-600">{{ $pendingCount }}</div>
+                </div>
+            </div>
 
-                            <x-primary-button onclick="openAddResidency()">
-                                Add Residence
-                            </x-primary-button>
-                        </div>
-                    </div>
 
-                    <!-- Table -->
-                    <div class="h-full overflow-y-auto rounded">
-                        <table class="w-full text-sm text-left">
-                            <thead class="bg-gray-100 text-gray-600 uppercase sticky top-0 z-10 whitespace-nowrap">
-                                <tr>
-                                    <th class="px-4 py-2 text-left">Name</th>
-                                    <th class="px-4 py-2 text-left">Service Type</th>
-                                    <th class="px-4 py-2 text-left">Pick up Date</th>
-                                    <th class="px-4 py-2 text-left">Date Requested</th>
-                                    <th class="px-4 py-2 text-left">Status</th>
-                                    <th class="px-4 py-2 text-left">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="residenceTableBody" class="divide-y divide-gray-200 whitespace-nowrap"></tbody>
-                        </table>
-                    </div>
-                    <div id="paginationControls" class="mt-4 border-t"></div>
+            <!-- 🔹 Request Type Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-indigo-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Residence Requests</div>
+                    <div class="text-2xl font-bold text-indigo-600" id="residenceCount">{{ $residencyCount }}</div>
+                </div>
+                <div class="bg-cyan-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Indigency Requests</div>
+                    <div class="text-2xl font-bold text-cyan-600" id="indigencyCount">{{ $indigencyCount }}</div>
+                </div>
+                <div class="bg-purple-50 p-5 rounded-lg shadow text-center">
+                    <div class="text-sm text-gray-500">Barangay ID Requests</div>
+                    <div class="text-2xl font-bold text-purple-600" id="barangayIdCount">{{ $barangayIdCount }}</div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 </x-app-layout>
