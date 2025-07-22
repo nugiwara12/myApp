@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+class User extends Authenticatable implements FilamentUser
 {
     use HasRoles;
     use HasApiTokens;
@@ -50,8 +50,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     // ✅ This is the method used by Filament to authorize dashboard access
     public function canAccessPanel(Panel $panel): bool
-    {
-        // return $this->hasAnyRole(['admin', 'user', 'encoder', 'staff']) && $this->status === 1;
-        return $this->hasRole('admin') && $this->status === 1;
+{
+    if ($this->hasRole('superadmin')) {
+        return true; // Superadmin skips email verification
     }
+
+    return $this->hasRole('admin')
+        && $this->status === 1
+        && $this->hasVerifiedEmail(); // Admin must verify email
+}
 }

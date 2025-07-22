@@ -63,34 +63,34 @@
 
     let userIdToDelete = null; // Delete Users but its soft delete
 
-    // Dynamic role
-    window.loadRoles = async function() {
-        try {
-            const response = await axios.get('/getRoles');
-            const roles = response.data;
+    // // Dynamic role
+    // window.loadRoles = async function() {
+    //     try {
+    //         const response = await axios.get('/getRoles');
+    //         const roles = response.data;
 
-            const roleSelect = document.querySelector('#role');
-            if (!roleSelect) {
-                console.error('Role dropdown not found');
-                return;
-            }
+    //         const roleSelect = document.querySelector('#role');
+    //         if (!roleSelect) {
+    //             console.error('Role dropdown not found');
+    //             return;
+    //         }
 
-            roleSelect.innerHTML = '<option value="">-- Select Role --</option>';
-            roles.forEach(role => {
-                roleSelect.innerHTML +=
-                `<option value="${role.name}">${role.name}</option>`;
-            });
-        } catch (error) {
-            console.error('Failed to load roles:', error);
-        }
-    };
+    //         roleSelect.innerHTML = '<option value="">-- Select Role --</option>';
+    //         roles.forEach(role => {
+    //             roleSelect.innerHTML +=
+    //             `<option value="${role.name}">${role.name}</option>`;
+    //         });
+    //     } catch (error) {
+    //         console.error('Failed to load roles:', error);
+    //     }
+    // };
 
     // Add user && Edit Users
     window.submitAddUser = async function() {
         const userId = document.getElementById('addUserModal').dataset.userid;
         const name = document.querySelector('#name').value.trim();
         const email = document.querySelector('#email').value.trim();
-        const role = document.querySelector('#role').value;
+        const role = 'user';
         const password = document.querySelector('#password').value;
         const password_confirmation = document.querySelector('#password_confirmation').value;
 
@@ -124,7 +124,7 @@
                 // Clear fields
                 document.querySelector('#name').value = '';
                 document.querySelector('#email').value = '';
-                document.querySelector('#role').value = '';
+                // document.querySelector('#role').value = '';
                 document.querySelector('#password').value = '';
                 document.querySelector('#password_confirmation').value = '';
 
@@ -235,7 +235,7 @@
     // Edit Functiuon
     window.editUser = async function(user) {
         // Load roles into the dropdown first
-        await window.loadRoles();
+        // await window.loadRoles();
 
         // Set form field values
         document.getElementById('name').value = user.name || '';
@@ -265,14 +265,14 @@
 
         document.getElementById('name').value = '';
         document.getElementById('email').value = '';
-        document.getElementById('role').value = '';
+        // document.getElementById('role').value = '';
         document.getElementById('password').value = '';
         document.getElementById('password_confirmation').value = '';
 
         const modal = document.getElementById('addUserModal');
         modal.removeAttribute('data-userid');
 
-        window.loadRoles();
+        // window.loadRoles();
         openModal('addUserModal');
     };
 
@@ -323,26 +323,32 @@
 
     // Search Input
     document.getElementById('searchInput').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#tableBody tr');
-        const noDataMessage = document.getElementById(
-        'noDataMessage'); // element for "No data found"
-        let visibleCount = 0;
+    const searchTerm = this.value.trim().toLowerCase();
+    const rows = document.querySelectorAll('#tableBody tr');
+    const noDataMessage = document.getElementById('noDataMessage'); 
+    let visibleCount = 0;
 
-        rows.forEach(row => {
-            const name = row.children[1]?.textContent.toLowerCase();
-            const email = row.children[2]?.textContent.toLowerCase();
-            const role = row.children[3]?.textContent.toLowerCase();
+    rows.forEach(row => {
+        const name = row.children[1]?.textContent.trim().toLowerCase();
+        const email = row.children[2]?.textContent.trim().toLowerCase();
+        const role = row.children[3]?.textContent.trim().toLowerCase();
+        const status = row.children[4]?.textContent.trim().toLowerCase();  // <-- trim to remove spaces
 
-            const matches = name.includes(searchTerm) || email.includes(searchTerm) || role
-                .includes(searchTerm);
-            row.style.display = matches ? '' : 'none';
-            if (matches) visibleCount++;
-        });
+        let matches = false;
 
-        // Toggle visibility of the "No data found" message
-        if (noDataMessage) {
-            noDataMessage.style.display = visibleCount === 0 ? 'table-row' : 'none';
+        if (searchTerm === 'active' || searchTerm === 'inactive') {
+            matches = status === searchTerm;  // Exact match
+        } else {
+            matches = name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm) || status.includes(searchTerm);
         }
+
+        row.style.display = matches ? '' : 'none';
+        if (matches) visibleCount++;
     });
+
+    if (noDataMessage) {
+        noDataMessage.style.display = visibleCount === 0 ? 'table-row' : 'none';
+    }
+});
+
 </script>

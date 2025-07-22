@@ -15,7 +15,21 @@ class DatabaseSeeder extends Seeder
         // Seed roles first
         $this->call([
             RoleSeeder::class,
+            // SuperAdminSeeder::class
         ]);
+
+        // Super Admin
+        {
+            $superAdmin = User::create([
+                'name' => 'Super Admin',
+                'email' => 'superadmin@example.com',
+                'password' => bcrypt('superpassword'),
+            //    'email_verified_at' => now(),
+            ]);
+
+            Role::firstOrCreate(['name' => 'superadmin']);
+            $superAdmin->assignRole('superadmin');
+        }
 
         // Admin
         $admin = User::factory()->create([

@@ -32,20 +32,20 @@
                 <nav class="flex items-center gap-4 text-sm">
                     @auth
                         <a href="{{ url('/dashboard') }}"
-                            class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] rounded text-[#1b1b18]">
+                            class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] rounded">
                             Dashboard
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="px-5 py-1.5 text-[#1b1b18] border border-transparent hover:border-[#19140035] rounded">
+                            class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] rounded">
                             Log in
                         </a>
-                        {{-- @if (Route::has('register'))
+                        @if (Route::has('register'))
                             <a href="{{ route('register') }}"
                                 class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] rounded">
                                 Register
                             </a>
-                        @endif --}}
+                        @endif
                     @endauth
                     <button onclick="window.openTrackingModal()"
                         class="px-5 py-1.5 border border-[#19140035] hover:border-[#1915014a] rounded text-[#1b1b18]">
@@ -535,7 +535,7 @@
         submitText.textContent = 'Submitting...';
         submitBtn.disabled = true;
 
-        axios.post('/addIndigency', formData, {
+        axios.post('/indigency/add', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }
@@ -596,7 +596,7 @@
         submitBtn.disabled = true;
 
         // Send request to backend
-        axios.post('/addResidence', formData, {
+        axios.post('/residency/add', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }
@@ -688,7 +688,7 @@
         submitText.textContent = 'Submitting...';
         submitBtn.disabled = true;
 
-        axios.post('/addBarangayId', formData, {
+        axios.post('barangay-id/addBarangayId', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }

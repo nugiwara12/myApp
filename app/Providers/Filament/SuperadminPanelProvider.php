@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Forms\Components\Toggle;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -9,8 +10,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Assets\Js;
-use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -20,48 +19,33 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class SuperadminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('admin')
-            ->path('admin')
-
+            ->default()
+            ->id('superadmin')
+            ->path('superadmin')
+            ->login() // ✅ This enables the /superadmin/login route
+            ->authGuard('web')  // ✅ Specify the guard here
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-            ->login()
-            ->colors([
-                'primary'   => Color::Amber,
-                'danger'    => Color::Red,
-                'success'   => Color::Emerald,
-                'info'      => Color::Blue,
-            ])
-            // ✅ Include your Vite-compiled CSS and JS assets
-            // ->viteTheme('resources/css/app.css')
-            // ->viteTheme('resources/js/app.js')
-
             ->discoverResources(
-                in: app_path('Filament/Admin/Resources'),
-                for: 'App\\Filament\\Admin\\Resources',
+                in: app_path('Filament/Superadmin/Resources'),
+                for: 'App\\Filament\\Superadmin\\Resources'
             )
             ->discoverPages(
-                in: app_path('Filament/Admin/Pages'),
-                for: 'App\\Filament\\Admin\\Pages',
+                in: app_path('Filament/Superadmin/Pages'),
+                for: 'App\\Filament\\Superadmin\\Pages'
             )
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(
-                in: app_path('Filament/Admin/Widgets'),
-                for: 'App\\Filament\\Admin\\Widgets',
+                in: app_path('Filament/Superadmin/Widgets'),
+                for: 'App\\Filament\\Superadmin\\Widgets'
             )
             ->widgets([
                 Widgets\AccountWidget::class,
@@ -82,4 +66,10 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
+
+    public static function canAccessPanel(): bool
+    {
+        return auth()->check() && auth()->user()->hasRole('superadmin');
+    }
+
 }

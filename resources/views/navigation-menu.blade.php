@@ -13,6 +13,7 @@
                 @php
                     $user = Auth::user();
                     $dashboardRoute = match (true) {
+                        $user->hasRole('superadmin') => 'superadmin.dashboard',
                         $user->hasRole('admin') => 'admin.dashboard',
                         $user->hasRole('user') => 'user.dashboard',
                         // $user->hasRole('staff') => 'staff.dashboard',

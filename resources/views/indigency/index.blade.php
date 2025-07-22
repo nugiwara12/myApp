@@ -5,6 +5,7 @@
 <x-toast />
 
 <!-- Script Section -->
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 <script>
     let confirmCallback = null;
     let selectedResidenceId = null;
@@ -82,9 +83,8 @@
 
             const method = this.editId ? 'put' : 'post';
             const url = this.editId
-                ? `/updateIndigency/${this.editId}`
-                : `{{ route('addIndigency') }}`;
-
+                ? `{{ url('updateIndigency') }}/${this.editId}`
+                : `{{ url('indigency/add') }}`;
             axios[method](url, data)
                 .then(() => {
                     showToast(this.editId ? 'Updated successfully.' : 'Submitted successfully.', 'success');
@@ -207,49 +207,62 @@
 
             let buttons = '';
 
-            if (isAdmin) {
-                // ✅ Only show Approve button if NOT approved
-                if (item.status === 1 && !isApproved) {
-                    buttons += `
-                        <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
-                            class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
-                            title="Approve">
-                            <i class="bi bi-check-circle-fill text-white text-md"></i>
-                        </button>
-                    `;
-                }
+            if (item.status === 1) {
+                if (isAdmin) {
+                    // ✅ If NOT approved, show only Approve button
+                    if (!isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); approveIndigency(${item.id})"
+                                class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center"
+                                title="Approve">
+                                <i class="bi bi-check-circle-fill text-white text-md"></i>
+                            </button>
+                        `;
+                    }
 
-                // ✅ If approved, show Edit, Delete, PDF
-                if (item.status === 1 && isApproved) {
-                    buttons += `
-                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
-                            <i class="bi bi-pencil-square text-black"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
-                            <i class="bi bi-trash-fill text-red-500"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
-                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
-                        </button>
-                    `;
+                    // ✅ If approved, show Edit/Delete/PDF
+                    if (isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                                <i class="bi bi-pencil-square text-black"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteIndigency(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Delete">
+                                <i class="bi bi-trash-fill text-red-500"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                                <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                            </button>
+                        `;
+                    }
+
+                } else {
+                    // ✅ Regular user: only show buttons if approved
+                    if (isApproved) {
+                        buttons += `
+                            <button onclick="event.stopPropagation(); editIndigency(${item.id})"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
+                                <i class="bi bi-pencil-square text-black"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
+                                class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
+                                <i class="bi bi-file-earmark-pdf text-red-600"></i>
+                            </button>
+                        `;
+                    }
                 }
-            } else {
-                // ✅ For regular users: show only if approved
-                if (item.status === 1 && isApproved) {
-                    buttons += `
-                        <button onclick="event.stopPropagation(); editIndigency(${item.id})"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="Edit">
-                            <i class="bi bi-pencil-square text-black"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); window.open('/indigency/pdf/${item.id}', '_blank')"
-                            class="btn btn-light border rounded p-2 d-flex align-items-center justify-content-center" title="View PDF">
-                            <i class="bi bi-file-earmark-pdf text-red-600"></i>
-                        </button>
-                    `;
-                }
+            }
+
+            // ✅ For soft deleted items
+            if (item.status !== 1) {
+                buttons = `
+                    <button onclick="event.stopPropagation(); restoreIndigency(${item.id})"
+                        class="bg-green-500 border white rounded p-2 d-flex align-items-center justify-content-center" title="Restore">
+                        <i class="bi bi-arrow-counterclockwise text-white text-md"></i>
+                    </button>
+                `;
             }
 
             return buttons;

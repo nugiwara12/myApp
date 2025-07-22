@@ -21,16 +21,19 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-1" />
             </div>
 
-            <!-- Role -->
+            {{-- <!-- Role -->
             <div>
                 <x-input-label for="role" :value="__('Role')" />
 
                 <x-text-select id="role" name="role" required>
-                    <option value="">-- Select Role --</option>
+                    <option value="user" selected>User</option>
                 </x-text-select>
 
                 <x-input-error :messages="$errors->get('role')" class="mt-1" />
-            </div>
+            </div> --}}
+            
+            <!-- Hidden Role Input -->
+            <input type="hidden" id="role" name="role" value="user" />
 
 
             <!-- Password -->

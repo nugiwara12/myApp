@@ -24,7 +24,7 @@
                             <input
                                 id="searchInput"
                                 type="text"
-                                placeholder="Search Indigency"
+                                placeholder="Search User"
                                 class="w-full sm:w-60 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                             />
                         </div>
@@ -500,9 +500,10 @@
                     const name = row.children[1]?.textContent.toLowerCase();
                     const email = row.children[2]?.textContent.toLowerCase();
                     const role = row.children[3]?.textContent.toLowerCase();
+                    const status = row.children[4]?.textContent.toLowerCase();
 
                     const matches = name.includes(searchTerm) || email.includes(searchTerm) || role
-                        .includes(searchTerm);
+                        .includes(searchTerm) || status.includes(searchTerm);
                     row.style.display = matches ? '' : 'none';
                     if (matches) visibleCount++;
                 });

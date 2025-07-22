@@ -1,48 +1,53 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-        <x-validation-errors class="mb-4" />
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md border border-gray-300">
+        <h2 class="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
 
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
+        @if ($errors->any())
+            <div class="mb-4 text-red-600 text-sm">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-        @endsession
+        @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form action="{{ route('login') }}" method="POST" class="space-y-4">
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="email" id="email" required
+                    class="mt-1 block w-full rounded border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" />
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password" id="password" required
+                    class="mt-1 block w-full rounded border border-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" />
             </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
+            <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                Login
+            </button>
+            <div class="flex justify-center">
+                {!! NoCaptcha::display(['data-theme' => 'light']) !!}
             </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </div>
+
+    {!! NoCaptcha::renderJs() !!}
+    
+</body>
+</html>

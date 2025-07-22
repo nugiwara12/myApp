@@ -1,3 +1,3 @@
-<x-dashboard-layout title="Admin Dashboard">
-    <p>Welcome, Admin! This is your dashboard.</p>
-</x-dashboard-layout>
+<x-app-layout>
+    Welcome Admin!
+</x-app-layout>

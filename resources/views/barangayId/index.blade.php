@@ -197,7 +197,7 @@
 
         fetchList(page = 1) {
             this.currentPage = page;
-            axios.get(`/getBarangayIdList?per_page=${this.perPage}&page=${this.currentPage}`)
+            axios.get(`/list?per_page=${this.perPage}&page=${this.currentPage}`)
                 .then(response => {
                     const { data, total, current_page, last_page } = response.data;
                     const tbody = document.getElementById('barangayIdTableBody');
