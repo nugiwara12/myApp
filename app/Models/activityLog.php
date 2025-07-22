@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class activityLog extends Model
+class ActivityLog extends Model
 {
    protected $fillable = [
         'user_id',
