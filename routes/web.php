@@ -105,7 +105,7 @@ Route::post('/restoreIndigencies', [IndigencyController::class, 'restore'])->nam
 Route::put('/updateIndigency/{id}', [IndigencyController::class, 'updateIndigency'])->name('updateIndigency');
 Route::get('/indigency/pdf/{id}', [IndigencyController::class, 'showIndigencyPdf'])->name('indigency.pdf');
 Route::post('/indigency/{id}/approve', [IndigencyController::class, 'approveIndigency']);
-Route::post('/barangay-indigency/{id}/approve', [IndigencyController::class, 'approvedIndigency'])->name('barangay-indigency.approve');
+Route::post('/approvedIndigency/{id}', [IndigencyController::class, 'approvedIndigency'])->name('approvedIndigency');
 
 // RESIDENCY
 Route::get('/residence', [ResidencyController::class, 'index'])->name('residence.index');
@@ -126,9 +126,9 @@ Route::post('/addBarangayId', [BarangayIdController::class, 'addBarangayId'])->n
 Route::get('/list', [BarangayIdController::class, 'getBarangayIdList']);
 Route::get('/getBarangayIdInformation/{id}', [BarangayIdController::class, 'getBarangayIdInformation'])->name('getBarangayIdInformation');
 Route::post('barangay-id/{id}/approve', [BarangayIdController::class, 'approvedBarangayId'])->name('barangay-id.approve');
-Route::post('/update/{id}', [BarangayIdController::class, 'updateBarangayId'])->name('barangay-id.update');
+Route::post('barangay-id/update/{id}', [BarangayIdController::class, 'updateBarangayId'])->name('barangay-id.update');
 Route::post('barangay-id/delete/{id}', [BarangayIdController::class, 'delete'])->name('barangay-id.delete');
-Route::post('/delete-selected', [BarangayIdController::class, 'deleteSelected'])->name('barangay-id.deleteSelected');
+Route::post('/deleteSelected', [BarangayIdController::class, 'deleteSelected'])->name('deleteSelected');
 Route::post('barangay-id/restore', [BarangayIdController::class, 'restore'])->name('barangay-id.restore');
 Route::get('barangayPdf/{id}', [BarangayIdController::class, 'barangayPdf'])->name('barangayPdf');
 

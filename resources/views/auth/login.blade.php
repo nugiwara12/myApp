@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {{-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --}}
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
@@ -41,13 +41,13 @@
                 class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
                 Login
             </button>
-            <div class="flex justify-center">
+            {{-- <div class="flex justify-center">
                 {!! NoCaptcha::display(['data-theme' => 'light']) !!}
-            </div>
+            </div> --}}
         </form>
     </div>
 
-    {!! NoCaptcha::renderJs() !!}
-    
+    {{-- {!! NoCaptcha::renderJs() !!} --}}
+
 </body>
 </html>

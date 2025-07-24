@@ -84,7 +84,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000';
             const method = this.editId ? 'put' : 'post';
             const url = this.editId
                 ? `{{ url('updateIndigency') }}/${this.editId}`
-                : `{{ url('indigency/add') }}`;
+                : `{{ url('addIndigency') }}`;
             axios[method](url, data)
                 .then(() => {
                     showToast(this.editId ? 'Updated successfully.' : 'Submitted successfully.', 'success');
@@ -283,7 +283,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000';
     window.confirmApproveIndigency = function () {
         if (!selectedResidenceId) return;
 
-        axios.post(`/barangay-indigency/${selectedResidenceId}/approve`)
+        axios.post(`approvedIndigency/${selectedResidenceId}`)
             .then(response => {
                 showToast('Barangay Indigency approved successfully!', 'success');
                 indigencyModal.fetchList();

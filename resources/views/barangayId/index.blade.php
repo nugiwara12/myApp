@@ -511,7 +511,7 @@
             message: `Are you sure you want to delete ${ids.length} selected record(s)?`,
             confirmText: 'Delete All',
             onConfirm: () => {
-                axios.post('/residency/delete-selected', { ids })
+                axios.post('/deleteSelected', { ids })
                     .then(() => {
                         showToast('Selected records deleted.', 'success');
                         window.barangayIdModal.fetchList();

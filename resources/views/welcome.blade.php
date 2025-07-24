@@ -13,6 +13,10 @@
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
+    <!-- title-logo -->
+    <link rel="shortcut icon" href="{{ URL::to('admin_assets/images/logo-left.png') }}">
+    <link rel="shortcut icon" href="{{ URL::to('admin_assets/images/logo-left.png') }}" type="image/x-icon">
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -535,7 +539,7 @@
         submitText.textContent = 'Submitting...';
         submitBtn.disabled = true;
 
-        axios.post('/indigency/add', formData, {
+        axios.post('/addIndigency', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }
@@ -596,7 +600,7 @@
         submitBtn.disabled = true;
 
         // Send request to backend
-        axios.post('/residency/add', formData, {
+        axios.post('/addResidence', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }
@@ -688,7 +692,7 @@
         submitText.textContent = 'Submitting...';
         submitBtn.disabled = true;
 
-        axios.post('barangay-id/addBarangayId', formData, {
+        axios.post('addBarangayId', formData, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }

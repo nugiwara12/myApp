@@ -16,12 +16,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-    'email' => 'required|email',
-    'password' => 'required',
-    'g-recaptcha-response' => 'required|captcha',
+        'email' => 'required|email',
+        'password' => 'required',
+        // 'g-recaptcha-response' => 'required|captcha',
         ], [
-            'g-recaptcha-response.required' => 'Please confirm you are not a robot.',
-            'g-recaptcha-response.captcha' => 'Captcha verification failed, please try again.',
+            // 'g-recaptcha-response.required' => 'Please confirm you are not a robot.',
+            // 'g-recaptcha-response.captcha' => 'Captcha verification failed, please try again.',
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
