@@ -53,6 +53,7 @@ return [
     */
     'panel_providers' => [
         App\Providers\Filament\SuperadminPanelProvider::class,
-        App\Providers\AdminPanelProvider::class,
+        // App\Providers\AdminPanelProvider::class,
+        App\Providers\Filament\AdminPanelProvider::class, // if it's in app/Providers/Filament/
     ],
 ];
