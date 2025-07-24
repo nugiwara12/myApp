@@ -30,23 +30,31 @@ Route::middleware('auth')->group(function () {
 
 // EMAIL VERIFICATION ROUTES
 Route::middleware('auth')->group(function () {
+    // Show verification notice page
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->name('verification.notice');
 
+    // Handle verification when user clicks link in email
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
         return redirect('/dashboard');
     })->middleware('signed')->name('verification.verify');
 
+    // ✅ Resend verification email (fixed session key)
     Route::post('/email/verification-notification', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->intended('/dashboard');
+        }
+
         $request->user()->sendEmailVerificationNotification();
-        return back()->with('message', 'Verification link sent!');
+
+        return back()->with('status', 'verification-link-sent'); // ✅ FIXED HERE
     })->middleware('throttle:6,1')->name('verification.send');
 });
 
 // DASHBOARD REDIRECTION
-Route::middleware(['auth', 'ensure.password.changed'])->group(function () {
+Route::middleware(['auth', 'verified', 'ensure.password.changed'])->group(function () {
     Route::get('/dashboard', function () {
         $user = Auth::user();
 
@@ -58,6 +66,7 @@ Route::middleware(['auth', 'ensure.password.changed'])->group(function () {
         };
     })->name('dashboard');
 });
+
 // Route::post('/login', [CustomAuthenticatedSessionController::class, 'store']);
 Route::post('/login', [LoginController::class, 'login'])->name('login.perform');
 
@@ -78,14 +87,14 @@ Route::middleware(['auth', 'ensure.password.changed'])->group(function () {
 });
 
 // USER MANAGEMENT ROUTES
-    Route::get('/role-management', [UserManagementController::class, 'index'])->name('role-management.index');
-    Route::post('/addUser', [UserManagementController::class, 'addUser'])->name('addUser');
-    Route::put('/updateUser/{id}', [UserManagementController::class, 'UpdateUser'])->name('UpdateUser');
-    Route::get('/userDetails', [UserManagementController::class, 'userDetails'])->name('userDetails');
-    Route::get('/getRoles', [UserManagementController::class, 'getRoles'])->name('getRoles');
-    Route::delete('/deleteUser/{id}', [UserManagementController::class, 'deleteUser'])->name('deleteUser');
-    Route::post('/restoreUser/{id}', [UserManagementController::class, 'restoreUser'])->name('restoreUser');
-    Route::get('/activity-logs', [UserManagementController::class, 'activityLogs'])->name('activity-logs');
+Route::get('/role-management', [UserManagementController::class, 'index'])->name('role-management.index');
+Route::post('/addUser', [UserManagementController::class, 'addUser'])->name('addUser');
+Route::put('/updateUser/{id}', [UserManagementController::class, 'UpdateUser'])->name('UpdateUser');
+Route::get('/userDetails', [UserManagementController::class, 'userDetails'])->name('userDetails');
+Route::get('/getRoles', [UserManagementController::class, 'getRoles'])->name('getRoles');
+Route::delete('/deleteUser/{id}', [UserManagementController::class, 'deleteUser'])->name('deleteUser');
+Route::post('/restoreUser/{id}', [UserManagementController::class, 'restoreUser'])->name('restoreUser');
+Route::get('/activity-logs', [UserManagementController::class, 'activityLogs'])->name('activity-logs');
 
 
 // FEEDBACK
